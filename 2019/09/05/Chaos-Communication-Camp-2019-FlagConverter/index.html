@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="Chaos Communication Camp 2019的FlagConverter，这题一共三个flag。题目描述： On the campground of the CCCamp, someone is trying to troll us by encrypting our flags. Sadly, we only got the memory dump of the PC which">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chaos-Communication-Camp-2019-FlagConverter">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="Chaos Communication Camp 2019的FlagConverter，这题一共三个flag。题目描述： On the campground of the CCCamp, someone is trying to troll us by encrypting our flags. Sadly, we only got the memory dump of the PC which">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/session_1.WinSta0.Default.png">
+<meta property="article:published_time" content="2019-09-05T13:09:52.000Z">
+<meta property="article:modified_time" content="2019-12-10T12:15:12.606Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Misc">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="AES">
+<meta property="article:tag" content="Forensic">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Volatility">
+<meta property="article:tag" content="SID">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/session_1.WinSta0.Default.png">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Chaos-Communication-Camp-2019-FlagConverter | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Chaos-Communication-Camp-2019-FlagConverter
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-05 21:09:52" itemprop="dateCreated datePublished" datetime="2019-09-05T21:09:52+08:00">2019-09-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>16k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>14 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Chaos Communication Camp 2019的FlagConverter，这题一共三个flag。题目描述： <blockquote><p>On the campground of the CCCamp, someone is trying to troll us by encrypting our flags. Sadly, we only got the memory dump of the PC which encrypted our flags.</p>
+</blockquote> <a id="more"></a> 附件在<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/Large-File/tree/master/Chaos-Communication-Camp-2019">这里</a>。</p>
+<p>给了个dmp文件，应该是Windows的内存Dump。先说一下，这题的flag开头为ALLES。那我们先搜一下字符串好了。strings dmp.dmp|grep -i "ALLES{"会找到一个flag：ALLES{f0r3n51k_15_50m3t1m35_t00_345y}。</p>
+<p>下一步是分析内存了。内存Dump必用Volatility。先分析一下dmp是那种操作系统的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">volatility imageinfo -f flagconverter.dmp </span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">INFO    : volatility.debug    : Determining profile based on KDBG search...</span><br><span class="line">          Suggested Profile(s) : Win7SP1x64, Win7SP0x64, Win2008R2SP0x64, Win2008R2SP1x64_24000, Win2008R2SP1x64_23418, Win2008R2SP1x64, Win7SP1x64_24000, Win7SP1x64_23418</span><br><span class="line">                     AS Layer1 : WindowsAMD64PagedMemory (Kernel AS)</span><br><span class="line">                     AS Layer2 : VirtualBoxCoreDumpElf64 (Unnamed AS)</span><br><span class="line">                     AS Layer3 : FileAddressSpace (&#x2F;root&#x2F;flagconverter.dmp)</span><br><span class="line">                      PAE type : No PAE</span><br><span class="line">                           DTB : 0x187000L</span><br><span class="line">                          KDBG : 0xf800027ff120L</span><br><span class="line">          Number of Processors : 2</span><br><span class="line">     Image Type (Service Pack) : 1</span><br><span class="line">                KPCR for CPU 0 : 0xfffff80002801000L</span><br><span class="line">                KPCR for CPU 1 : 0xfffff880009eb000L</span><br><span class="line">             KUSER_SHARED_DATA : 0xfffff78000000000L</span><br><span class="line">           Image date and time : 2019-08-21 05:55:09 UTC+0000</span><br><span class="line">     Image local date and time : 2019-08-21 07:55:09 +0200</span><br></pre></td></tr></table></figure>
+<p>Windows 7 SP1 x64的系统。那我们来列一下进程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">volatility pslist -f flagconverter.dmp --profile&#x3D;Win7SP1x64</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">Offset(V)          Name                    PID   PPID   Thds     Hnds   Sess  Wow64 Start                          Exit                          </span><br><span class="line"></span><br><span class="line">------------------ -------------------- ------ ------ ------ -------- ------ ------ ------------------------------ ------------------------------</span><br><span class="line">0xfffffa8000ca0040 System                    4      0     86      377 ------      0 2019-08-21 05:52:02 UTC+0000                                 </span><br><span class="line">0xfffffa8002861330 smss.exe                280      4      2       30 ------      0 2019-08-21 05:52:02 UTC+0000                                 </span><br><span class="line">0xfffffa80027dd700 csrss.exe               364    340      9      355      0      0 2019-08-21 05:52:05 UTC+0000                                 </span><br><span class="line">0xfffffa8007e4f8e0 wininit.exe             404    340      3       76      0      0 2019-08-21 05:52:05 UTC+0000                                 </span><br><span class="line">0xfffffa8007eaeb00 csrss.exe               424    412      8      188      1      0 2019-08-21 05:52:05 UTC+0000                                 </span><br><span class="line">0xfffffa8001d1e060 winlogon.exe            468    412      4      115      1      0 2019-08-21 05:52:05 UTC+0000                                 </span><br><span class="line">0xfffffa8001d6f820 services.exe            504    404     10      188      0      0 2019-08-21 05:52:05 UTC+0000                                 </span><br><span class="line">0xfffffa8001d75b00 lsass.exe               520    404      7      484      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001d74710 lsm.exe                 528    404     10      147      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001dbeb00 svchost.exe             640    504     11      354      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001c73060 VBoxService.ex          704    504     14      125      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001f2fb00 svchost.exe             764    504      7      240      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001f71b00 svchost.exe             852    504     21      425      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001f77b00 svchost.exe             908    504     21      435      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001fa2060 svchost.exe             936    504     13      248      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001fc2060 svchost.exe             988    504     34      888      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8001ff9b00 audiodg.exe             304    852      4      114      0      0 2019-08-21 05:52:06 UTC+0000                                 </span><br><span class="line">0xfffffa8002094200 svchost.exe            1068    504     15      350      0      0 2019-08-21 05:52:07 UTC+0000                                 </span><br><span class="line">0xfffffa80020ddb00 spoolsv.exe            1208    504     14      292      0      0 2019-08-21 05:52:07 UTC+0000                                 </span><br><span class="line">0xfffffa80020fd7d0 svchost.exe            1252    504     19      300      0      0 2019-08-21 05:52:07 UTC+0000                                 </span><br><span class="line">0xfffffa80021a0240 svchost.exe            1352    504     12      150      0      0 2019-08-21 05:52:07 UTC+0000                                 </span><br><span class="line">0xfffffa8000d48610 taskhost.exe           1828    504      9      172      1      0 2019-08-21 05:52:10 UTC+0000                                 </span><br><span class="line">0xfffffa80022dfb00 dwm.exe                1900    908      4       76      1      0 2019-08-21 05:52:10 UTC+0000                                 </span><br><span class="line">0xfffffa800230d910 explorer.exe           1924   1884     24      788      1      0 2019-08-21 05:52:10 UTC+0000                                 </span><br><span class="line">0xfffffa80023a7640 VBoxTray.exe            960   1924     13      141      1      0 2019-08-21 05:52:11 UTC+0000                                 </span><br><span class="line">0xfffffa80020c1060 SearchIndexer.         1816    504     13      647      0      0 2019-08-21 05:52:18 UTC+0000                                 </span><br><span class="line">0xfffffa80024133a0 SearchProtocol         1164   1816      6      272      0      0 2019-08-21 05:52:18 UTC+0000                                 </span><br><span class="line">0xfffffa8002428710 SearchFilterHo          844   1816      4       95      0      0 2019-08-21 05:52:18 UTC+0000                                 </span><br><span class="line">0xfffffa800246e530 converter.exe          2308   2280     11      183      1      0 2019-08-21 05:52:25 UTC+0000                                 </span><br><span class="line">0xfffffa800246fb00 converter.exe          2316   2280     10      152      1      0 2019-08-21 05:52:25 UTC+0000                                 </span><br><span class="line">0xfffffa8000e06b00 sppsvc.exe             2732    504      6      152      0      0 2019-08-21 05:54:09 UTC+0000                                 </span><br><span class="line">0xfffffa8000e0b060 svchost.exe            2760    504     12      376      0      0 2019-08-21 05:54:09 UTC+0000                                 </span><br><span class="line">0xfffffa8002443390 WmiPrvSE.exe           2976    640      8      142      0      0 2019-08-21 05:54:56 UTC+0000                                 </span><br></pre></td></tr></table></figure>
+<p>converter.exe似乎很扎眼。我们用procdump提出来。2308提出来大概8MB，而2316只有8KB。他俩似乎都是.Net的程序。而2308是可以直接运行的。我们用dotPeek反编译一下。2308的代码太大了，我们暂时不考虑。而2316.exe中有一段代码我们很感兴趣。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> someCrypto;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.ComponentModel;</span><br><span class="line"><span class="keyword">using</span> System.Drawing;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Windows.Forms;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">converter</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Form1</span> : <span class="title">Form</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> string_0 = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> MemoryStream ms = <span class="keyword">new</span> MemoryStream(<span class="number">800</span>);</span><br><span class="line">    <span class="keyword">private</span> IContainer components;</span><br><span class="line">    <span class="keyword">private</span> Button button;</span><br><span class="line">    <span class="keyword">private</span> RichTextBox text;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Form1</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      <span class="keyword">this</span>.InitializeComponent();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">Click_Button</span>(<span class="params"><span class="keyword">object</span> sender, EventArgs e</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      Crypto crypto = <span class="keyword">new</span> Crypto();</span><br><span class="line">      crypto.function03();</span><br><span class="line">      <span class="keyword">this</span>.string_0 = Convert.ToBase64String(crypto.function02(<span class="keyword">this</span>.text.Text));</span><br><span class="line">      crypto.Dispose();</span><br><span class="line">      GC.Collect();</span><br><span class="line">      GC.WaitForPendingFinalizers();</span><br><span class="line">      <span class="keyword">this</span>.ms.Read(Encoding.ASCII.GetBytes(<span class="keyword">this</span>.string_0), <span class="number">0</span>, Encoding.ASCII.GetBytes(<span class="keyword">this</span>.string_0).Length);</span><br><span class="line">      <span class="keyword">this</span>.text.Text = <span class="keyword">this</span>.string_0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其中用到了someCrypto？那我们用dlllist查一下2316用到的DLL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">volatility dlllist -f flagconverter.dmp --profile&#x3D;Win7SP1x64 -p 2316</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line"></span><br><span class="line">************************************************************************</span><br><span class="line">converter.exe pid:   2316</span><br><span class="line">Command line : C:\Users\ALLES\Desktop\3\converter.exe </span><br><span class="line">Service Pack 1</span><br><span class="line"></span><br><span class="line">Base                             Size          LoadCount LoadTime                       Path</span><br><span class="line">------------------ ------------------ ------------------ ------------------------------ ----</span><br><span class="line">0x0000000001090000             0x8000             0xffff 1970-01-01 00:00:00 UTC+0000   C:\Users\ALLES\Desktop\3\converter.exe</span><br><span class="line">0x0000000077aa0000           0x19f000             0xffff 1970-01-01 00:00:00 UTC+0000   C:\Windows\SYSTEM32\ntdll.dll</span><br><span class="line">0x000007fef5020000            0x6f000             0xffff 2019-08-21 05:52:25 UTC+0000   C:\Windows\SYSTEM32\MSCOREE.DLL</span><br><span class="line">0x0000000077980000           0x11f000             0xffff 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\KERNEL32.dll</span><br><span class="line">0x000007fefd770000            0x6a000             0xffff 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\KERNELBASE.dll</span><br><span class="line">0x000007feff5a0000            0xdb000                0xe 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\ADVAPI32.dll</span><br><span class="line">0x000007feff680000            0x9f000               0x68 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\msvcrt.dll</span><br><span class="line">0x000007feff4e0000            0x1f000               0x3b 2019-08-21 05:52:25 UTC+0000   C:\Windows\SYSTEM32\sechost.dll</span><br><span class="line">0x000007feffb90000           0x12d000               0x2b 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\RPCRT4.dll</span><br><span class="line">0x000007fef4f80000            0x9c000                0x1 2019-08-21 05:52:25 UTC+0000   C:\Windows\Microsoft.NET\Framework64\v4.0.30319\mscoreei.dll</span><br><span class="line">0x000007fefd9b0000            0x71000                0x9 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\SHLWAPI.dll</span><br><span class="line">0x000007feff720000            0x67000               0x83 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\GDI32.dll</span><br><span class="line">0x0000000077880000            0xfa000               0x87 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\USER32.dll</span><br><span class="line">0x000007feff170000             0xe000               0x1f 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\LPK.dll</span><br><span class="line">0x000007feffcc0000            0xcb000               0x1f 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\USP10.dll</span><br><span class="line">0x000007feff140000            0x2e000                0x3 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\IMM32.DLL</span><br><span class="line">0x000007feff030000           0x109000                0x3 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\MSCTF.dll</span><br><span class="line">0x000007fefc830000             0xc000                0x2 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\VERSION.dll</span><br><span class="line">0x000007fef33f0000           0x9a0000                0x3 2019-08-21 05:52:25 UTC+0000   C:\Windows\Microsoft.NET\Framework64\v2.0.50727\mscorwks.dll</span><br><span class="line">0x0000000074f00000            0xc9000                0x4 2019-08-21 05:52:25 UTC+0000   C:\Windows\WinSxS\amd64_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4940_none_88df89932faf0bf6\MSVCR80.dll</span><br><span class="line">0x000007fefdbb0000           0xd8a000                0x2 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\shell32.dll</span><br><span class="line">0x000007feff790000           0x1ff000                0x9 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\ole32.dll</span><br><span class="line">0x000007fefd5f0000             0xf000                0x1 2019-08-21 05:52:25 UTC+0000   C:\Windows\system32\profapi.dll</span><br><span class="line">0x000007fef2440000           0xee3000                0x1 2019-08-21 05:52:25 UTC+0000   C:\Windows\assembly\NativeImages_v2.0.50727_64\mscorlib\a83e2c5a3237fc549e8ccb54585ff2c1\mscorlib.ni.dll</span><br><span class="line">0x000007fefd3f0000             0xf000                0x2 2019-08-21 05:52:26 UTC+0000   C:\Windows\system32\CRYPTBASE.dll</span><br><span class="line">0x000007fefbdb0000            0x56000                0x4 2019-08-21 05:52:26 UTC+0000   C:\Windows\system32\uxtheme.dll</span><br><span class="line">0x000007fef17c0000           0x183000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\Microsoft.NET\Framework64\v2.0.50727\mscorjit.dll</span><br><span class="line">0x000007fef0d80000           0xa33000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\assembly\NativeImages_v2.0.50727_64\System\9bb115aedc44c70bb3f6cf4ac4f3f9cb\System.ni.dll</span><br><span class="line">0x000007fef0b40000           0x239000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\assembly\NativeImages_v2.0.50727_64\System.Drawing\24637f09c78822f6e1b3b531489f223f\System.Drawing.ni.dll</span><br><span class="line">0x000007feefaa0000          0x1098000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\assembly\NativeImages_v2.0.50727_64\System.Windows.Forms\6c3df040b081b732b934702fa8149535\System.Windows.Forms.ni.dll</span><br><span class="line">0x000007feec5b0000            0x9e000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\system32\RichEd20.DLL</span><br><span class="line">0x000007fefbb90000           0x218000                0x2 2019-08-21 05:52:26 UTC+0000   C:\Windows\WinSxS\amd64_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.7601.24280_none_145e10148b8de48e\gdiplus.dll</span><br><span class="line">0x000007fefb890000            0x18000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\system32\dwmapi.dll</span><br><span class="line">0x000007fefc130000           0x1f4000                0x3 2019-08-21 05:52:26 UTC+0000   C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.18837_none_fa3b1e3d17594757\comctl32.DLL</span><br><span class="line">0x000007fefdad0000            0xda000                0x1 2019-08-21 05:52:26 UTC+0000   C:\Windows\system32\OLEAUT32.DLL</span><br><span class="line">0x000007fefcde0000            0x18000                0x1 2019-08-21 05:54:38 UTC+0000   C:\Windows\system32\CRYPTSP.dll</span><br><span class="line">0x000007fefcae0000            0x47000                0x1 2019-08-21 05:54:38 UTC+0000   C:\Windows\system32\rsaenh.dll</span><br><span class="line">0x000007fefd540000            0x14000                0x1 2019-08-21 05:54:38 UTC+0000   C:\Windows\system32\RpcRtRemote.dll</span><br><span class="line">0x0000000074ef0000             0x8000                0x1 2019-08-21 05:54:38 UTC+0000   C:\Users\ALLES\Desktop\3\Crypto.dll</span><br><span class="line">0x000007fefcf30000            0x22000                0x1 2019-08-21 05:54:38 UTC+0000   C:\Windows\system32\bcrypt.dll</span><br></pre></td></tr></table></figure>
+<p>其中确实有一个Crypto.dll。我们用dlldump导出来后发现还是个.Net的应用程序集。继续拖到dotPeek。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Microsoft.Win32.SafeHandles;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Security.Cryptography;</span><br><span class="line"><span class="keyword">using</span> System.Security.Principal;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">someCrypto</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Crypto</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">private</span> SafeHandle handle = (SafeHandle) <span class="keyword">new</span> SafeFileHandle(IntPtr.Zero, <span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] byte_0;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] byte_1;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">bool</span> disposed;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      <span class="keyword">this</span>.Dispose(<span class="literal">true</span>);</span><br><span class="line">      GC.SuppressFinalize((<span class="keyword">object</span>) <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"><span class="keyword">bool</span> disposing</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.disposed)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      <span class="keyword">if</span> (disposing)</span><br><span class="line">        <span class="keyword">this</span>.handle.Dispose();</span><br><span class="line">      <span class="keyword">this</span>.disposed = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> SymmetricAlgorithm <span class="title">function01</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      RijndaelManaged rijndaelManaged = <span class="keyword">new</span> RijndaelManaged();</span><br><span class="line">      rijndaelManaged.KeySize = <span class="number">256</span>;</span><br><span class="line">      rijndaelManaged.IV = <span class="keyword">this</span>.byte_1;</span><br><span class="line">      rijndaelManaged.Key = <span class="keyword">this</span>.byte_0;</span><br><span class="line">      <span class="keyword">return</span> (SymmetricAlgorithm) rijndaelManaged;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">byte</span>[] <span class="title">function02</span>(<span class="params"><span class="keyword">string</span> string_0</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      SymmetricAlgorithm symmetricAlgorithm = <span class="keyword">this</span>.function01();</span><br><span class="line">      MemoryStream memoryStream = <span class="keyword">new</span> MemoryStream();</span><br><span class="line">      CryptoStream cryptoStream = <span class="keyword">new</span> CryptoStream((Stream) memoryStream, symmetricAlgorithm.CreateEncryptor(), CryptoStreamMode.Write);</span><br><span class="line">      <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> UnicodeEncoding().GetBytes(string_0.PadRight(string_0.Length % <span class="number">8</span>, <span class="keyword">char</span>.MinValue));</span><br><span class="line">      cryptoStream.Write(bytes, <span class="number">0</span>, bytes.Length);</span><br><span class="line">      cryptoStream.FlushFinalBlock();</span><br><span class="line">      memoryStream.Position = <span class="number">0L</span>;</span><br><span class="line">      <span class="keyword">byte</span>[] array = memoryStream.ToArray();</span><br><span class="line">      string_0 = (<span class="keyword">string</span>) <span class="literal">null</span>;</span><br><span class="line">      cryptoStream.Close();</span><br><span class="line">      memoryStream.Close();</span><br><span class="line">      GC.Collect();</span><br><span class="line">      GC.WaitForPendingFinalizers();</span><br><span class="line">      <span class="keyword">return</span> array;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function03</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">      <span class="keyword">byte</span>[] binaryForm = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">28</span>];</span><br><span class="line">      WindowsIdentity.GetCurrent().User.GetBinaryForm(binaryForm, <span class="number">0</span>);</span><br><span class="line">      <span class="keyword">this</span>.byte_1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">16</span>];</span><br><span class="line">      Array.Copy((Array) binaryForm, <span class="number">0</span>, (Array) <span class="keyword">this</span>.byte_1, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">      <span class="keyword">this</span>.byte_0 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">32</span>];</span><br><span class="line">      Array.Copy((Array) binaryForm, binaryForm.Length - <span class="number">16</span>, (Array) <span class="keyword">this</span>.byte_0, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">      Array.Copy((Array) binaryForm, binaryForm.Length - <span class="number">16</span>, (Array) <span class="keyword">this</span>.byte_0, <span class="number">16</span>, <span class="number">16</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好了，加密函数有了。那么我们要找到的密文呢？注意到2316主程序使用了Base64进行加密。那我们应该去寻找Base64字符串。后来我们在clipboard那里翻出来一段Base64，但很不幸的，这个是Flag1的Base64。然后我们大胆猜测一下2308和2316的内存中应该还残留数据，这次我们用memdump命令。导出来后grep "="，果然发现一串：<code>ZuwJUgfmKzIMbo4F8agPy1MPLq+r7cAlDLowY+RT2wgp1uifc2TXeNH4bvbb2VqfK6r77SPHFrrMYR+GMGv8JGS87Tiybyi4LNNHQWnTR8LlGlSeHWWA9pydAXuJjSk8FzUFbqHOKqHc+bCtJ/4K2Q==</code>，那我们来看一下Crypto.dll的代码逆向推这段密文吧。</p>
+<p>function03()主要是获取到了当前登录用户的SID，转成二进制形式，然后填充了两个数组。而function02()使用AES进行加密，将两个数组分别用做IV和Key。</p>
+<p>加密算法已知，下一步是获得用户的SID。这个可以通过Volatility的getsids完成。<code>converter.exe (2316): S-1-5-21-2947568794-2193893069-2968809547-1000 (ALLES)</code>。下面是写程序解密了。首先拿到AES的Key和IV，以及要知道默认的加密方式。这个就直接用C#好了，省得再转。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Security.Principal;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ConsoleApp1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">byte</span>[] byte_1;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">byte</span>[] byte_0;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] binaryForm = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">28</span>];</span><br><span class="line">            SecurityIdentifier a=<span class="keyword">new</span> SecurityIdentifier(<span class="string">&quot;S-1-5-21-2947568794-2193893069-2968809547-1000&quot;</span>);</span><br><span class="line">            a.GetBinaryForm(binaryForm, <span class="number">0</span>);</span><br><span class="line">            byte_1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">16</span>];</span><br><span class="line">            Array.Copy((Array)binaryForm, <span class="number">0</span>, (Array)byte_1, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">            byte_0 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">32</span>];</span><br><span class="line">            Array.Copy((Array)binaryForm, binaryForm.Length - <span class="number">16</span>, (Array)byte_0, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">            Array.Copy((Array)binaryForm, binaryForm.Length - <span class="number">16</span>, (Array)byte_0, <span class="number">16</span>, <span class="number">16</span>);</span><br><span class="line">            Console.WriteLine(Convert.ToBase64String(byte_0));</span><br><span class="line">            Console.WriteLine(Convert.ToBase64String(byte_1));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>得到byte_0的Base64：<code>mlSwr80mxIJLcPSw6AMAAJpUsK/NJsSCS3D0sOgDAAA=</code>，byte_1的Base64：<code>AQUAAAAAAAUVAAAAmlSwrw==</code>。同时拿到AES的加密方式为CBC。下面就是解密了。完整程序如下（AES解密是从<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/dotnet/api/system.security.cryptography.rijndaelmanaged?view=netframework-4.8">这里</a>抄的）：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Security.Cryptography;</span><br><span class="line"><span class="keyword">using</span> System.Security.Principal;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ConsoleApp1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">byte</span>[] byte_1;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">byte</span>[] byte_0;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] binaryForm = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">28</span>];</span><br><span class="line">            SecurityIdentifier a=<span class="keyword">new</span> SecurityIdentifier(<span class="string">&quot;S-1-5-21-2947568794-2193893069-2968809547-1000&quot;</span>);</span><br><span class="line">            a.GetBinaryForm(binaryForm, <span class="number">0</span>);</span><br><span class="line">            byte_1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">16</span>];</span><br><span class="line">            Array.Copy((Array)binaryForm, <span class="number">0</span>, (Array)byte_1, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">            byte_0 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">32</span>];</span><br><span class="line">            Array.Copy((Array)binaryForm, binaryForm.Length - <span class="number">16</span>, (Array)byte_0, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">            Array.Copy((Array)binaryForm, binaryForm.Length - <span class="number">16</span>, (Array)byte_0, <span class="number">16</span>, <span class="number">16</span>);</span><br><span class="line">            Console.WriteLine(Convert.ToBase64String(byte_0));</span><br><span class="line">            Console.WriteLine(Convert.ToBase64String(byte_1));</span><br><span class="line">            RijndaelManaged rijndaelManaged = <span class="keyword">new</span> RijndaelManaged();</span><br><span class="line">            rijndaelManaged.KeySize = <span class="number">256</span>;</span><br><span class="line">            Console.WriteLine(rijndaelManaged.Mode);</span><br><span class="line">           	Console.WriteLine(DecryptStringFromBytes(Convert.FromBase64String(<span class="string">&quot;ZuwJUgfmKzIMbo4F8agPy1MPLq+r7cAlDLowY+RT2wgp1uifc2TXeNH4bvbb2VqfK6r77SPHFrrMYR+GMGv8JGS87Tiybyi4LNNHQWnTR8LlGlSeHWWA9pydAXuJjSk8FzUFbqHOKqHc+bCtJ/4K2Q==&quot;</span>)));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">string</span> <span class="title">DecryptStringFromBytes</span>(<span class="params"><span class="keyword">byte</span>[] cipherText</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Declare the string used to hold</span></span><br><span class="line">            <span class="comment">// the decrypted text.</span></span><br><span class="line">            <span class="keyword">string</span> plaintext = <span class="literal">null</span>;</span><br><span class="line">    </span><br><span class="line">            <span class="comment">// Create an RijndaelManaged object</span></span><br><span class="line">            <span class="comment">// with the specified key and IV.</span></span><br><span class="line">            <span class="keyword">using</span> (RijndaelManaged rijAlg = <span class="keyword">new</span> RijndaelManaged())</span><br><span class="line">            &#123;</span><br><span class="line">                rijAlg.Key = byte_0;</span><br><span class="line">                rijAlg.IV = byte_1;</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// Create a decryptor to perform the stream transform.</span></span><br><span class="line">                ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);</span><br><span class="line">    </span><br><span class="line">                <span class="comment">// Create the streams used for decryption.</span></span><br><span class="line">                <span class="keyword">using</span> (MemoryStream msDecrypt = <span class="keyword">new</span> MemoryStream(cipherText))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">using</span> (CryptoStream csDecrypt = <span class="keyword">new</span> CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">using</span> (StreamReader srDecrypt = <span class="keyword">new</span> StreamReader(csDecrypt))</span><br><span class="line">                        &#123;</span><br><span class="line">                            plaintext = srDecrypt.ReadToEnd();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">    </span><br><span class="line">            &#125;</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">return</span> plaintext;</span><br><span class="line">    </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就拿到了我们的第二个Flag：ALLES{50m3_f0r3n51k_50m3_r3v3r51ng_4nd_50m3_c2ypt0_fun}。</p>
+<p>那么，第三个呢？进程看了，DLL看了，下面看一下截图吧。<img src="/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/session_1.WinSta0.Default.png" class="" title="桌面截图">哦吼，explorer打开了一个看似乱码的路径？我们用filescan也能找到这个路径。<code>0x000000003e6645a0     16      0 R--r-d \Device\HarddiskVolume2\Program Files\D9f\gCFhd\yxEUQSFyoHU1ybvQ0S9TOOwUWFCR+HWh+YicMXXJ2hzO39bjKEbONClpsoTzUtfuC86APEJGe46byt7fmJGBEkmrtktbMIZ5Mk4LnGFkyNVkAwEKm\O7dnFs7JKPrXrI9Co8Z4ULFf1UzT1cK5wFiIONE\0t33K+0.bat</code>。我们同时搜到了路径和后面的文件，先用带文件名的路径试试。然后我们注意到，Base64没有<code>\</code>，但是有<code>/</code>，那么大胆猜测一下上述路径是个Base64：<code>D9f/gCFhd/yxEUQSFyoHU1ybvQ0S9TOOwUWFCR+HWh+YicMXXJ2hzO39bjKEbONClpsoTzUtfuC86APEJGe46byt7fmJGBEkmrtktbMIZ5Mk4LnGFkyNVkAwEKm/O7dnFs7JKPrXrI9Co8Z4ULFf1UzT1cK5wFiIONE/0t33K+0</code>，丢到上面的程序，看一下出什么结果。报错了，Base64不全，我们加个=，然后就得到了第三个Flag：ALLES{0n3_f0r3n51k_tr345ur3_15_ly1ng_w1th1n_th3_5h1mc4ch3}。</p>
+
+    <div id="aplayer-BELYfEvc" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="4233965" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{5fd6d1a0-ac6c-4140-a6ae-64cdda65a015}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/" title="Chaos-Communication-Camp-2019-FlagConverter">http://tiaonmmn.github.io/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Misc/" rel="tag"><i class="fa fa-tag"></i> Misc</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C#</a>
+              <a href="/tags/AES/" rel="tag"><i class="fa fa-tag"></i> AES</a>
+              <a href="/tags/Forensic/" rel="tag"><i class="fa fa-tag"></i> Forensic</a>
+              <a href="/tags/Windows/" rel="tag"><i class="fa fa-tag"></i> Windows</a>
+              <a href="/tags/Volatility/" rel="tag"><i class="fa fa-tag"></i> Volatility</a>
+              <a href="/tags/SID/" rel="tag"><i class="fa fa-tag"></i> SID</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/04/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-laravel/" rel="prev" title="BUUOJ刷题-Web-easy_Laravel">
+                  <i class="fa fa-chevron-left"></i> BUUOJ刷题-Web-easy_Laravel
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/09/07/BUUOJ%E5%88%B7%E9%A2%98-Web-Easy-Notes/" rel="next" title="BUUOJ刷题-Web-Easy Notes">
+                  BUUOJ刷题-Web-Easy Notes <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/09/05/Chaos-Communication-Camp-2019-FlagConverter/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

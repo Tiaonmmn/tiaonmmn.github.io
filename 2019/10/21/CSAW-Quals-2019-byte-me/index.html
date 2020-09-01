@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="这道题没给文件，我们连接后返回一个16进制数，然后让我们input something。我们重复输入一个字符串返回相同结果。每当输入的字符串增加16位，返回的结果增加32位。这一条可以确定这个加密方式应该是某种块加密。最容易想到的就是AES了。那么哪种加密方式？参考这里，再观察输出的密文。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAW-Quals-2019-byte_me">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/10/21/CSAW-Quals-2019-byte-me/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="这道题没给文件，我们连接后返回一个16进制数，然后让我们input something。我们重复输入一个字符串返回相同结果。每当输入的字符串增加16位，返回的结果增加32位。这一条可以确定这个加密方式应该是某种块加密。最容易想到的就是AES了。那么哪种加密方式？参考这里，再观察输出的密文。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-21T12:17:02.000Z">
+<meta property="article:modified_time" content="2019-12-10T12:15:12.609Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="AES">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="ECB">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/10/21/CSAW-Quals-2019-byte-me/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CSAW-Quals-2019-byte_me | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/10/21/CSAW-Quals-2019-byte-me/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSAW-Quals-2019-byte_me
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-21 20:17:02" itemprop="dateCreated datePublished" datetime="2019-10-21T20:17:02+08:00">2019-10-21</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/10/21/CSAW-Quals-2019-byte-me/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/10/21/CSAW-Quals-2019-byte-me/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>21k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>19 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>这道题没给文件，我们连接后返回一个16进制数，然后让我们input something。我们重复输入一个字符串返回相同结果。每当输入的字符串增加16位，返回的结果增加32位。这一条可以确定这个加密方式应该是某种块加密。最容易想到的就是AES了。那么哪种加密方式？参考<a target="_blank" rel="noopener" href="https://ctf101.org/cryptography/what-are-block-ciphers/">这里</a>，再观察输出的密文。 <a id="more"></a> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="comment"># context.log_level=&#x27;debug&#x27;</span></span><br><span class="line">s = connect(<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">8060</span>)</span><br><span class="line">print(<span class="string">&quot;encrypted_flag is:&quot;</span> + s.recvline())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_message</span>(<span class="params">message</span>):</span></span><br><span class="line">    s.recv()</span><br><span class="line">    s.sendline(message)</span><br><span class="line">    s.recvline()</span><br><span class="line">    encrypted = s.recvline()</span><br><span class="line">    print(<span class="string">&quot;Encryped &#123;0&#125; is:&#123;1&#125;.Its length is &#123;2&#125;.Message length is &#123;3&#125;&quot;</span>.format(message, encrypted, len(encrypted),</span><br><span class="line">                                                                               len(message)))</span><br><span class="line"></span><br><span class="line">result=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">65</span>):</span><br><span class="line">    send_message(<span class="string">&quot;a&quot;</span>*i)</span><br></pre></td></tr></table></figure> 结果如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;python2.7 &#x2F;home&#x2F;tiaonmmn&#x2F;PycharmProjects&#x2F;python2&#x2F;byte_me.py</span><br><span class="line">[+] Opening connection to 127.0.0.1 on port 8060: Done</span><br><span class="line">encrypted_flag is:1e7086115a9f43410dfdcfa01702b6f4a4b6a5a081935cca7a7f38977dd21cf8eb662dc55bd5e8813ff23ad4d50d5486cdadce02d6fd6be555365a42fed846dc</span><br><span class="line"></span><br><span class="line">Encryped a is:ff52d314fe1306fb890d7140fe9875e882e7e524dd98fc2fdcc877222107d63a7905145edc3016646ccb0926aa5b0e38bb947ba83c0bbfdf4fb4cac0913c0401</span><br><span class="line">.Its length is 130.Message length is 1</span><br><span class="line">Encryped aa is:4f13a88b3aa5e816885649d346f56d5c5d5215beb0324c26e9aad9e4a180134aafef6f401eb921e4662fd9daf49487ecd83d0116094263d3ee19e605aaaacb64</span><br><span class="line">.Its length is 130.Message length is 2</span><br><span class="line">Encryped aaa is:e310dde5a0593baec946ab994183741aecbb45a44ca607f028486521564f62b692cfec5b59fe47e23d85f02d8fdf41d317eaef4cd0ade581266903cf6cd12741</span><br><span class="line">.Its length is 130.Message length is 3</span><br><span class="line">Encryped aaaa is:01abdc7751a9eea1afec0ab084e973a0b5caaeb147b989f0b3a8385fcb94c223d36f07bec80fc2c2c53238d5d331ebe59aa484ffe4338af5df49d5b18b59171c</span><br><span class="line">.Its length is 130.Message length is 4</span><br><span class="line">Encryped aaaaa is:28505aca54d2ef9fe91165176bb429844214d7902976d7f23049246fb1829982b991a9db4b31c76b6968ed59867220336f7d115fe99d107cc8992648881bee0b</span><br><span class="line">.Its length is 130.Message length is 5</span><br><span class="line">Encryped aaaaaa is:5034d975ff043ce8039993a0242950b02eb454f8fe777cd13c211683850f931d56b98aa9ae125595949e0b278aa2735ff6e3c57ff639a9dccda67e712bc4c9bc</span><br><span class="line">.Its length is 130.Message length is 6</span><br><span class="line">Encryped aaaaaaa is:882cab2b25bdbfe8d663b3215f6ef5d875ea0d5e5a9378aefc1c782a5a501be454c1c32ef9c518e149c3625dcfc247a50d29ba749068f3800165a8f22054dabe</span><br><span class="line">.Its length is 130.Message length is 7</span><br><span class="line">Encryped aaaaaaaa is:d988fe442e1e627455822e16925b4a28d00ff7ab6874a4cc61fa46fca71b726aa8cf17aa77bfb5360cb92f4fa7e7e9cdfc433c70b9ee1e78c5a5064533da8d46</span><br><span class="line">.Its length is 130.Message length is 8</span><br><span class="line">Encryped aaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f43eccbe78b8ae3903491e25ff706abd752b04d980aafa48393d75ff7484d5032d9c8d8d838fd5e44a9ecbc9aca2251bdb</span><br><span class="line">.Its length is 130.Message length is 9</span><br><span class="line">Encryped aaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f49a19a618bd564f5fb30cea8e18abac12839b7746650d3f3e9456c32e799a752ce329679aaf6adcc40556ce46ed5df1bf</span><br><span class="line">.Its length is 130.Message length is 10</span><br><span class="line">Encryped aaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4657c1732b2e4916e22bbf3dea339ee2dbdcaa652ec09315452cfa4b2dce4d8e52af2a3eccee542d42511f1138a6cdf73</span><br><span class="line">.Its length is 130.Message length is 11</span><br><span class="line">Encryped aaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4d811b161afce4939967a4ae2a83c89b516a1ab0b723c549a8ea67b026444c8bc8a32af103de992b41efe193e5c2576deea95fe196998951a0f598a2e519925c7</span><br><span class="line">.Its length is 162.Message length is 12</span><br><span class="line">Encryped aaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4e3eeb89f4ba128ce311b33787865b5d94ddc0480866840c8c811f80e1047ef216ffa19a23acfb23d21a49c6c90d027811d0f00affdfce4afa4b025d4457bd595</span><br><span class="line">.Its length is 162.Message length is 13</span><br><span class="line">Encryped aaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f459994a644d4aa519ead145821fa949b4e89e7c11851ae0d640631af0bdbeee8b73cfc452c87afa74e86731fe31c8558492adf99e7a0c109c5cb662db35c0ea5b</span><br><span class="line">.Its length is 162.Message length is 14</span><br><span class="line">Encryped aaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f48cef101955556e5bcd064d2dcfcbbc421b182df74863e95ca0d83e75b6ce8b977e7cab1ba0f113d3fe6bc2409006e35829b76a13f2a170c50eaeffb470c38a60</span><br><span class="line">.Its length is 162.Message length is 15</span><br><span class="line">Encryped aaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f46885b4e75c3d47d0dfeabd65836cf329a4b6a5a081935cca7a7f38977dd21cf8eb662dc55bd5e8813ff23ad4d50d5486cdadce02d6fd6be555365a42fed846dc</span><br><span class="line">.Its length is 162.Message length is 16</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4f42e62f15dc036e1a09c389250015c1982e7e524dd98fc2fdcc877222107d63a7905145edc3016646ccb0926aa5b0e38bb947ba83c0bbfdf4fb4cac0913c0401</span><br><span class="line">.Its length is 162.Message length is 17</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4e6430275a9bb274ee7e37b860e8d8a065d5215beb0324c26e9aad9e4a180134aafef6f401eb921e4662fd9daf49487ecd83d0116094263d3ee19e605aaaacb64</span><br><span class="line">.Its length is 162.Message length is 18</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4351e8889f4291b6d56c7e894aab91a48ecbb45a44ca607f028486521564f62b692cfec5b59fe47e23d85f02d8fdf41d317eaef4cd0ade581266903cf6cd12741</span><br><span class="line">.Its length is 162.Message length is 19</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f49579199f4e69346a5fdc11d2e593c80ab5caaeb147b989f0b3a8385fcb94c223d36f07bec80fc2c2c53238d5d331ebe59aa484ffe4338af5df49d5b18b59171c</span><br><span class="line">.Its length is 162.Message length is 20</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f469bc2c9ea8182813544ba55ab1a963014214d7902976d7f23049246fb1829982b991a9db4b31c76b6968ed59867220336f7d115fe99d107cc8992648881bee0b</span><br><span class="line">.Its length is 162.Message length is 21</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4d19681425feb1a0d02fdbe35823e06242eb454f8fe777cd13c211683850f931d56b98aa9ae125595949e0b278aa2735ff6e3c57ff639a9dccda67e712bc4c9bc</span><br><span class="line">.Its length is 162.Message length is 22</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f44bfa35fb255a71e08d82e8a75317654475ea0d5e5a9378aefc1c782a5a501be454c1c32ef9c518e149c3625dcfc247a50d29ba749068f3800165a8f22054dabe</span><br><span class="line">.Its length is 162.Message length is 23</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4dd9e5d3a378726db3c0b9e92b4a35d86d00ff7ab6874a4cc61fa46fca71b726aa8cf17aa77bfb5360cb92f4fa7e7e9cdfc433c70b9ee1e78c5a5064533da8d46</span><br><span class="line">.Its length is 162.Message length is 24</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a993eccbe78b8ae3903491e25ff706abd752b04d980aafa48393d75ff7484d5032d9c8d8d838fd5e44a9ecbc9aca2251bdb</span><br><span class="line">.Its length is 162.Message length is 25</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a999a19a618bd564f5fb30cea8e18abac12839b7746650d3f3e9456c32e799a752ce329679aaf6adcc40556ce46ed5df1bf</span><br><span class="line">.Its length is 162.Message length is 26</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99657c1732b2e4916e22bbf3dea339ee2dbdcaa652ec09315452cfa4b2dce4d8e52af2a3eccee542d42511f1138a6cdf73</span><br><span class="line">.Its length is 162.Message length is 27</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99d811b161afce4939967a4ae2a83c89b516a1ab0b723c549a8ea67b026444c8bc8a32af103de992b41efe193e5c2576deea95fe196998951a0f598a2e519925c7</span><br><span class="line">.Its length is 194.Message length is 28</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99e3eeb89f4ba128ce311b33787865b5d94ddc0480866840c8c811f80e1047ef216ffa19a23acfb23d21a49c6c90d027811d0f00affdfce4afa4b025d4457bd595</span><br><span class="line">.Its length is 194.Message length is 29</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a9959994a644d4aa519ead145821fa949b4e89e7c11851ae0d640631af0bdbeee8b73cfc452c87afa74e86731fe31c8558492adf99e7a0c109c5cb662db35c0ea5b</span><br><span class="line">.Its length is 194.Message length is 30</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a998cef101955556e5bcd064d2dcfcbbc421b182df74863e95ca0d83e75b6ce8b977e7cab1ba0f113d3fe6bc2409006e35829b76a13f2a170c50eaeffb470c38a60</span><br><span class="line">.Its length is 194.Message length is 31</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a996885b4e75c3d47d0dfeabd65836cf329a4b6a5a081935cca7a7f38977dd21cf8eb662dc55bd5e8813ff23ad4d50d5486cdadce02d6fd6be555365a42fed846dc</span><br><span class="line">.Its length is 194.Message length is 32</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99f42e62f15dc036e1a09c389250015c1982e7e524dd98fc2fdcc877222107d63a7905145edc3016646ccb0926aa5b0e38bb947ba83c0bbfdf4fb4cac0913c0401</span><br><span class="line">.Its length is 194.Message length is 33</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99e6430275a9bb274ee7e37b860e8d8a065d5215beb0324c26e9aad9e4a180134aafef6f401eb921e4662fd9daf49487ecd83d0116094263d3ee19e605aaaacb64</span><br><span class="line">.Its length is 194.Message length is 34</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99351e8889f4291b6d56c7e894aab91a48ecbb45a44ca607f028486521564f62b692cfec5b59fe47e23d85f02d8fdf41d317eaef4cd0ade581266903cf6cd12741</span><br><span class="line">.Its length is 194.Message length is 35</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a999579199f4e69346a5fdc11d2e593c80ab5caaeb147b989f0b3a8385fcb94c223d36f07bec80fc2c2c53238d5d331ebe59aa484ffe4338af5df49d5b18b59171c</span><br><span class="line">.Its length is 194.Message length is 36</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a9969bc2c9ea8182813544ba55ab1a963014214d7902976d7f23049246fb1829982b991a9db4b31c76b6968ed59867220336f7d115fe99d107cc8992648881bee0b</span><br><span class="line">.Its length is 194.Message length is 37</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99d19681425feb1a0d02fdbe35823e06242eb454f8fe777cd13c211683850f931d56b98aa9ae125595949e0b278aa2735ff6e3c57ff639a9dccda67e712bc4c9bc</span><br><span class="line">.Its length is 194.Message length is 38</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a994bfa35fb255a71e08d82e8a75317654475ea0d5e5a9378aefc1c782a5a501be454c1c32ef9c518e149c3625dcfc247a50d29ba749068f3800165a8f22054dabe</span><br><span class="line">.Its length is 194.Message length is 39</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99dd9e5d3a378726db3c0b9e92b4a35d86d00ff7ab6874a4cc61fa46fca71b726aa8cf17aa77bfb5360cb92f4fa7e7e9cdfc433c70b9ee1e78c5a5064533da8d46</span><br><span class="line">.Its length is 194.Message length is 40</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a993eccbe78b8ae3903491e25ff706abd752b04d980aafa48393d75ff7484d5032d9c8d8d838fd5e44a9ecbc9aca2251bdb</span><br><span class="line">.Its length is 194.Message length is 41</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a999a19a618bd564f5fb30cea8e18abac12839b7746650d3f3e9456c32e799a752ce329679aaf6adcc40556ce46ed5df1bf</span><br><span class="line">.Its length is 194.Message length is 42</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99657c1732b2e4916e22bbf3dea339ee2dbdcaa652ec09315452cfa4b2dce4d8e52af2a3eccee542d42511f1138a6cdf73</span><br><span class="line">.Its length is 194.Message length is 43</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99d811b161afce4939967a4ae2a83c89b516a1ab0b723c549a8ea67b026444c8bc8a32af103de992b41efe193e5c2576deea95fe196998951a0f598a2e519925c7</span><br><span class="line">.Its length is 226.Message length is 44</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99e3eeb89f4ba128ce311b33787865b5d94ddc0480866840c8c811f80e1047ef216ffa19a23acfb23d21a49c6c90d027811d0f00affdfce4afa4b025d4457bd595</span><br><span class="line">.Its length is 226.Message length is 45</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a9959994a644d4aa519ead145821fa949b4e89e7c11851ae0d640631af0bdbeee8b73cfc452c87afa74e86731fe31c8558492adf99e7a0c109c5cb662db35c0ea5b</span><br><span class="line">.Its length is 226.Message length is 46</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a998cef101955556e5bcd064d2dcfcbbc421b182df74863e95ca0d83e75b6ce8b977e7cab1ba0f113d3fe6bc2409006e35829b76a13f2a170c50eaeffb470c38a60</span><br><span class="line">.Its length is 226.Message length is 47</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a996885b4e75c3d47d0dfeabd65836cf329a4b6a5a081935cca7a7f38977dd21cf8eb662dc55bd5e8813ff23ad4d50d5486cdadce02d6fd6be555365a42fed846dc</span><br><span class="line">.Its length is 226.Message length is 48</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99f42e62f15dc036e1a09c389250015c1982e7e524dd98fc2fdcc877222107d63a7905145edc3016646ccb0926aa5b0e38bb947ba83c0bbfdf4fb4cac0913c0401</span><br><span class="line">.Its length is 226.Message length is 49</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99e6430275a9bb274ee7e37b860e8d8a065d5215beb0324c26e9aad9e4a180134aafef6f401eb921e4662fd9daf49487ecd83d0116094263d3ee19e605aaaacb64</span><br><span class="line">.Its length is 226.Message length is 50</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99351e8889f4291b6d56c7e894aab91a48ecbb45a44ca607f028486521564f62b692cfec5b59fe47e23d85f02d8fdf41d317eaef4cd0ade581266903cf6cd12741</span><br><span class="line">.Its length is 226.Message length is 51</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a999579199f4e69346a5fdc11d2e593c80ab5caaeb147b989f0b3a8385fcb94c223d36f07bec80fc2c2c53238d5d331ebe59aa484ffe4338af5df49d5b18b59171c</span><br><span class="line">.Its length is 226.Message length is 52</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a9969bc2c9ea8182813544ba55ab1a963014214d7902976d7f23049246fb1829982b991a9db4b31c76b6968ed59867220336f7d115fe99d107cc8992648881bee0b</span><br><span class="line">.Its length is 226.Message length is 53</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99d19681425feb1a0d02fdbe35823e06242eb454f8fe777cd13c211683850f931d56b98aa9ae125595949e0b278aa2735ff6e3c57ff639a9dccda67e712bc4c9bc</span><br><span class="line">.Its length is 226.Message length is 54</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a994bfa35fb255a71e08d82e8a75317654475ea0d5e5a9378aefc1c782a5a501be454c1c32ef9c518e149c3625dcfc247a50d29ba749068f3800165a8f22054dabe</span><br><span class="line">.Its length is 226.Message length is 55</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99dd9e5d3a378726db3c0b9e92b4a35d86d00ff7ab6874a4cc61fa46fca71b726aa8cf17aa77bfb5360cb92f4fa7e7e9cdfc433c70b9ee1e78c5a5064533da8d46</span><br><span class="line">.Its length is 226.Message length is 56</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a993eccbe78b8ae3903491e25ff706abd752b04d980aafa48393d75ff7484d5032d9c8d8d838fd5e44a9ecbc9aca2251bdb</span><br><span class="line">.Its length is 226.Message length is 57</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a999a19a618bd564f5fb30cea8e18abac12839b7746650d3f3e9456c32e799a752ce329679aaf6adcc40556ce46ed5df1bf</span><br><span class="line">.Its length is 226.Message length is 58</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99657c1732b2e4916e22bbf3dea339ee2dbdcaa652ec09315452cfa4b2dce4d8e52af2a3eccee542d42511f1138a6cdf73</span><br><span class="line">.Its length is 226.Message length is 59</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99d811b161afce4939967a4ae2a83c89b516a1ab0b723c549a8ea67b026444c8bc8a32af103de992b41efe193e5c2576deea95fe196998951a0f598a2e519925c7</span><br><span class="line">.Its length is 258.Message length is 60</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99e3eeb89f4ba128ce311b33787865b5d94ddc0480866840c8c811f80e1047ef216ffa19a23acfb23d21a49c6c90d027811d0f00affdfce4afa4b025d4457bd595</span><br><span class="line">.Its length is 258.Message length is 61</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a9959994a644d4aa519ead145821fa949b4e89e7c11851ae0d640631af0bdbeee8b73cfc452c87afa74e86731fe31c8558492adf99e7a0c109c5cb662db35c0ea5b</span><br><span class="line">.Its length is 258.Message length is 62</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a998cef101955556e5bcd064d2dcfcbbc421b182df74863e95ca0d83e75b6ce8b977e7cab1ba0f113d3fe6bc2409006e35829b76a13f2a170c50eaeffb470c38a60</span><br><span class="line">.Its length is 258.Message length is 63</span><br><span class="line">Encryped aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa is:97e13b7cedd005b0125a4be2af9dc1f4952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a99952e28f1b4f8a588b92fb1ded8716a996885b4e75c3d47d0dfeabd65836cf329a4b6a5a081935cca7a7f38977dd21cf8eb662dc55bd5e8813ff23ad4d50d5486cdadce02d6fd6be555365a42fed846dc</span><br><span class="line">.Its length is 258.Message length is 64</span><br><span class="line">[*] Closed connection to 127.0.0.1 port 8060</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure></p>
+<p>注意到每次“a”增加8位，密文的相同部分就会增加32位。那么我们猜测这个是ECB加密，因为ECB加密每次针对一组明文进行加密，且不会重用之前的密文结果。</p>
+<p>但是为什么一个a与两个a具有完全不相同的结果，直到发送'a'*9的时候才稳定下来密文。那么就大胆猜测一下服务端加密的时候是把flag与我们输入的内容一起加密了，并且其组合方式应该是encrypt(random+input_string+flag)，因为flag在前的时候密文前半部分应该是稳定的，而每次连接服务的时候，到密文稳定的距离都不一样。</p>
+<p>对于ECB模式，我们可以通过逐位爆破的方式得到明文。不考虑random区域并假设flag为flag{teststring_0123456789}。我们发送"a"*16，服务器实际加密的字符串是"a"*16+"flag{teststring_0123456789}"，可以得到第一个Block "a"*16的密文结果。那么发送"a"*15，服务器加密的就是"a"*15+"flag{teststring_0123456789}"，第一个Block的内容实际上是"a"*15+"f"，我们记下这个Block的密文结果。然后开始对第一个Block的最后一位进行爆破，当爆破到最后一位是"f"时发现与刚刚得到的结果一样。那么就证明flag的第一位是"f"。同样的，我们发送"a"*14，那么第一个Block实际上是"a*14"+"fl"， 我们已知flag第一位是"f"，那么发送"a*14"+"f"，并爆破最后一位，爆破到"l"发现结果一致，那么flag前两位是"fl"，如此循环。</p>
+<p>那么当flag大于16位的时候，又怎么处理？假设flag为flag{teststring_0123456789}，上一段所述方法我们可以得到flag{teststring_。当我们发送'a'*15的时候，第一个Block内容是'a'*15+'f'，第二个Block内容为"lag{testring_"+"0"。那么我们爆破第二个Block的内容就可以了。</p>
+<p>思路明确，那么我们就写脚本好了。对于random区域处理，通过判断什么时候密文前32位稳定就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">s = connect(<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">8060</span>)</span><br><span class="line"></span><br><span class="line">s.recvline()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recv_encrypted</span>(<span class="params">message</span>):</span></span><br><span class="line">    s.recv()</span><br><span class="line">    s.sendline(message)</span><br><span class="line">    s.recvline()</span><br><span class="line">    <span class="keyword">return</span> s.recvline()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pad</span>():</span></span><br><span class="line">    print(<span class="string">&quot;[+] Getting pad.&quot;</span>)</span><br><span class="line">    pad = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">30</span>):</span><br><span class="line">        message = <span class="string">&quot;a&quot;</span> * i</span><br><span class="line">        encrypted_prev = recv_encrypted(message)  <span class="comment"># get previous encrypted message</span></span><br><span class="line">        message = <span class="string">&quot;a&quot;</span> * (i + <span class="number">1</span>)</span><br><span class="line">        encrypted_now = recv_encrypted(message)  <span class="comment"># get now encrypted message</span></span><br><span class="line">        print(<span class="string">&quot;prev: &#123;0&#125;,now: &#123;1&#125;&quot;</span>.format(encrypted_prev[<span class="number">0</span>:<span class="number">31</span>], encrypted_now[<span class="number">0</span>:<span class="number">31</span>]))</span><br><span class="line">        <span class="keyword">if</span> encrypted_prev[<span class="number">0</span>:<span class="number">31</span>] == encrypted_now[<span class="number">0</span>:<span class="number">31</span>]:</span><br><span class="line">            pad = i</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    print(<span class="string">&quot;pad is &#123;0&#125;&quot;</span>.format(pad))</span><br><span class="line">    <span class="keyword">return</span> pad</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">brute_flag</span>(<span class="params">pad</span>):</span></span><br><span class="line">    result = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> rounds <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">10</span>):</span><br><span class="line"></span><br><span class="line">        temp_result = <span class="string">&quot;&quot;</span>  <span class="comment"># flag每一轮添加16位</span></span><br><span class="line">        random_char = random.choice(string.ascii_letters + string.digits)</span><br><span class="line">        <span class="keyword">for</span> a <span class="keyword">in</span> range(<span class="number">15</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">            initial_message = <span class="string">&quot;a&quot;</span> * pad + random_char * a</span><br><span class="line">            initial = recv_encrypted(initial_message)  <span class="comment"># 固定值</span></span><br><span class="line">    </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&#x27;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;#$%&amp;\&#x27;()*+,-./:;&lt;=&gt;?@[\\]^_`&#123;|&#125;~&#x27;</span>:</span><br><span class="line">                message = <span class="string">&quot;a&quot;</span> * pad + (random_char * a) + result + temp_result + i  <span class="comment">#</span></span><br><span class="line">                encrypt_range = slice(<span class="number">32</span> * (rounds + <span class="number">1</span>), <span class="number">32</span> * (rounds + <span class="number">2</span>))  <span class="comment"># [32:64]</span></span><br><span class="line">                encrypt_message = recv_encrypted(message)</span><br><span class="line">                print(<span class="string">&quot;message is :&#123;0&#125;,encrypted is :&#123;1&#125;,initial is :&#123;2&#125;,initial message is :&#123;3&#125;&quot;</span>.format(message,</span><br><span class="line">                                                                                                         encrypt_message,</span><br><span class="line">                                                                                                         initial,</span><br><span class="line">                                                                                                         initial_message))</span><br><span class="line">                <span class="keyword">if</span> encrypt_message[encrypt_range] == initial[encrypt_range]:  <span class="comment"># 第一轮比较[32:64]，第二轮比较[64,96]</span></span><br><span class="line">                    temp_result += i</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            print(<span class="string">&quot;round &#123;0&#125; flag is: &#123;1&#125;&quot;</span>.format(rounds, temp_result))</span><br><span class="line">    </span><br><span class="line">        result += temp_result</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;&#125;&quot;</span> <span class="keyword">in</span> result:</span><br><span class="line">            print(<span class="string">&quot;flag is :&#123;0&#125;&quot;</span>.format(result))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">brute_flag(get_pad())</span><br></pre></td></tr></table></figure>
+
+    <div id="aplayer-AKrVwwkH" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="4441164" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{e8b74d24-f749-49dc-a9a9-55b979567510}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/10/21/CSAW-Quals-2019-byte-me/" title="CSAW-Quals-2019-byte_me">http://tiaonmmn.github.io/2019/10/21/CSAW-Quals-2019-byte-me/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/AES/" rel="tag"><i class="fa fa-tag"></i> AES</a>
+              <a href="/tags/Crypto/" rel="tag"><i class="fa fa-tag"></i> Crypto</a>
+              <a href="/tags/ECB/" rel="tag"><i class="fa fa-tag"></i> ECB</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/19/PASECACTF-2019-Honey-shop/" rel="prev" title="PASECACTF-2019-Honey_shop">
+                  <i class="fa fa-chevron-left"></i> PASECACTF-2019-Honey_shop
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/24/BUUOJ%E5%88%B7%E9%A2%98-Web-Checkin/" rel="next" title="BUUOJ刷题-Web-Checkin">
+                  BUUOJ刷题-Web-Checkin <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/10/21/CSAW-Quals-2019-byte-me/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

