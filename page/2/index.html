@@ -198,7 +198,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -242,6 +242,124 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-WebDog</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-23 10:22:16" itemprop="dateCreated datePublished" datetime="2020-04-23T10:22:16+08:00">2020-04-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-08-27 15:13:35" itemprop="dateModified" datetime="2020-08-27T15:13:35+08:00">2020-08-27</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>NPUCTF 2020的Web🐕，很基础的AES CBC。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;config.php&#x27;</span>);   <span class="comment"># $key,$flag</span></span><br><span class="line">define(<span class="string">&quot;METHOD&quot;</span>, <span class="string">&quot;aes-128-cbc&quot;</span>);  <span class="comment">//定义加密方式</span></span><br><span class="line">define(<span class="string">&quot;SECRET_KEY&quot;</span>, $key);    <span class="comment">//定义密钥</span></span><br><span class="line">define(<span class="string">&quot;IV&quot;</span>,<span class="string">&quot;6666666666666666&quot;</span>);    <span class="comment">//定义初始向量 16个6</span></span><br><span class="line">define(<span class="string">&quot;BR&quot;</span>,<span class="string">&#x27;&lt;br&gt;&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;source&#x27;</span>]))header(<span class="string">&#x27;location:./index.php?source=1&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#var_dump($GLOBALS);   //听说你想看这个？</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aes_encrypt</span>(<span class="params">$iv,$data</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;--------encrypt---------&quot;</span>.BR;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;IV:&#x27;</span>.$iv.BR;</span><br><span class="line">    <span class="keyword">return</span> base64_encode(openssl_encrypt($data, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, $iv)).BR;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aes_decrypt</span>(<span class="params">$iv,$data</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> openssl_decrypt(base64_decode($data),METHOD,SECRET_KEY,OPENSSL_RAW_DATA,$iv) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;False&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">&#x27;method&#x27;</span>]==<span class="string">&#x27;encrypt&#x27;</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $iv = IV;</span><br><span class="line">    $data = $flag;    </span><br><span class="line">    <span class="keyword">echo</span> aes_encrypt($iv,$data);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>($_GET[<span class="string">&#x27;method&#x27;</span>]==<span class="string">&quot;decrypt&quot;</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $iv = @$_POST[<span class="string">&#x27;iv&#x27;</span>];</span><br><span class="line">    $data = @$_POST[<span class="string">&#x27;data&#x27;</span>];</span><br><span class="line">    <span class="keyword">echo</span> aes_decrypt($iv,$data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;我摊牌了，就是懒得写前端&quot;</span>.BR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">&#x27;source&#x27;</span>]==<span class="number">1</span>)highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>允许我们加密或解密，加密会把$flag的内容加密显示，而解密时允许我们输入IV和密文，用相同的key解密。那么看起来我们可以直接decrypt了，然后发现并不行。注意到21行解密的时候后面还加了个or，当我们解密成功时or的左端为True，那么会直接返回True，参考<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.operators.logical.php">这里</a>。所以我们还拿不到明文。</p>
+<p>然后发现它用的加密方式是AES CBC，那么就想到AES CBC的两种攻击手法：Padding Oracle和字节反转。Padding Oracle适合在不清楚key和IV的情况下解密密文，这就是我们要的。具体请参考<a target="_blank" rel="noopener" href="https://ctf-wiki.github.io/ctf-wiki/crypto/blockcipher/mode/padding-oracle-attack-zh/">这里</a>。Padding Oracle的条件是能分辨正常解密和解密失败的情况，本题解密失败时会返回False，足够区分了。</p>
+
+    <div id="aplayer-xykJVAYt" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="34040331" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{0e55ec5f-fdee-4455-96a3-20ebd390da59}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1338,123 +1456,6 @@ B--&gt;|Prototype|C[&quot;123&quot;]
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-easy_serialize_php</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-12-03 08:56:28" itemprop="dateCreated datePublished" datetime="2019-12-03T08:56:28+08:00">2019-12-03</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-12-07 19:18:48" itemprop="dateModified" datetime="2019-12-07T19:18:48+08:00">2019-12-07</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>5k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>安洵杯 2019的题。 打开就给了我们源码：
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/03/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-serialize-php/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1511,14 +1512,14 @@ B--&gt;|Prototype|C[&quot;123&quot;]
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">296k</span>
+    <span title="站点总字数">298k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:29</span>
+    <span title="站点阅读时长">4:31</span>
   </span>
 </div>
 <div class="busuanzi-count">

