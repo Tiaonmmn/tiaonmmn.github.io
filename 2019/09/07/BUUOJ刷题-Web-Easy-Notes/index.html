@@ -101,9 +101,9 @@
   </style>
 </noscript>
 
-<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
-<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
-<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+<link rel="stylesheet" href="/assets/css/APlayer.min.css" class="aplayer-style-marker">
+<script src="/assets/js/APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="/assets/js/Meting.min.js" class="meting-script-marker"></script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -114,6 +114,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -137,6 +140,31 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -206,18 +234,21 @@
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
+          <a href="/archives/">
+        
           <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
+          
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
+          
         <span class="site-state-item-count">82</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
@@ -225,7 +256,13 @@
 </div>
 
 
-
+<!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div><!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div>
       </section>
     </div>
   </aside>
@@ -350,7 +387,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>HarekazeCTF 2019的Easy Notes。 <a id="more"></a> 先把源码脱下来。index.php没有LFI。pages/flag.php要求is_admin()成功后显示flag。is_admin()在lib.php中： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_admin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="keyword">isset</span>($_SESSION[<span class="string">&#x27;admin&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> $_SESSION[<span class="string">&#x27;admin&#x27;</span>] === <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>HarekazeCTF 2019的Easy Notes。 <a id="more"></a> 先把源码脱下来。index.php没有LFI。pages/flag.php要求is_admin()成功后显示flag。is_admin()在lib.php中： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_admin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="keyword">isset</span>($_SESSION[<span class="string">&#x27;admin&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> $_SESSION[<span class="string">&#x27;admin&#x27;</span>] === <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>要求SESSION验证，那我们来看一下SESSION处理的相关代码。init.php中出现session_save_path为"/var/www/tmp/"。然后全部代码再没有提过$_SESSION['admin']了，同时也没有数据库的参与。那就要考虑一下Session反序列化的问题了。</p>
 <p>接着看代码，在用户登录以后可以添加Notes，以及Export。添加Notes，会把相关数据写到Session里。Export的时候可以选择Tar或者Zip，如果指定为Tar会使用Phar进行压缩，否则就会使用Zip。注意type是可以通过GET传递的，那么如果type设为<code>.</code>，就会连同前面的<code>.</code>一起被删除。那么文件就变成了sess_-(随机数字)，保存在/var/www/tmp下。</p>
 <p>PHP使用文件存储Session信息，并且。因此如果我们把Session文件替换了，写入admin信息，那么Flag就会出来了。PHP的Session文件以"sess_"开头，后接Session ID，Session ID仅有[A-Za-z0-9-0]构成。Ubuntu默认安装的PHP中session.serialize_handler默认设置为php。这种情况下，Session文件的内容为(属性名)|(序列化数据)。在访问Session数据的时候，PHP会自动反序列化相应数据。那么，我们构造Note的标题名为"|N;admin|b:1;"。这样反序列化的结果就是admin==bool(true)。我们就伪造了admin身份。而我们访问的时候，通过传递Cookie的值PHPSESSID为我们想要的Session ID，PHP就会去反序列化相应的Session文件。</p>
@@ -580,6 +617,23 @@ if (document.querySelectorAll('.mermaid').length) {
   
 
   
+<!-- calendar widget -->
+
+    <script src=""></script>
+    <script src=""></script>
+    <script>
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 <script>
 NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
@@ -592,5 +646,23 @@ NexT.utils.loadComments('#valine-comments', () => {
 });
 </script>
 
+    
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 </body>
 </html>
+
+

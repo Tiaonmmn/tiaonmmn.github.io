@@ -101,9 +101,9 @@
   </style>
 </noscript>
 
-<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
-<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
-<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+<link rel="stylesheet" href="/assets/css/APlayer.min.css" class="aplayer-style-marker">
+<script src="/assets/js/APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="/assets/js/Meting.min.js" class="meting-script-marker"></script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -114,6 +114,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -137,6 +140,31 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -206,18 +234,21 @@
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
+          <a href="/archives/">
+        
           <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
+          
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
+          
         <span class="site-state-item-count">82</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
@@ -225,7 +256,13 @@
 </div>
 
 
-
+<!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div><!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div>
       </section>
     </div>
   </aside>
@@ -350,7 +387,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>打开就送源码： <a id="more"></a> <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;source&#x27;</span>])) &#123;</span><br><span class="line">  show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">  <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_valid</span>(<span class="params">$str</span>) </span>&#123;</span><br><span class="line">  $banword = [</span><br><span class="line">    <span class="comment">// no path traversal</span></span><br><span class="line">    <span class="string">&#x27;\.\.&#x27;</span>,</span><br><span class="line">    <span class="comment">// no stream wrapper</span></span><br><span class="line">    <span class="string">&#x27;(php|file|glob|data|tp|zip|zlib|phar):&#x27;</span>,</span><br><span class="line">    <span class="comment">// no data exfiltration</span></span><br><span class="line">    <span class="string">&#x27;flag&#x27;</span></span><br><span class="line">  ];</span><br><span class="line">  $regexp = <span class="string">&#x27;/&#x27;</span> . implode(<span class="string">&#x27;|&#x27;</span>, $banword) . <span class="string">&#x27;/i&#x27;</span>;</span><br><span class="line">  <span class="keyword">if</span> (preg_match($regexp, $str)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$body = file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">$json = json_decode($body, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (is_valid($body) &amp;&amp; <span class="keyword">isset</span>($json) &amp;&amp; <span class="keyword">isset</span>($json[<span class="string">&#x27;page&#x27;</span>])) &#123;</span><br><span class="line">  $page = $json[<span class="string">&#x27;page&#x27;</span>];</span><br><span class="line">  $content = file_get_contents($page);</span><br><span class="line">  <span class="keyword">if</span> (!$content || !is_valid($content)) &#123;</span><br><span class="line">    $content = <span class="string">&quot;&lt;p&gt;not found&lt;/p&gt;\n&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  $content = <span class="string">&#x27;&lt;p&gt;invalid request&lt;/p&gt;&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// no data exfiltration!!!</span></span><br><span class="line">$content = preg_replace(<span class="string">&#x27;/HarekazeCTF\&#123;.+\&#125;/i&#x27;</span>, <span class="string">&#x27;HarekazeCTF&#123;&amp;lt;censored&amp;gt;&#125;&#x27;</span>, $content);</span><br><span class="line"><span class="keyword">echo</span> json_encode([<span class="string">&#x27;content&#x27;</span> =&gt; $content]);</span><br></pre></td></tr></table></figure></p>
+        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>打开就送源码： <a id="more"></a> <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;source&#x27;</span>])) &#123;</span><br><span class="line">  show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">  <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_valid</span>(<span class="params">$str</span>) </span>&#123;</span><br><span class="line">  $banword = [</span><br><span class="line">    <span class="comment">// no path traversal</span></span><br><span class="line">    <span class="string">&#x27;\.\.&#x27;</span>,</span><br><span class="line">    <span class="comment">// no stream wrapper</span></span><br><span class="line">    <span class="string">&#x27;(php|file|glob|data|tp|zip|zlib|phar):&#x27;</span>,</span><br><span class="line">    <span class="comment">// no data exfiltration</span></span><br><span class="line">    <span class="string">&#x27;flag&#x27;</span></span><br><span class="line">  ];</span><br><span class="line">  $regexp = <span class="string">&#x27;/&#x27;</span> . implode(<span class="string">&#x27;|&#x27;</span>, $banword) . <span class="string">&#x27;/i&#x27;</span>;</span><br><span class="line">  <span class="keyword">if</span> (preg_match($regexp, $str)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$body = file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">$json = json_decode($body, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (is_valid($body) &amp;&amp; <span class="keyword">isset</span>($json) &amp;&amp; <span class="keyword">isset</span>($json[<span class="string">&#x27;page&#x27;</span>])) &#123;</span><br><span class="line">  $page = $json[<span class="string">&#x27;page&#x27;</span>];</span><br><span class="line">  $content = file_get_contents($page);</span><br><span class="line">  <span class="keyword">if</span> (!$content || !is_valid($content)) &#123;</span><br><span class="line">    $content = <span class="string">&quot;&lt;p&gt;not found&lt;/p&gt;\n&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  $content = <span class="string">&#x27;&lt;p&gt;invalid request&lt;/p&gt;&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// no data exfiltration!!!</span></span><br><span class="line">$content = preg_replace(<span class="string">&#x27;/HarekazeCTF\&#123;.+\&#125;/i&#x27;</span>, <span class="string">&#x27;HarekazeCTF&#123;&amp;lt;censored&amp;gt;&#125;&#x27;</span>, $content);</span><br><span class="line"><span class="keyword">echo</span> json_encode([<span class="string">&#x27;content&#x27;</span> =&gt; $content]);</span><br></pre></td></tr></table></figure></p>
 <p>is_valid()Ban了几个关键词：flag php file glob data tp zip zlib phar和..，这样我们没法用PHP流读文件了。然后它从php://input读内容，我们直接POST就可以了。我们POST的内容要是JSON，他会读page的项，如果返回内容不符合is_valid()或者没有内容就会返回not found，其他错误就返回invlaid request，然后把返回的内容中如果有HarekazeCTF{}，就把花括号中的内容删掉，最后返回结果。</p>
 <p>正常情况下是没办法绕过is_valid()的，但是他提交的是JSON。JSON具有很强的包容性，能够接收Unicode，因此我们可以用Unicode编码字符去绕过。</p>
 <p>根据所给的Dockerfile我们可以知道flag在根目录下。提交<code>&#123;"page":"/fl\u0061g"&#125;</code>（a的Unicode编码是U+0061），返回not found，因为/flag包含flag字符串，没通过is_valid()。同样的，用php流就可以了，提交<code>&#123;"page":"ph\u0070\u003a//filter/convert.base64-encode/resource=/fl\u0061g"&#125;</code>，返回Base64编码过的flag。反Base64就可以了。</p>
@@ -571,6 +608,23 @@ if (document.querySelectorAll('.mermaid').length) {
   
 
   
+<!-- calendar widget -->
+
+    <script src=""></script>
+    <script src=""></script>
+    <script>
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 <script>
 NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
@@ -583,5 +637,23 @@ NexT.utils.loadComments('#valine-comments', () => {
 });
 </script>
 
+    
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 </body>
 </html>
+
+

@@ -99,9 +99,9 @@
   </style>
 </noscript>
 
-<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
-<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
-<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+<link rel="stylesheet" href="/assets/css/APlayer.min.css" class="aplayer-style-marker">
+<script src="/assets/js/APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="/assets/js/Meting.min.js" class="meting-script-marker"></script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -112,6 +112,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -135,6 +138,31 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -205,18 +233,21 @@
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
+          <a href="/archives/">
+        
           <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
+          
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
+          
         <span class="site-state-item-count">82</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
@@ -224,7 +255,13 @@
 </div>
 
 
-
+<!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div><!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div>
       </section>
     </div>
   </aside>
@@ -349,7 +386,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>花了几天时间搞明白一道题，放<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/hitcon_2018_babycake">环境</a>有点晚。</p>
+        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>花了几天时间搞明白一道题，放<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/hitcon_2018_babycake">环境</a>有点晚。</p>
 <p>源码审计的题，跟 SSRF 无关。用的 CakePHP 框架，PHP7.2 版本的。打开页面后让我们输入 URL，但又不是 SSRF，反序列化？猜不到，看源码吧。 <a id="more"></a> # Part 1.Look inside the code,and LFI.</p>
 <p>重点代码在 src.php 里。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Core</span>\<span class="title">Configure</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Http</span>\<span class="title">Client</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Http</span>\<span class="title">Exception</span>\<span class="title">ForbiddenException</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">Http</span>\<span class="title">Exception</span>\<span class="title">NotFoundException</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Cake</span>\<span class="title">View</span>\<span class="title">Exception</span>\<span class="title">MissingTemplateException</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DymmyResponse</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$headers, $body</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;headers = $headers;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;body = $body;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PagesController</span> <span class="keyword">extends</span> <span class="title">AppController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">httpclient</span>(<span class="params">$method, $url, $headers, $data</span>) </span>&#123;</span><br><span class="line">        $options = [</span><br><span class="line">            <span class="string">&#x27;headers&#x27;</span> =&gt; $headers, </span><br><span class="line">            <span class="string">&#x27;timeout&#x27;</span> =&gt; <span class="number">10</span></span><br><span class="line">        ];</span><br><span class="line">    </span><br><span class="line">        $http = <span class="keyword">new</span> Client();</span><br><span class="line">        <span class="keyword">return</span> $http-&gt;$method($url, $data, $options);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">back</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;render(<span class="string">&#x27;pages&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">_cache_dir</span>(<span class="params">$key</span>)</span>&#123;</span><br><span class="line">        $ip = <span class="keyword">$this</span>-&gt;request-&gt;getEnv(<span class="string">&#x27;REMOTE_ADDR&#x27;</span>);</span><br><span class="line">        $index = sprintf(<span class="string">&#x27;mycache/%s/%s/&#x27;</span>, $ip, $key);</span><br><span class="line">        <span class="keyword">return</span> CACHE . $index;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">cache_set</span>(<span class="params">$key, $response</span>) </span>&#123;</span><br><span class="line">        $cache_dir = <span class="keyword">$this</span>-&gt;_cache_dir($key);</span><br><span class="line">        <span class="keyword">if</span> ( !file_exists($cache_dir) ) &#123;</span><br><span class="line">            mkdir($cache_dir, <span class="number">0700</span>, <span class="literal">true</span>);</span><br><span class="line">            file_put_contents($cache_dir . <span class="string">&quot;body.cache&quot;</span>, $response-&gt;body);</span><br><span class="line">            file_put_contents($cache_dir . <span class="string">&quot;headers.cache&quot;</span>, serialize($response-&gt;headers));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">cache_get</span>(<span class="params">$key</span>) </span>&#123;</span><br><span class="line">        $cache_dir = <span class="keyword">$this</span>-&gt;_cache_dir($key);</span><br><span class="line">        <span class="keyword">if</span> (file_exists($cache_dir)) &#123;</span><br><span class="line">            $body   = file_get_contents($cache_dir . <span class="string">&quot;/body.cache&quot;</span>);</span><br><span class="line">            $headers = file_get_contents($cache_dir . <span class="string">&quot;/headers.cache&quot;</span>);</span><br><span class="line">            </span><br><span class="line">            $body = <span class="string">&quot;&lt;!-- from cache --&gt;\n&quot;</span> . $body;</span><br><span class="line">            $headers = unserialize($headers);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> DymmyResponse($headers, $body);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span>(<span class="params">...$path</span>) </span>&#123;    </span><br><span class="line">        $request  = <span class="keyword">$this</span>-&gt;request;</span><br><span class="line">        $data = $request-&gt;getQuery(<span class="string">&#x27;data&#x27;</span>);</span><br><span class="line">        $url  = $request-&gt;getQuery(<span class="string">&#x27;url&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (strlen($url) == <span class="number">0</span>) </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;back();</span><br><span class="line">    </span><br><span class="line">        $scheme = strtolower( parse_url($url, PHP_URL_SCHEME) );</span><br><span class="line">        <span class="keyword">if</span> (strlen($scheme) == <span class="number">0</span> || !in_array($scheme, [<span class="string">&#x27;http&#x27;</span>, <span class="string">&#x27;https&#x27;</span>]))</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;back();</span><br><span class="line">    </span><br><span class="line">        $method = strtolower( $request-&gt;getMethod() );</span><br><span class="line">        <span class="keyword">if</span> ( !in_array($method, [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;post&#x27;</span>, <span class="string">&#x27;put&#x27;</span>, <span class="string">&#x27;delete&#x27;</span>, <span class="string">&#x27;patch&#x27;</span>]) )</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;back();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        $headers = [];</span><br><span class="line">        <span class="keyword">foreach</span> ($request-&gt;getHeaders() <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">            <span class="keyword">if</span> (in_array( strtolower($key), [<span class="string">&#x27;host&#x27;</span>, <span class="string">&#x27;connection&#x27;</span>, <span class="string">&#x27;expect&#x27;</span>, <span class="string">&#x27;content-length&#x27;</span>] ))</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (count($value) == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">    </span><br><span class="line">            $headers[$key] = $value[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        $key = md5($url);</span><br><span class="line">        <span class="keyword">if</span> ($method == <span class="string">&#x27;get&#x27;</span>) &#123;</span><br><span class="line">            $response = <span class="keyword">$this</span>-&gt;cache_get($key);</span><br><span class="line">            <span class="keyword">if</span> (!$response) &#123;</span><br><span class="line">                $response = <span class="keyword">$this</span>-&gt;httpclient($method, $url, $headers, <span class="literal">null</span>);</span><br><span class="line">                <span class="keyword">$this</span>-&gt;cache_set($key, $response);                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $response = <span class="keyword">$this</span>-&gt;httpclient($method, $url, $headers, $data);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">foreach</span> ($response-&gt;headers <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">            <span class="keyword">if</span> (strtolower($key) == <span class="string">&#x27;content-type&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;response-&gt;type(<span class="keyword">array</span>(<span class="string">&#x27;type&#x27;</span> =&gt; $value));</span><br><span class="line">                <span class="keyword">$this</span>-&gt;response-&gt;type(<span class="string">&#x27;type&#x27;</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;response-&gt;withHeader($key, $value);</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">$this</span>-&gt;response-&gt;body($response-&gt;body);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;response;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>很明显，允许我们输入的 URL 只能是 HTTP 或 HTTPS 协议的，然后根据访问题目页面的 HTTP 方式去，通过一个 httpclient 来对输入 URL 进行访问。如果使用的是 GET 方式，会设置缓存。同时，访问题目页面时的 HTTP 头也会同时发送到 httpclient 中。</p>
@@ -586,6 +623,23 @@ if (document.querySelectorAll('.mermaid').length) {
   
 
   
+<!-- calendar widget -->
+
+    <script src=""></script>
+    <script src=""></script>
+    <script>
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 <script>
 NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
@@ -598,5 +652,23 @@ NexT.utils.loadComments('#valine-comments', () => {
 });
 </script>
 
+    
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 </body>
 </html>
+
+

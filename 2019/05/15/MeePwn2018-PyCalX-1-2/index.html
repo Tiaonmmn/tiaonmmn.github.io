@@ -98,9 +98,9 @@
   </style>
 </noscript>
 
-<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
-<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
-<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+<link rel="stylesheet" href="/assets/css/APlayer.min.css" class="aplayer-style-marker">
+<script src="/assets/js/APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="/assets/js/Meting.min.js" class="meting-script-marker"></script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -111,6 +111,9 @@
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -134,6 +137,31 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -204,18 +232,21 @@
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives">
+          <a href="/archives/">
+        
           <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
+          
         <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
+          
         <span class="site-state-item-count">82</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
@@ -223,7 +254,13 @@
 </div>
 
 
-
+<!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div><!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div>
       </section>
     </div>
   </aside>
@@ -348,7 +385,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>一道 Python 的题，绕沙盒的。环境在<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/meepwn_2018_pycalx">这</a>。</p>
+        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>一道 Python 的题，绕沙盒的。环境在<a target="_blank" rel="noopener" href="https://github.com/Tiaonmmn/meepwn_2018_pycalx">这</a>。</p>
 <h1 id="part-1.-pycalx-version1">Part 1. PyCalX-Version1</h1>
 <p>  题目给了源码。 <a id="more"></a> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> cgi;</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> html <span class="keyword">import</span> escape</span><br><span class="line"></span><br><span class="line">FLAG = open(<span class="string">&#x27;/var/www/flag&#x27;</span>,<span class="string">&#x27;r&#x27;</span>).read()</span><br><span class="line"></span><br><span class="line">OK_200 = <span class="string">&quot;&quot;&quot;Content-type: text/html</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;title&gt;PyCalx&lt;/title&gt;</span></span><br><span class="line"><span class="string">&lt;h1&gt;PyCalx&lt;/h1&gt;</span></span><br><span class="line"><span class="string">&lt;form&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=value1 placeholder=&#x27;Value 1 (Example: 1  abc)&#x27; autofocus/&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=op placeholder=&#x27;Operator (Example: + - * ** / // == != )&#x27; /&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4&quot; type=text name=value2 placeholder=&#x27;Value 2 (Example: 1  abc)&#x27; /&gt;</span></span><br><span class="line"><span class="string">&lt;input class=&quot;form-control col-md-4 btn btn-success&quot; type=submit value=EVAL /&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br><span class="line"><span class="string">&lt;a href=&#x27;?source=1&#x27;&gt;Source&lt;/a&gt;</span></span><br><span class="line"><span class="string">&lt;/center&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">print(OK_200)</span><br><span class="line">arguments = cgi.FieldStorage()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;source&#x27;</span> <span class="keyword">in</span> arguments:</span><br><span class="line">    source = arguments[<span class="string">&#x27;source&#x27;</span>].value</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    source = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> source == <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">    print(<span class="string">&#x27;&lt;pre&gt;&#x27;</span>+escape(str(open(__file__,<span class="string">&#x27;r&#x27;</span>).read()))+<span class="string">&#x27;&lt;/pre&gt;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">&#x27;value1&#x27;</span> <span class="keyword">in</span> arguments <span class="keyword">and</span> <span class="string">&#x27;value2&#x27;</span> <span class="keyword">in</span> arguments <span class="keyword">and</span> <span class="string">&#x27;op&#x27;</span> <span class="keyword">in</span> arguments:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span>(<span class="params">val</span>):</span></span><br><span class="line">        val = str(val)[:<span class="number">64</span>]</span><br><span class="line">        <span class="keyword">if</span> str(val).isdigit(): <span class="keyword">return</span> int(val)</span><br><span class="line">        blacklist = [<span class="string">&#x27;(&#x27;</span>,<span class="string">&#x27;)&#x27;</span>,<span class="string">&#x27;[&#x27;</span>,<span class="string">&#x27;]&#x27;</span>,<span class="string">&#x27;\&#x27;&#x27;</span>,<span class="string">&#x27;&quot;&#x27;</span>] <span class="comment"># I don&#x27;t like tuple, list and dict.</span></span><br><span class="line">        <span class="keyword">if</span> val == <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> [c <span class="keyword">for</span> c <span class="keyword">in</span> blacklist <span class="keyword">if</span> c <span class="keyword">in</span> val] != []:</span><br><span class="line">            print(<span class="string">&#x27;&lt;center&gt;Invalid value %s&lt;/center&gt;&#x27;</span>%val)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_op</span>(<span class="params">val</span>):</span></span><br><span class="line">        val = str(val)[:<span class="number">2</span>]</span><br><span class="line">        list_ops = [<span class="string">&#x27;+&#x27;</span>,<span class="string">&#x27;-&#x27;</span>,<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;=&#x27;</span>,<span class="string">&#x27;!&#x27;</span>]</span><br><span class="line">        <span class="keyword">if</span> val == <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> val[<span class="number">0</span>] <span class="keyword">not</span> <span class="keyword">in</span> list_ops:</span><br><span class="line">            print(<span class="string">&#x27;&lt;center&gt;Invalid op&lt;/center&gt;&#x27;</span>)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line">    </span><br><span class="line">    op = get_op(arguments[<span class="string">&#x27;op&#x27;</span>].value)</span><br><span class="line">    value1 = get_value(arguments[<span class="string">&#x27;value1&#x27;</span>].value)</span><br><span class="line">    value2 = get_value(arguments[<span class="string">&#x27;value2&#x27;</span>].value)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> str(value1).isdigit() ^ str(value2).isdigit():</span><br><span class="line">        print(<span class="string">&#x27;&lt;center&gt;Types of the values don\&#x27;t match&lt;/center&gt;&#x27;</span>)</span><br><span class="line">        sys.exit(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    calc_eval = str(repr(value1)) + str(op) + str(repr(value2))</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">&#x27;&lt;div class=container&gt;&lt;div class=row&gt;&lt;div class=col-md-2&gt;&lt;/div&gt;&lt;div class=&quot;col-md-8&quot;&gt;&lt;pre&gt;&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;&gt;&gt;&gt;&gt; print(&#x27;</span>+escape(calc_eval)+<span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = str(eval(calc_eval))</span><br><span class="line">        <span class="keyword">if</span> result.isdigit() <span class="keyword">or</span> result == <span class="string">&#x27;True&#x27;</span> <span class="keyword">or</span> result == <span class="string">&#x27;False&#x27;</span>:</span><br><span class="line">            print(result)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">&quot;Invalid&quot;</span>) <span class="comment"># Sorry we don&#x27;t support output as a string due to security issue.</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">&quot;Invalid&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;&gt;&gt;&gt; &lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
 <p>就是用 eval 实现了个简易计算器，而 FLAG 已经读进程序了，暂时不想绕沙盒 getshell 的事情。两个值要求不能出现”、’、[、]、(、) 这些符号，而中间的运算符要求必须是 <code>+ - * / ! =</code> 这几个，但是请注意源码 50 行，它使用的是 op [0]，后面的没做任何限制，因此可以出现 <code>+''</code> 这种符号。而程序允许我们使用字符串运算，但是没法直接返回结果。因此思路非常明确了：通过类似盲注的方式，逐位判断 FLAG。但是我们需要一个第三方能控制的变量，value1 没法真正参与运算。这个时候，我们发现还有一个 source 变量，虽然是用来显示源码的，但是它的作用域是全局，可以参与运算，并且可以控制。那么可以开始写脚本了。</p>
@@ -571,6 +608,23 @@ if (document.querySelectorAll('.mermaid').length) {
   
 
   
+<!-- calendar widget -->
+
+    <script src=""></script>
+    <script src=""></script>
+    <script>
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 <script>
 NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
@@ -583,5 +637,23 @@ NexT.utils.loadComments('#valine-comments', () => {
 });
 </script>
 
+    
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
 </body>
 </html>
+
+
