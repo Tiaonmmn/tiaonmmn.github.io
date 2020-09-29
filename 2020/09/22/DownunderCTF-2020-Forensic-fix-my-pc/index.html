@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tiaonmmn.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#b46eba","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}};
+  </script>
+
+  <meta name="description" content="Downunder CTF 2020的fix-my-pc，给了个rescue.zip，解压是两个bin。 1234file crash.bincrash.bin: ELF 64-bit LSB core file, x86-64, version 1 (SYSV), SVR4-stylefile system.binsystem.bin: QEMU QCOW2 Image (v3), 824634">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DownunderCTF-Forensic-fix-my-pc">
+<meta property="og:url" content="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/index.html">
+<meta property="og:site_name" content="Tiaonmmn&#39;s Littile House">
+<meta property="og:description" content="Downunder CTF 2020的fix-my-pc，给了个rescue.zip，解压是两个bin。 1234file crash.bincrash.bin: ELF 64-bit LSB core file, x86-64, version 1 (SYSV), SVR4-stylefile system.binsystem.bin: QEMU QCOW2 Image (v3), 824634">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/git_history.png">
+<meta property="article:published_time" content="2020-09-22T09:22:26.000Z">
+<meta property="article:modified_time" content="2020-09-23T03:18:19.206Z">
+<meta property="article:author" content="Tiaonmmn.ZMZ">
+<meta property="article:tag" content="Misc">
+<meta property="article:tag" content="Forenisc">
+<meta property="article:tag" content="Memory">
+<meta property="article:tag" content="LUKS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/git_history.png">
+
+
+<link rel="canonical" href="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>DownunderCTF-Forensic-fix-my-pc | Tiaonmmn's Littile House</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/assets/css/APlayer.min.css" class="aplayer-style-marker">
+<script src="/assets/js/APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="/assets/js/Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tiaonmmn's Littile House</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tiaonmmn.ZMZ"
+      src="/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">Tiaonmmn.ZMZ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">95</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+<!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div><!-- CloudCalendar -->
+<div class="widget-wrap" style="width: 90%;margin-left: auto;margin-right: auto; opacity: 0.97;">
+	<div class="widget" id="CloudCalendar"></div>
+</div>
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DownunderCTF-Forensic-fix-my-pc
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-22 17:22:26" itemprop="dateCreated datePublished" datetime="2020-09-22T17:22:26+08:00">2020-09-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-23 11:18:19" itemprop="dateModified" datetime="2020-09-23T11:18:19+08:00">2020-09-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Downunder CTF 2020的fix-my-pc，给了个rescue.zip，解压是两个bin。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">file crash.bin</span><br><span class="line">crash.bin: ELF 64-bit LSB core file, x86-64, version 1 (SYSV), SVR4-style</span><br><span class="line">file system.bin</span><br><span class="line">system.bin: QEMU QCOW2 Image (v3), 824634368 bytes</span><br></pre></td></tr></table></figure> crash.bin大概率是个内存镜像。system.bin是个QCOW2镜像，qemu-nbd挂载就OK。 先挂载QCOW2：modprobe nbd;qemu-nbd --connect=/dev/nbd0 system.bin。 然后fdisk -l查看分区信息： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Disk &#x2F;dev&#x2F;nbd0: 786.43 MiB, 824634368 bytes, 1610614 sectors</span><br><span class="line">Units: sectors of 1 * 512 &#x3D; 512 bytes</span><br><span class="line">Sector size (logical&#x2F;physical): 512 bytes &#x2F; 512 bytes</span><br><span class="line">I&#x2F;O size (minimum&#x2F;optimal): 512 bytes &#x2F; 512 bytes</span><br><span class="line">Disklabel type: dos</span><br><span class="line">Disk identifier: 0x00000000</span><br><span class="line"></span><br><span class="line">Device      Boot   Start     End Sectors   Size Id Type</span><br><span class="line">&#x2F;dev&#x2F;nbd0p1           63  204862  204800   100M 83 Linux</span><br><span class="line">&#x2F;dev&#x2F;nbd0p2       204863 1253438 1048576   512M 83 Linux</span><br><span class="line">&#x2F;dev&#x2F;nbd0p3      1253439 1610613  357175 174.4M 83 Linux</span><br></pre></td></tr></table></figure> mount挂载分区，发现nbd0p2和p3不能挂载，分区类型为crypto_LUKS。尝试挂载：modprobe dm-crypt;modprobe dm-mod;cryptsetup open /dev/nbd2 test2，然后要密码。没密码，那就去内存翻。</p>
+<p>在去内存找密码之前，先看一下LUKS头信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># cryptsetup luksDump &#x2F;dev&#x2F;nbd0p2                                                                                                 root@CTFServer-Vindication</span><br><span class="line">LUKS header information</span><br><span class="line">Version:        2</span><br><span class="line">Epoch:          3</span><br><span class="line">Metadata area:  16384 [bytes]</span><br><span class="line">Keyslots area:  16744448 [bytes]</span><br><span class="line">UUID:           d2ed9bec-ef5f-4482-a03c-57c3b3aabcb3</span><br><span class="line">Label:          (no label)</span><br><span class="line">Subsystem:      (no subsystem)</span><br><span class="line">Flags:          (no flags)</span><br><span class="line"></span><br><span class="line">Data segments:</span><br><span class="line">  0: crypt</span><br><span class="line">        offset: 16777216 [bytes]</span><br><span class="line">        length: (whole device)</span><br><span class="line">        cipher: aes-xts-plain64</span><br><span class="line">        sector: 512 [bytes]</span><br><span class="line"></span><br><span class="line">Keyslots:</span><br><span class="line">  0: luks2</span><br><span class="line">        Key:        512 bits</span><br><span class="line">        Priority:   normal</span><br><span class="line">        Cipher:     aes-xts-plain64</span><br><span class="line">        Cipher key: 512 bits</span><br><span class="line">        PBKDF:      argon2i</span><br><span class="line">        Time cost:  13</span><br><span class="line">        Memory:     249470</span><br><span class="line">        Threads:    1</span><br><span class="line">        Salt:       fa 36 bf 79 a9 69 ec f3 6f 49 aa f0 e7 3b e3 03 </span><br><span class="line">                    a4 2b 1f 9b fd a9 8a b6 ca 02 b8 17 d5 ce cf e3 </span><br><span class="line">        AF stripes: 4000</span><br><span class="line">        AF hash:    sha256</span><br><span class="line">        Area offset:32768 [bytes]</span><br><span class="line">        Area length:258048 [bytes]</span><br><span class="line">        Digest ID:  0</span><br><span class="line">Tokens:</span><br><span class="line">Digests:</span><br><span class="line">  0: pbkdf2</span><br><span class="line">        Hash:       sha256</span><br><span class="line">        Iterations: 160627</span><br><span class="line">        Salt:       dc 1a 99 0b f0 b3 c6 bb e5 61 8a f1 41 ff 31 c7 </span><br><span class="line">                    2c 8f d2 b9 7c bf b6 89 d7 20 b9 34 ef ac ae a7 </span><br><span class="line">        Digest:     a0 a2 bb cf e7 27 41 f8 2b e3 df e9 82 c6 c4 f9 </span><br><span class="line">                    98 0f 85 ff 81 e6 e2 cd be f8 0c 3d 33 1a cc 97 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>用的AES加密。binwalk crash.bin发现是Linux的内存镜像，volatility跑不出来。谷歌搜到了一篇<a target="_blank" rel="noopener" href="https://blog.appsecco.com/breaking-full-disk-encryption-from-a-memory-dump-5a868c4fc81e">这个</a>，试一下findaes工具。跑出来两个AES 256的Key。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Searching &#x2F;home&#x2F;tiaonmmn&#x2F;Challenges_2020_public&#x2F;forensics&#x2F;fix-my-pc&#x2F;crash.bin</span><br><span class="line">Found AES-256 key schedule at offset 0x1bffed68: </span><br><span class="line">ff 98 d7 67 61 14 70 24 eb b0 c8 d4 e1 14 18 14 21 4d 2a 83 d7 93 66 09 37 77 55 e5 18 0a 3c 57 </span><br><span class="line">Found AES-256 key schedule at offset 0x1bffef58: </span><br><span class="line">09 4e 2a df 58 cf b1 7d 85 f0 f6 93 3f 7b 44 ef a0 0a 3c da 7b be 01 87 3e 09 ff 4e e7 a6 05 39</span><br></pre></td></tr></table></figure>
+<p>然后参考<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/119803/how-to-decrypt-luks-with-the-known-master-key">这里</a>解密，要注意的是，AES-XTS-Plain64用的是64位密钥，所以要合并上面两段：<code>echo "0 1048576 crypt aes-xts-plain64 094e2adf58cfb17d85f0f6933f7b44efa00a3cda7bbe01873e09ff4ee7a60539ff98d76761147024ebb0c8d4e1141814214d2a83d7936609377755e5180a3c57 0 /dev/nbd0p2 4096" | dmsetup create luks_volume</code>。没有报错，接着挂载：<code>mount /dev/mapper/luks_volume /mnt</code>，得到一个Linux分区，/home没啥东西，/root文件名乱码，直接cat *，得到下面有趣的东西：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">cat &#x2F;home&#x2F;bob&#x2F;.ash_history </span><br><span class="line">rm .ash_history </span><br><span class="line">shutdown -h now</span><br><span class="line">shutdown</span><br><span class="line">halt</span><br><span class="line">vi &#x2F;etc&#x2F;crypttab</span><br><span class="line">ls</span><br><span class="line">du -h</span><br><span class="line">pwd</span><br><span class="line">ls -la</span><br><span class="line">ls</span><br><span class="line">rm ??b??</span><br><span class="line">cd &#x2F;etc</span><br><span class="line">ls</span><br><span class="line">blkid &gt;&gt; &#x2F;etc&#x2F;crypttab</span><br><span class="line">vim &#x2F;etc&#x2F;crypttab</span><br><span class="line">vi &#x2F;etc&#x2F;crypttab</span><br><span class="line">cd crypttab.d</span><br><span class="line">cd &#x2F;etc&#x2F;crypttab.d</span><br><span class="line">cryptsetup luksOpen &#x2F;dev&#x2F;sda3 crypthome --key-file &#x2F;etc&#x2F;crypttab.d&#x2F;home.key </span><br><span class="line">mount -t ext4 &#x2F;dev&#x2F;sda3 &#x2F;home</span><br><span class="line">ls &#x2F;etc&#x2F;crypttab.d&#x2F;home.key</span><br><span class="line">rc-service sshd start</span><br></pre></td></tr></table></figure>
+<p>发现又来一个cryptsetup，我们还有一个分区/dev/nbd0p3没看呢。根据提示，直接解密：<code>cryptsetup luksOpen /dev/nbd0p3 crypthome --key-file /mnt/etc/home.key</code>，<code>mount /dev/mapper/nbd0p3 /mnt1</code>，然后看/mnt1文件，发现有.ssh目录，存在id_rsa id_rsa.pub known_hosts，SSH免密登录。看.ash_history，发现有github的Repo。那就把.ssh目录的文件拷到我们机器上的.ssh目录下，然后git clone git@github.com:cornochips/configs。得到10个file*.txt，但是都没用。git log发现有大量提交日志，一点点翻文件找到了。</p>
+<img src="/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/git_history.png" class="" title="Git History">
+
+    <div id="aplayer-vaWFSYmn" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="424262056" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{548c9969-8cb1-4aef-89fa-4b8548e17b25}</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Tiaonmmn.ZMZ
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/" title="DownunderCTF-Forensic-fix-my-pc">http://tiaonmmn.github.io/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Misc/" rel="tag"><i class="fa fa-tag"></i> Misc</a>
+              <a href="/tags/Forenisc/" rel="tag"><i class="fa fa-tag"></i> Forenisc</a>
+              <a href="/tags/Memory/" rel="tag"><i class="fa fa-tag"></i> Memory</a>
+              <a href="/tags/LUKS/" rel="tag"><i class="fa fa-tag"></i> LUKS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/09/22/DownunderCTF-2020-Web-Taking-stock/" rel="prev" title="DownunderCTF-Web-Taking-stock">
+                  <i class="fa fa-chevron-left"></i> DownunderCTF-Web-Taking-stock
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/09/24/BUUOJ%E5%88%B7%E9%A2%98-Web-Fake-Google/" rel="next" title="BUUOJ刷题-Web-Fake-Google">
+                  BUUOJ刷题-Web-Fake-Google <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">flag{Lorem_ipsum}</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">342k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">5:11</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/npm/ribbon.js@1.0.2/dist/ribbon.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  const url = element.dataset.target;
+  const pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  const pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  const fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8.7.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+<!-- calendar widget -->
+
+    <script src=""></script>
+    <script src=""></script>
+    <script>
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el  : '#valine-comments',
+      path: "/2020/09/22/DownunderCTF-2020-Forensic-fix-my-pc/",
+    }, {"enable":true,"appId":"rGe4J3rLO75By3sjYfktvsyD-MdYXbMMI","appKey":"bpXDIRUBmowvz9tnMhIj6zs7","placeholder":"Just go go","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-cn","visitor":false,"comment_count":true,"recordIP":true,"serverURLs":null,"enableQQ":true,"requiredFields":[]}
+    ));
+  }, window.Valine);
+});
+</script>
+
+    
+    <script src="/lib/calendar/calendar.min.js"></script>
+    <script src="/lib/calendar/languages.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('#CloudCalendar').aCalendar('zh-CN',
+            $.extend(
+                '', {
+                    single:true,
+                    root:'/calendar/'
+                }
+            )
+        );
+    });
+    </script>
+
+</body>
+</html>
+
+

