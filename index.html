@@ -312,7 +312,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2020-09-29 09:57:23 / 修改时间：10:09:18" itemprop="dateCreated datePublished" datetime="2020-09-29T09:57:23+08:00">2020-09-29</time>
+      <time title="创建时间：2020-09-29 09:57:23 / 修改时间：11:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T09:57:23+08:00">2020-09-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -347,7 +347,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>511</span>
+      <span>910</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -376,11 +376,21 @@
 <img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_100323.png" class="">
 <p>我们要找的是mum，猜测mum会关注Cat的Instgram，点开Followers一个个看，我习惯先看最后最早关注的，emwaters92。</p>
 <img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_100618.png" class="">
-<p>我们提交emily_waters，不对。</p>
-<p>那就看发帖内容。在cat的帖子中发现YouTube Channel。</p>
+<p>我们提交emily_waters，不对。看来名字应该少一部分。</p>
+<p>那就看发帖内容。在cat的帖子中发现YouTube Channel。2020年9月5日注册。</p>
 <img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_100842.png" class="">
+<p>提交emily_gelato_waters和emily_elgato_waters，不对。</p>
+<p>以gelato_elgato为关键词搜索，搜到的结果全是Elgato公司的网页，没找到我们要找的人。然后明确一下elgato是啥，这是一家做游戏实况设备的公司，例如麦克风、录屏器、直播分流器、灯光、绿屏等。而Gelato是一种意大利冰淇淋。</p>
+<p>搜不到，那就Twitter Facebook上找这个名字。Twitter上有</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_105351.png" class="">
+<p>顺着这个搜索结果，我们找到用户@gelato_elgato。</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_105453.png" class="">
+<p>昵称是call me theresa。大胆猜测mum的名字是Emily Thereas Waters。提交，过了。</p>
+<p>其实可以不翻Twitter，找到emily waters的Instgram后会发现他有一个商务邮箱emilytwaters92@gmail.com，直接发个邮件她会回复东西：</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_110200.png" class="">
+<p>直接搞定。</p>
 
-    <div id="aplayer-hUsiaHRc" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-DUelncUf" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="29107447" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
     ></div>
 <p>flag{b0ccd8d3-726b-4263-98a7-60f995f79b09}</p>
