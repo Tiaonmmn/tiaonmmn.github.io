@@ -310,10 +310,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2020-09-29 09:57:23 / 修改时间：11:02:18" itemprop="dateCreated datePublished" datetime="2020-09-29T09:57:23+08:00">2020-09-29</time>
+      <time title="创建时间：2020-09-29 09:57:23" itemprop="dateCreated datePublished" datetime="2020-09-29T09:57:23+08:00">2020-09-29</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-30 11:19:36" itemprop="dateModified" datetime="2020-09-30T11:19:36+08:00">2020-09-30</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -347,14 +353,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>910</span>
+      <span>2.7k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -389,8 +395,35 @@
 <p>其实可以不翻Twitter，找到emily waters的Instgram后会发现他有一个商务邮箱emilytwaters92@gmail.com，直接发个邮件她会回复东西：</p>
 <img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_110200.png" class="">
 <p>直接搞定。</p>
+<h1 id="bad-man">Bad Man</h1>
+<div class="note info"><p>We have recently received reports about a hacker who goes by the alias und3rm4t3r. He has been threatening innocent people for money and must be stopped. Help us find him and get us the flag.</p>
+</div>
+<p>要找一个叫und3rm4t3r的黑客。</p>
+<p>搜到Twitter。</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_110744.png" class="">
+<p>7月23日发了一条推：since a when is vp:Qj6ixmFZA not a strong password smh....不知道什么的密码，以及上面的一条推whew that was close.... put out a tweet that contained personal information... welp im glad we have a delete button。看起来他把某些推文删了。</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_110939.png" class="">
+<p>那就查历史记录，web.archive.org是个好东西：https://web.archive.org/web/20200723112257/https://twitter.com/und3rm4t3r。</p>
+<h1 id="off-the-rails">Off the Rails</h1>
+<div class="note info"><p>I’m in trouble, I’m on the run... My friend told me he would meet me underneath a rail bridge 2km from his house before we escape on a train but he forgot to tell me where he lived. He took two day trips relatively close by and sent me two photos.</p>
+<p><strong>I also know that late last year, there was a fire near the suburbs approximately 25km from where he lives.</strong></p>
+<p>He lives somewhere in the middle of those three points. Could you tell me the name of the road parallel to the bridge, and the latitude and longitude of the bridge? P.S. The longitude and latitude should be to 3 decimal places (plus if necessary include the . and/or -). Each segement of the flag should be seperated by an underscore. The road name type should be the same as when you find it. The flag is also case insensitive.</p>
+</div>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/koala.jpg" class="">
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/on_track.jpg" class="">
+<p>简单来说，要我们通过两张照片确定一个街道的名称、精度、纬度。这两张照片是题目主人公他朋友住处附近拍的，住处25km外的郊区去年年底有一场大火。</p>
+<p>先看图吧，koala.jpg有EXIF元数据，可以知道纬度：37,40.98066S，经度：145,31.7097E。Google Map查地址在<a target="_blank" rel="noopener" href="https://www.google.com/maps/place/37%C2%B040&#39;58.8%22S+145%C2%B031&#39;42.6%22E/@-37.6830067,145.5263063,17z/data=!3m1!4b1!4m2!3m1!1s0x0:0x0">这里</a>。澳大利亚的维多利亚州一个叫Badger Creek VIC 3777, Australia的地方。</p>
+<p>on_track.jpg没有EXIF元数据，Google搜图发现是<a target="_blank" rel="noopener" href="https://www.google.com/search?tbs=sbi:AMhZZitIsCgaUBDdOOoRF-KOuA-0k97zi6etUzG3tOqs2iBAiu4GE3ZHVneKP1vgvSzF5t0si_1VnCPfuuOpXkAvGM232tMQZDVVauHzW-1ZJ0y3tqCX5hWDR4YWS6ZOz3JjuftHnS9elmPZHuy4B4w04C7xO-7FjZ2zriDbHgIFol4cYDP3YO6oY1ttjMc-w3dOnz22OxicXxl7DhehfsN_1tAuXy5y0O7lWfaYE6auLtvYpVb1OAYz4b8QLvbTIJ_1ZwD4uZfJXqB1Rk18duyNGwzfjYst-CLfDfxJSPUkPWWHmfsJDbrCRdimVphTUVOy6o04GXTudYj&amp;btnG=Search%20by%20image&amp;hl=en">Trestle bridge</a>，栈桥。然后找<a target="_blank" rel="noopener" href="https://www.google.com/search?sa=X&amp;hl=en&amp;sxsrf=ALeKk03DiULGbiQnpntFkxkUKxrnoC7tVw:1601364488330&amp;q=trestle+bridge+in+victoria+australia&amp;npsic=0&amp;rflfq=1&amp;rldoc=1&amp;rlha=0&amp;rllag=-38094351,145502226,225716&amp;tbm=lcl&amp;ved=2ahUKEwjm8-3L643sAhUGW60KHZaJBdoQjGp6BAgNEEM&amp;biw=1600&amp;bih=721#rlfi=hd:;si:;mv:%5B%5B-36.0027166,148.3497869%5D,%5B-38.6990084,142.654667%5D%5D;tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!3sIAE,lf:1,lf_ui:1">澳大利亚维多利亚州的栈桥</a>，一张张对比，发现<a target="_blank" rel="noopener" href="https://www.google.com/maps/uv?pb=!1s0x6ad62398d276c1cf%3A0xd718f0ed4c13d24e!3m1!7e115!4shttps%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMQNFH44iejzePChQBn9WgzxOcGSf2STAZEjTWU%3Dw260-h175-n-k-no!5strestle%20bridge%20in%20victoria%20australia%20-%20Google%20Search!15sCgIgAQ&amp;imagekey=!1e1!2shttps%3A%2F%2Fmedia2.trover.com%2FT%2F5d31081e6e1f1f7424005f52%2Ffixedw.jpg&amp;hl=en">Puffing Billy Railway Trestle Bridge</a>超像，因为那个转弯很有特点，正好对的上。</p>
+<p>然后呢，我们要找一场去年的大火，在那座桥的附近25km处。这个距离太大，我们从维多利亚州的大火入手。搜索“australia victoria bushfire 2019 suburb”，找到<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/2019%E2%80%9320_Australian_bushfire_season#Victoria">维基百科</a>。</p>
+<p>关键的一句话：</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_154843.png" class="">
+<p>Plenty Gorge Parklands在12月30号着火了，我们看一下地图。</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_155838.png" class="">
+<p>现在我们有三个地方：Puffing Billy Railway Trestle Bridge，Plenty Gorge Parklands和Badger Creek VIC 3777，Google Map上标点。</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_161440.png" class="">
+<p>回到题目描述，朋友住在这三点中间，我们取三角形边的中点连线： <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png" class=""> 然后要找2km附近的一座铁路桥。先找铁路 <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png" class=""> 附近找桥 <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_111703.png" class=""> 然后要找与这座桥平行的路，就在旁边，Creek Rd。 所以答案：-37.751817, 145.351507，Creek_Rd，保留三位小数：-37.752_145.352_Creek_Rd。</p>
 
-    <div id="aplayer-DUelncUf" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-ebIpVMkD" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="29107447" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
     ></div>
 <p>flag{b0ccd8d3-726b-4263-98a7-60f995f79b09}</p>
@@ -1515,14 +1548,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">343k</span>
+    <span title="站点总字数">345k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:12</span>
+    <span title="站点阅读时长">5:14</span>
   </span>
 </div>
 <div class="busuanzi-count">
