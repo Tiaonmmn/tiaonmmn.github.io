@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -279,6 +279,120 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/03/01/BUUOJ%E5%88%B7%E9%A2%98-Web-Products-Manager/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/01/BUUOJ%E5%88%B7%E9%A2%98-Web-Products-Manager/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-Products Manager</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-03-01 20:14:48 / 修改时间：21:44:08" itemprop="dateCreated datePublished" datetime="2020-03-01T20:14:48+08:00">2020-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/01/BUUOJ%E5%88%B7%E9%A2%98-Web-Products-Manager/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/01/BUUOJ%E5%88%B7%E9%A2%98-Web-Products-Manager/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>FaceBook CTF 2019的Products Manager。给了源码，猜测是SQL注入的题。</p>
+<p>开题允许我们查看Top 5的Products，添加自己的商品，或者查看其他人的商品详情，但是需要输入密码。那么盲猜flag在某个商品详情里面。</p>
+<p>看一下源码，db.php告诉我们flag在facebook商品里面，我们需要拿到它的密码。db.php包含数据区读写操作，所有的SQL语句都使用了prepare，看来SQL注入废了。我们重点看一下view.php。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handle_post</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">global</span> $_POST;</span><br><span class="line"></span><br><span class="line">  $name = $_POST[<span class="string">&quot;name&quot;</span>];</span><br><span class="line">  $secret = $_POST[<span class="string">&quot;secret&quot;</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">isset</span>($name) &amp;&amp; $name !== <span class="string">&quot;&quot;</span></span><br><span class="line">        &amp;&amp; <span class="keyword">isset</span>($secret) &amp;&amp; $secret !== <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (check_name_secret($name, hash(<span class="string">&#x27;sha256&#x27;</span>, $secret)) === <span class="literal">false</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;Incorrect name or secret, please try again&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $product = get_product($name);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt;Product details:&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;ul&gt;&lt;li&gt;&quot;</span> . htmlentities($product[<span class="string">&#x27;name&#x27;</span>]) . <span class="string">&quot;&lt;/li&gt;&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;li&gt;&quot;</span> . htmlentities($product[<span class="string">&#x27;description&#x27;</span>]) . <span class="string">&quot;&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 过了check_name_secret()后会调用get_product()获得商品信息。问题来了，get_product()里的SQL语句是这么写的<code>SELECT name, description FROM products WHERE name = ?</code>，而name在MySQL中是char(64)类型，对MySQL而言，char和varchar类型有个奇怪的特性。 <blockquote><p>All MySQL collations are of type PAD SPACE. This means that all CHAR, VARCHAR, and TEXT values are compared without regard to any trailing spaces. “Comparison” in this context does not include the LIKE pattern-matching operator, for which trailing spaces are significant.</p>
+<footer><strong>https://dev.mysql.com/doc/refman/5.7/en/char.html</strong></footer></blockquote></p>
+<p>使用=比较的时候MySQL会忽略掉字符串后面的空格，所以如果我们传入'facebook '，SQL语句变成<code>select name,description from products where name='facebook     ';</code>对MySQL而言，等同于<code>select name,description from products where name='facebook';</code>，所以，我们在add.php的handle_post()里传入'facebook '，会先进行get_product()，而get_product()错误的返回了'facebook'的数据，因此可以通过重名的检查从而插入了一条'facebook '的数据。当我们view的时候，会过check_name_secret()，仍然使用=比较：<code>SELECT name FROM products WHERE name = ? AND secret = ?</code>，MySQL认为'facebook'与'facebook '是相同的，因此secret为我们设置的值时select正常返回，这样就可以绕过facebook的secret了。但是get_product()的时候只会返回'facebook'的结果，不会返回'facebook '的结果。</p>
+<p>所以，Add一个'facebook '的Product，secret任意设置。然后view，名称填'facebook'，secret为刚才设置的值，即可拿到flag。</p>
+
+    <div id="aplayer-DFAdmdKU" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="28315111" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{246d6062-dca6-4de4-adbb-5f5a3770b9e6}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1350,124 +1464,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2019/10/28/BUUOJ%E5%88%B7%E9%A2%98-Web-SimplePHP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/28/BUUOJ%E5%88%B7%E9%A2%98-Web-SimplePHP/" class="post-title-link" itemprop="url">BUUOJ刷题-Web-SimplePHP</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-10-28 21:57:08" itemprop="dateCreated datePublished" datetime="2019-10-28T21:57:08+08:00">2019-10-28</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-03-05 15:15:52" itemprop="dateModified" datetime="2020-03-05T15:15:52+08:00">2020-03-05</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2019/10/28/BUUOJ%E5%88%B7%E9%A2%98-Web-SimplePHP/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/10/28/BUUOJ%E5%88%B7%E9%A2%98-Web-SimplePHP/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>10k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>9 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>SWPU 2018 CTF的SimplePHP。</p>
-<p>给了个查看文件和上传文件，扫目录似乎没结果。然后发现“查看文件”的URL有点东西<code>http://ed97c7d0-1d36-4255-852f-e4b73a9fbd2b.node3.buuoj.cn/file.php?file=</code>，LFI试一下。行吧，直接show_source了。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/BUUOJ%E5%88%B7%E9%A2%98-Web-SimplePHP/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1524,14 +1520,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">345k</span>
+    <span title="站点总字数">349k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:14</span>
+    <span title="站点阅读时长">5:17</span>
   </span>
 </div>
 <div class="busuanzi-count">

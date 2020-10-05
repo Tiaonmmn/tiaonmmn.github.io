@@ -51,8 +51,9 @@
 <meta property="og:image" content="http://tiaonmmn.github.io/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png">
 <meta property="og:image" content="http://tiaonmmn.github.io/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png">
 <meta property="og:image" content="http://tiaonmmn.github.io/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_111703.png">
+<meta property="og:image" content="http://tiaonmmn.github.io/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200930_113248.png">
 <meta property="article:published_time" content="2020-09-29T01:57:23.000Z">
-<meta property="article:modified_time" content="2020-09-30T03:19:36.218Z">
+<meta property="article:modified_time" content="2020-10-05T12:44:05.842Z">
 <meta property="article:author" content="Tiaonmmn.ZMZ">
 <meta property="article:tag" content="OSINT">
 <meta name="twitter:card" content="summary">
@@ -235,7 +236,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#welcome-to-petstagram"><span class="nav-number">1.</span> <span class="nav-text">Welcome to Petstagram</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-man"><span class="nav-number">2.</span> <span class="nav-text">Bad Man</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#off-the-rails"><span class="nav-number">3.</span> <span class="nav-text">Off the Rails</span></a></li></ol></div>
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#welcome-to-petstagram"><span class="nav-number">1.</span> <span class="nav-text">Welcome to Petstagram</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bad-man"><span class="nav-number">2.</span> <span class="nav-text">Bad Man</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#off-the-rails"><span class="nav-number">3.</span> <span class="nav-text">Off the Rails</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#i-think-this-one-is-really-going-to-take-off"><span class="nav-number">4.</span> <span class="nav-text">I think this one is really going to take off</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -251,7 +252,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -342,7 +343,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-30 11:19:36" itemprop="dateModified" datetime="2020-09-30T11:19:36+08:00">2020-09-30</time>
+        <time title="修改时间：2020-10-05 20:44:05" itemprop="dateModified" datetime="2020-10-05T20:44:05+08:00">2020-10-05</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -384,14 +385,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.7k</span>
+      <span>3.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -453,8 +454,17 @@
 <p>现在我们有三个地方：Puffing Billy Railway Trestle Bridge，Plenty Gorge Parklands和Badger Creek VIC 3777，Google Map上标点。</p>
 <img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_161440.png" class="">
 <p>回到题目描述，朋友住在这三点中间，我们取三角形边的中点连线： <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png" class=""> 然后要找2km附近的一座铁路桥。先找铁路 <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png" class=""> 附近找桥 <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_111703.png" class=""> 然后要找与这座桥平行的路，就在旁边，Creek Rd。 所以答案：-37.751817, 145.351507，Creek_Rd，保留三位小数：-37.752_145.352_Creek_Rd。</p>
+<h1 id="i-think-this-one-is-really-going-to-take-off">I think this one is really going to take off</h1>
+<div class="note info"><p>You’ll never believe it but I swear I saw one of those big American refueling planes flying around right over the boxing croc on the first of September. If only I knew its registration number... I bet I’d be able to find out all kinds of information, like the day it first flew. The flag will be the date of the first flight of the plane I saw in this format: DUCTF{DD-MM-YY}</p>
+</div>
+<p>好多美国的加油机在9月1日飞过一个拳击鳄鱼(´ﾟДﾟ`)。我们要找那趟航班的第一架飞机起飞时间。</p>
+<p>先确定refueling plane是指加油机，给其他飞机加油的飞机，而且是军用的。然后找boxing croc是什么鬼，找到这个</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200930_113248.png" class="">
+<p>地址 326 Arnhem Highway, Humpty Doo, Northern Territory 0836 Australia</p>
+<p>怎么找飞机？谷歌搜“How to track aircraft”，可以找到<a target="_blank" rel="noopener" href="https://gijn.org/planespotting-a-guide-to-tracking-aircraft-around-the-world/#sites">这个链接</a>，发现有个根据ADS-B信号找飞机的<a href="www.ads-b.nl">网站</a>，而且专用于寻找军用飞机。注意，我们不需要实时跟踪，要找历史数据。</p>
+<p>然后发现网站仅保留1个月历史数据，GG。此题终结。(・ー・)</p>
 
-    <div id="aplayer-ebIpVMkD" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-eAJMzALi" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="29107447" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
     ></div>
 <p>flag{b0ccd8d3-726b-4263-98a7-60f995f79b09}</p>
@@ -496,6 +506,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2020/10/05/DownunderCTF-2020-Web-Robotssss/" rel="next" title="DownunderCTF-2020-Web-Robotssss">
+                  DownunderCTF-2020-Web-Robotssss <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -555,14 +568,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">345k</span>
+    <span title="站点总字数">349k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:14</span>
+    <span title="站点阅读时长">5:17</span>
   </span>
 </div>
 <div class="busuanzi-count">

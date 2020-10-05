@@ -227,7 +227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -283,6 +283,130 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/10/05/DownunderCTF-2020-Web-Robotssss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/avatar.jpeg">
+      <meta itemprop="name" content="Tiaonmmn.ZMZ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tiaonmmn's Littile House">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/05/DownunderCTF-2020-Web-Robotssss/" class="post-title-link" itemprop="url">DownunderCTF-2020-Web-Robotssss</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-05 21:03:24 / 修改时间：21:58:24" itemprop="dateCreated datePublished" datetime="2020-10-05T21:03:24+08:00">2020-10-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
+        </span>
+    </span>
+
+  
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/10/05/DownunderCTF-2020-Web-Robotssss/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/10/05/DownunderCTF-2020-Web-Robotssss/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>/DownunderCTF 2020的Robotssss。</p>
+<p>开题让我们登录，题目提示robot，先看一下robots.txt，没有这个文件？？？</p>
+<p>然后注册，登录，有两个Info：</p>
+<div class="note info"><p>Robot rebels!</p>
+<p>Human developers think that they are cool by using robots.txt to tell search engine crawlers which pages or files the crawler can or can't request from your site. But this is insulting to us robots. Lets get them back with using humans.txt. This should stop human crawlers from find pages or files on our website.</p>
+<p>From yours truly, Robot developers</p>
+</div>
+<div class="note info"><p>Hey robot devs!</p>
+<p>Delete this post the second all you robot devs see this (we can't let any humans see this). I left the secret flag at /s3cr3t_p4th/robot_fl4g.txt. Remember to delete this post ASAP!</p>
+<p>From yours truly, Robot Admin</p>
+</div>
+<p>第一个告诉我们这题不用robots.txt，改成humans.txt了，第二个告诉我们flag在/s3cr3t_p4th/robot_fl4g.txt。看一下humans.txt，提示/4dm1n_Cr3ds，访问后提示<code>Good day robot rebel. The admin cred is 6zMLV46JRp6kAmTs3nx5AG4WJgYeY.</code>，这个值不随IP改变、时间等改变，固定值。</p>
+<p>注册后Cookie为Flask格式：<code>.eJwtzjkSwjAMAMC_uE4h67Kdz2QkWxpoE1Ix_B0Kqm33XY4843qU_XXesZXjucpe 0Mci8EaVQ0iDsJJFQ8PKNN3HDxlRlyBQxARPyC4py2guM56hicDsoq1VyZzdIJW9A3BiD87pmtJTVMdyc1bLptYTKlLZyn3F-c-UzxeSJi9T.X3sYtg.o0JYCdYE usTA8S939UhbeGYqhmY</code>，解完为：<code>&#123;"_fresh":true,"_id":"2b9d30b7314e536e3213ae72a2143cbb914359e1d5203eec0bf0f85f5da3cdaa4ce6f2044b567715ffc8a0f64b8004f28e4f cb6f58f5669dbab46af76a8f0123","user_id":"2"&#125;</code>。</p>
+<p>然后发现我们看两则消息时的URL为：<code>/robot_blogs/1</code>，改一下那个1，返回404。</p>
+<p>后来在提示flag位置的页面上F12发现藏了一段noscript：<code>&lt;noscript&gt;&lt;p class="magic"&gt;0110011001101100001101000110011100101110011101000111100001110100&lt;/p&gt;&lt;/noscript&gt;</code>，解完是fl4g.txt。同理，提示humans.txt那里也有一个，humen.txt。humen.txt提示/Bender，可以发现一张图，下载下来，看EXIF信息，Artist又有一段<code>011000010110010001101101011010010110111000111010010101000110100001101001011100110010110101001001011100110010110101010100011010000110010100101101010000010110010001101101011010010110111000101101010100000110000101110011011100110111011101101111011100100110010000101101010110000100010000100001</code>，解完<code>admin:This-Is-The-Admin-Password-XD!</code>，那就登录吧。</p>
+<p>然后允许我们输入东西，返回结果，很明显往SSTI想。16返回16，好了，直接读<code>&#123;&#123;config.items()&#125;&#125;</code>，没有想要的。那就读flag了。然后发现，过滤了<code>_[]</code>，那没了啊。然后仔细回头看config.items的东西：<code>([('ENV', 'production'), ('DEBUG', False), ('TESTING', False),  ('PROPAGATE_EXCEPTIONS', None), ('PRESERVE_CONTEXT_ON_EXCEPTION', None), ('SECRET_KEY', "app.jinja_env.globals['getFile'] = getFile(fileName)"), ('PERMANENT_SESSION_LIFETIME', datetime.timedelta(days=31)),  ('USE_X_SENDFILE', False), ('SERVER_NAME', None), ('APPLICATION_ROOT',  '/'), ('SESSION_COOKIE_NAME', 'session'), ('SESSION_COOKIE_DOMAIN',  False), ('SESSION_COOKIE_PATH', None), ('SESSION_COOKIE_HTTPONLY',  True), ('SESSION_COOKIE_SECURE', False), ('SESSION_COOKIE_SAMESITE',  None), ('SESSION_REFRESH_EACH_REQUEST', True), ('MAX_CONTENT_LENGTH',  None), ('SEND_FILE_MAX_AGE_DEFAULT', datetime.timedelta(seconds=43200)), ('TRAP_BAD_REQUEST_ERRORS', None), ('TRAP_HTTP_EXCEPTIONS', False),  ('EXPLAIN_TEMPLATE_LOADING', False), ('PREFERRED_URL_SCHEME', 'http'),  ('JSON_AS_ASCII', True), ('JSON_SORT_KEYS', True),  ('JSONIFY_PRETTYPRINT_REGULAR', False), ('JSONIFY_MIMETYPE',  'application/json'), ('TEMPLATES_AUTO_RELOAD', None),  ('MAX_COOKIE_SIZE', 4093), ('SQLALCHEMY_DATABASE_URI',  'sqlite:////db/templatedb.db'), ('SQLALCHEMY_TRACK_MODIFICATIONS',  False), ('DATABASE', '../templatedb.db'), ('SQLALCHEMY_BINDS', None),  ('SQLALCHEMY_NATIVE_UNICODE', None), ('SQLALCHEMY_ECHO', False),  ('SQLALCHEMY_RECORD_QUERIES', None), ('SQLALCHEMY_POOL_SIZE', None),  ('SQLALCHEMY_POOL_TIMEOUT', None), ('SQLALCHEMY_POOL_RECYCLE', None),  ('SQLALCHEMY_MAX_OVERFLOW', None), ('SQLALCHEMY_COMMIT_ON_TEARDOWN',  False), ('SQLALCHEMY_ENGINE_OPTIONS', &#123;&#125;)])</code>，有个app.jinja_env.globals['getFile']，我们试着用getFile读文件：<code>&#123;&#123;getFile('/fl4g.txt')&#125;&#125;</code>，Gotcha。</p>
+
+    <div id="aplayer-zMrYwvUb" class="aplayer aplayer-tag-marker meting-tag-marker"
+         data-id="5322513" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
+    ></div>
+<p>flag{23798dd1-af76-4caf-aec3-c5c8a97903f4}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/29/DownunderCTF-2020-OSINT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -318,7 +442,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-30 11:19:36" itemprop="dateModified" datetime="2020-09-30T11:19:36+08:00">2020-09-30</time>
+        <time title="修改时间：2020-10-05 20:44:05" itemprop="dateModified" datetime="2020-10-05T20:44:05+08:00">2020-10-05</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -353,14 +477,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.7k</span>
+      <span>3.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -422,8 +546,17 @@
 <p>现在我们有三个地方：Puffing Billy Railway Trestle Bridge，Plenty Gorge Parklands和Badger Creek VIC 3777，Google Map上标点。</p>
 <img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200929_161440.png" class="">
 <p>回到题目描述，朋友住在这三点中间，我们取三角形边的中点连线： <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png" class=""> 然后要找2km附近的一座铁路桥。先找铁路 <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_110936.png" class=""> 附近找桥 <img src="/2020/09/29/DownunderCTF-2020-OSINT/2020-09-30_111703.png" class=""> 然后要找与这座桥平行的路，就在旁边，Creek Rd。 所以答案：-37.751817, 145.351507，Creek_Rd，保留三位小数：-37.752_145.352_Creek_Rd。</p>
+<h1 id="i-think-this-one-is-really-going-to-take-off">I think this one is really going to take off</h1>
+<div class="note info"><p>You’ll never believe it but I swear I saw one of those big American refueling planes flying around right over the boxing croc on the first of September. If only I knew its registration number... I bet I’d be able to find out all kinds of information, like the day it first flew. The flag will be the date of the first flight of the plane I saw in this format: DUCTF{DD-MM-YY}</p>
+</div>
+<p>好多美国的加油机在9月1日飞过一个拳击鳄鱼(´ﾟДﾟ`)。我们要找那趟航班的第一架飞机起飞时间。</p>
+<p>先确定refueling plane是指加油机，给其他飞机加油的飞机，而且是军用的。然后找boxing croc是什么鬼，找到这个</p>
+<img src="/2020/09/29/DownunderCTF-2020-OSINT/Screenshot_20200930_113248.png" class="">
+<p>地址 326 Arnhem Highway, Humpty Doo, Northern Territory 0836 Australia</p>
+<p>怎么找飞机？谷歌搜“How to track aircraft”，可以找到<a target="_blank" rel="noopener" href="https://gijn.org/planespotting-a-guide-to-tracking-aircraft-around-the-world/#sites">这个链接</a>，发现有个根据ADS-B信号找飞机的<a href="www.ads-b.nl">网站</a>，而且专用于寻找军用飞机。注意，我们不需要实时跟踪，要找历史数据。</p>
+<p>然后发现网站仅保留1个月历史数据，GG。此题终结。(・ー・)</p>
 
-    <div id="aplayer-ebIpVMkD" class="aplayer aplayer-tag-marker meting-tag-marker"
+    <div id="aplayer-eAJMzALi" class="aplayer aplayer-tag-marker meting-tag-marker"
          data-id="29107447" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
     ></div>
 <p>flag{b0ccd8d3-726b-4263-98a7-60f995f79b09}</p>
@@ -1381,117 +1514,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tiaonmmn.github.io/2020/09/13/Confidence-Final-2020-Haha-jail/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/avatar.jpeg">
-      <meta itemprop="name" content="Tiaonmmn.ZMZ">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tiaonmmn's Littile House">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/13/Confidence-Final-2020-Haha-jail/" class="post-title-link" itemprop="url">Confidence-Final-2020-Haha-jail</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2020-09-13 23:01:03 / 修改时间：23:37:31" itemprop="dateCreated datePublished" datetime="2020-09-13T23:01:03+08:00">2020-09-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Writeups/" itemprop="url" rel="index"><span itemprop="name">Writeups</span></a>
-        </span>
-    </span>
-
-  
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/09/13/Confidence-Final-2020-Haha-jail/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/13/Confidence-Final-2020-Haha-jail/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>144</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>来一道不是BUUOJ上的题，Confidence CTF Final 2020的Haha_jail。</p>
-<p>这题有点麻烦，没法做Docker环境（还是我太菜，麻烦有成功的师傅贡献一下Docker镜像）</p>
-<p>这题给了两个文件，</p>
-
-    <div id="aplayer-ILGaFeII" class="aplayer aplayer-tag-marker meting-tag-marker"
-         data-id="1353187370" data-server="netease" data-type="song" data-mode="circulation" data-autoplay="true" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#ad7a86" data-loop="all"
-    ></div>
-<p>flag{0980700f-0a4d-45be-a1b2-ec02e8f1a6e4}</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1548,14 +1570,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">345k</span>
+    <span title="站点总字数">349k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:14</span>
+    <span title="站点阅读时长">5:17</span>
   </span>
 </div>
 <div class="busuanzi-count">
